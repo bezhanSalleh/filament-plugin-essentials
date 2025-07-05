@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BezhanSalleh\PluginEssentials\Resource\Concerns;
 
+use BackedEnum;
 use BezhanSalleh\PluginEssentials\Resource\DelegatesToPlugin;
 use Filament\Pages\Enums\SubNavigationPosition;
 use Filament\Panel;
@@ -24,8 +25,8 @@ trait HasNavigation
             null
         );
 
-        if (! static::isNoPluginResult($pluginResult)) {
-            return $pluginResult ?? '';
+        if (! static::isNoPluginResult($pluginResult) && filled($pluginResult)) {
+            return $pluginResult;
         }
 
         return static::getParentResult('getNavigationLabel') ?? '';
@@ -34,7 +35,7 @@ trait HasNavigation
     /**
      * Get the navigation icon.
      */
-    public static function getNavigationIcon(): string | Htmlable | null
+    public static function getNavigationIcon(): string | BackedEnum | Htmlable | null
     {
         $pluginResult = static::delegateToPlugin(
             'HasNavigation',
@@ -52,7 +53,7 @@ trait HasNavigation
     /**
      * Get the active navigation icon.
      */
-    public static function getActiveNavigationIcon(): string | Htmlable | null
+    public static function getActiveNavigationIcon(): BackedEnum | Htmlable | null | string
     {
         $pluginResult = static::delegateToPlugin(
             'HasNavigation',
@@ -178,20 +179,20 @@ trait HasNavigation
     /**
      * Get the slug.
      */
-    public static function getSlug(?Panel $panel = null): string
-    {
-        $pluginResult = static::delegateToPlugin(
-            'HasNavigation',
-            'getSlug',
-            null
-        );
+    // public static function getSlug(?Panel $panel = null): string
+    // {
+    //     $pluginResult = static::delegateToPlugin(
+    //         'HasNavigation',
+    //         'getSlug',
+    //         null
+    //     );
 
-        if (! static::isNoPluginResult($pluginResult)) {
-            return $pluginResult ?? '';
-        }
+    //     if (! static::isNoPluginResult($pluginResult)) {
+    //         return $pluginResult ?? '';
+    //     }
 
-        return static::getParentResult('getSlug') ?? '';
-    }
+    //     return static::getParentResult('getSlug') ?? '';
+    // }
 
     /**
      * Get the navigation parent item.

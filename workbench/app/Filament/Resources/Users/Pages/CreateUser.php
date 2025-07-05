@@ -2,8 +2,8 @@
 
 namespace Workbench\App\Filament\Resources\Users\Pages;
 
-use Workbench\App\Filament\Resources\Users\UserResource;
 use Filament\Resources\Pages\CreateRecord;
+use Workbench\App\Filament\Resources\Users\UserResource;
 
 class CreateUser extends CreateRecord
 {

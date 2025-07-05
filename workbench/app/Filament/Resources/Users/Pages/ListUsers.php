@@ -2,9 +2,9 @@
 
 namespace Workbench\App\Filament\Resources\Users\Pages;
 
-use Workbench\App\Filament\Resources\Users\UserResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Workbench\App\Filament\Resources\Users\UserResource;
 
 class ListUsers extends ListRecords
 {

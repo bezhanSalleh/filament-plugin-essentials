@@ -2,9 +2,9 @@
 
 namespace Workbench\App\Filament\Resources\Users\Pages;
 
-use Workbench\App\Filament\Resources\Users\UserResource;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use Workbench\App\Filament\Resources\Users\UserResource;
 
 class EditUser extends EditRecord
 {

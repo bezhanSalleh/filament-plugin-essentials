@@ -40,7 +40,7 @@ class TestCase extends Orchestra
 
     protected function defineEnvironment($app)
     {
-        $app['config']->set('database.default', 'sqlite');
+        // $app['config']->set('database.default', 'sqlite');
     }
 
     /**
@@ -55,9 +55,9 @@ class TestCase extends Orchestra
         );
 
         // Load test-specific migrations
-        // $this->loadMigrationsFrom(
-        //     __DIR__ . '/../database/migrations'
-        // );
+        $this->loadMigrationsFrom(
+            __DIR__ . '/../database/migrations'
+        );
     }
 
     protected function getPackageProviders($app): array

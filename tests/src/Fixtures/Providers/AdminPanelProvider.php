@@ -31,10 +31,10 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('/admin')
             ->login()
-            ->resources([
-                UserResource::class,
-                PostResource::class,
-            ])
+            // ->resources([
+            //     UserResource::class,
+            //     PostResource::class,
+            // ])
             ->pages([
                 Pages\Dashboard::class,
             ])
