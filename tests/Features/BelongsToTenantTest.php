@@ -1,6 +1,6 @@
 <?php
 
-use BezhanSalleh\PluginEssentials\Concerns\BelongsToTenant;
+use BezhanSalleh\PluginEssentials\Plugin\BelongsToTenant;
 use Filament\Support\Concerns\EvaluatesClosures;
 
 beforeEach(function () {

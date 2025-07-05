@@ -1,6 +1,6 @@
 <?php
 
-use BezhanSalleh\PluginEssentials\Concerns\BelongsToCluster;
+use BezhanSalleh\PluginEssentials\Plugin\BelongsToCluster;
 use Filament\Support\Concerns\EvaluatesClosures;
 
 beforeEach(function () {

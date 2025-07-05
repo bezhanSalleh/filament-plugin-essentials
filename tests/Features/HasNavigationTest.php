@@ -1,6 +1,6 @@
 <?php
 
-use BezhanSalleh\PluginEssentials\Concerns\HasNavigation;
+use BezhanSalleh\PluginEssentials\Plugin\HasNavigation;
 use Filament\Pages\Enums\SubNavigationPosition;
 use Filament\Support\Concerns\EvaluatesClosures;
 

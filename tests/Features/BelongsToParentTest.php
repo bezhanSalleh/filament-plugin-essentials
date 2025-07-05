@@ -1,6 +1,6 @@
 <?php
 
-use BezhanSalleh\PluginEssentials\Concerns\BelongsToParent;
+use BezhanSalleh\PluginEssentials\Plugin\BelongsToParent;
 use Filament\Support\Concerns\EvaluatesClosures;
 
 beforeEach(function () {

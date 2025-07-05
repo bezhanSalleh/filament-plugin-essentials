@@ -1,6 +1,6 @@
 <?php
 
-use BezhanSalleh\PluginEssentials\Concerns\HasLabels;
+use BezhanSalleh\PluginEssentials\Plugin\HasLabels;
 use Filament\Support\Concerns\EvaluatesClosures;
 
 beforeEach(function () {

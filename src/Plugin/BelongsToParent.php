@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BezhanSalleh\PluginEssentials\Concerns;
+namespace BezhanSalleh\PluginEssentials\Plugin;
 
 trait BelongsToParent
 {

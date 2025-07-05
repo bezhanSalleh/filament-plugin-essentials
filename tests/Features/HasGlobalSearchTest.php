@@ -1,6 +1,6 @@
 <?php
 
-use BezhanSalleh\PluginEssentials\Concerns\HasGlobalSearch;
+use BezhanSalleh\PluginEssentials\Plugin\HasGlobalSearch;
 use Filament\Support\Concerns\EvaluatesClosures;
 
 beforeEach(function () {
