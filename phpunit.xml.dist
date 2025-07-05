@@ -20,9 +20,15 @@
             <directory>tests</directory>
         </testsuite>
     </testsuites>
-    <logging>
-        <junit outputFile="build/report.junit.xml"/>
-    </logging>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="APP_KEY" value="base64:4bHj7CIUiEzDxa9oAS3bncF3L5czGQHhyytRB7QAbUs="/>
+        <env name="DB_CONNECTION" value="sqlite"/>
+        <env name="DB_DATABASE" value=":memory:"/>
+        <env name="QUEUE_CONNECTION" value="sync"/>
+        <env name="SESSION_DRIVER" value="array"/>
+        <env name="CURATOR_GLIDE_TOKEN" value="1234567890"/>
+    </php>
     <source>
         <include>
             <directory suffix=".php">./src</directory>

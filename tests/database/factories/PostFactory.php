@@ -1,0 +1,24 @@
+<?php
+
+declare(strict_types=1);
+
+namespace BezhanSalleh\PluginEssentials\Tests\Database\Factories;
+
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Models\Post;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * @extends Factory<Post>
+ */
+class PostFactory extends Factory
+{
+    /** @return array<string, mixed> */
+    public function definition(): array
+    {
+        return [
+            'title' => fake()->words(),
+            'body' => fake()->unique()->paragraph(),
+            'tenant_id' => null, // Assuming tenant_id is nullable
+        ];
+    }
+}
