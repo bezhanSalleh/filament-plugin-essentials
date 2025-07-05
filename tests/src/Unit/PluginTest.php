@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\EssentialPlugin;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\MultiResourceEssentialPlugin;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Admin\AdminResource;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Posts\PostResource;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\UserResource;
 use Filament\Facades\Filament;
@@ -65,7 +66,7 @@ describe('Plugin HasLabels Trait', function () {
                 EssentialPlugin::make()
                     ->modelLabel('Person')
                     ->recordTitleAttribute('name'),
-                    // pluralModelLabel and titleCaseModelLabel use defaults
+                // pluralModelLabel and titleCaseModelLabel use defaults
             ]);
 
         $plugin = Filament::getPlugin('bezhansalleh/essentials');
@@ -138,7 +139,7 @@ describe('Plugin HasNavigation Trait', function () {
                     ->navigationLabel('People')
                     ->navigationIcon('heroicon-o-user-group')
                     ->navigationSort(5),
-                    // Other navigation properties use defaults
+                // Other navigation properties use defaults
             ]);
 
         $plugin = Filament::getPlugin('bezhansalleh/essentials');
@@ -272,5 +273,168 @@ describe('Plugin HasGlobalSearch Trait', function () {
             ->and(UserResource::getGlobalSearchResultsLimit())->toBe(50)
             ->and(UserResource::isGlobalSearchForcedCaseInsensitive())->toBeNull()
             ->and(UserResource::shouldSplitGlobalSearchTerms())->toBeFalse();
+    });
+});
+
+describe('Multi-Resource Plugin Support', function () {
+    it('sets different labels per resource', function () {
+        $this->panel
+            ->plugins([
+                MultiResourceEssentialPlugin::make()
+                    ->resource(AdminResource::class)
+                    ->modelLabel('System Admin')
+                    ->pluralModelLabel('System Admins')
+                    ->recordTitleAttribute('email')
+                    ->resource(PostResource::class)
+                    ->modelLabel('Blog Post')
+                    ->pluralModelLabel('Blog Posts')
+                    ->recordTitleAttribute('title'),
+            ]);
+
+        // Test that AdminResource gets its specific configuration
+        expect(AdminResource::getModelLabel())->toBe('System Admin')
+            ->and(AdminResource::getPluralModelLabel())->toBe('System Admins')
+            ->and(AdminResource::getRecordTitleAttribute())->toBe('email');
+
+        // Test that PostResource gets its specific configuration
+        expect(PostResource::getModelLabel())->toBe('Blog Post')
+            ->and(PostResource::getPluralModelLabel())->toBe('Blog Posts')
+            ->and(PostResource::getRecordTitleAttribute())->toBe('title');
+    });
+
+    it('uses mixed resource configs and defaults', function () {
+        $this->panel
+            ->plugins([
+                MultiResourceEssentialPlugin::make()
+                    ->resource(AdminResource::class)
+                    ->modelLabel('Administrator')
+                        // Other properties use defaults
+                    ->resource(PostResource::class)
+                    ->pluralModelLabel('Articles')
+                    ->recordTitleAttribute('slug'),
+                // modelLabel uses default
+            ]);
+
+        // AdminResource gets partial config, others default
+        expect(AdminResource::getModelLabel())->toBe('Administrator')
+            ->and(AdminResource::getPluralModelLabel())->toBe('') // Default
+            ->and(AdminResource::getRecordTitleAttribute())->toBeNull(); // Default
+
+        // PostResource gets different partial config
+        expect(PostResource::getModelLabel())->toBe('') // Default empty string
+            ->and(PostResource::getPluralModelLabel())->toBe('Articles')
+            ->and(PostResource::getRecordTitleAttribute())->toBe('slug');
+    });
+
+    it('sets different navigation per resource', function () {
+        $this->panel
+            ->plugins([
+                MultiResourceEssentialPlugin::make()
+                    ->resource(AdminResource::class)
+                    ->navigationLabel('User Management')
+                    ->navigationGroup('Admin')
+                    ->navigationSort(10)
+                    ->resource(PostResource::class)
+                    ->navigationLabel('Blog Posts')
+                    ->navigationGroup('Content')
+                    ->navigationSort(20),
+            ]);
+
+        // AdminResource gets its specific navigation
+        expect(AdminResource::getNavigationLabel())->toBe('User Management')
+            ->and(AdminResource::getNavigationGroup())->toBe('Admin')
+            ->and(AdminResource::getNavigationSort())->toBe(10);
+
+        // PostResource gets its specific navigation
+        expect(PostResource::getNavigationLabel())->toBe('Blog Posts')
+            ->and(PostResource::getNavigationGroup())->toBe('Content')
+            ->and(PostResource::getNavigationSort())->toBe(20);
+    });
+
+    it('uses mixed navigation configs and defaults', function () {
+        $this->panel
+            ->plugins([
+                MultiResourceEssentialPlugin::make()
+                    ->resource(AdminResource::class)
+                    ->navigationLabel('Admins')
+                    ->navigationSort(5)
+                        // Group uses default
+                    ->resource(PostResource::class)
+                    ->navigationGroup('Publishing'),
+                // Label and sort use defaults
+            ]);
+
+        // AdminResource gets partial navigation config
+        expect(AdminResource::getNavigationLabel())->toBe('Admins')
+            ->and(AdminResource::getNavigationGroup())->toBeNull() // Default
+            ->and(AdminResource::getNavigationSort())->toBe(5);
+
+        // PostResource gets different partial navigation config
+        expect(PostResource::getNavigationLabel())->toBe('') // Default empty string
+            ->and(PostResource::getNavigationGroup())->toBe('Publishing')
+            ->and(PostResource::getNavigationSort())->toBeNull(); // Default
+    });
+
+    it('sets different cluster per resource', function () {
+        $this->panel
+            ->plugins([
+                MultiResourceEssentialPlugin::make()
+                    ->resource(AdminResource::class)
+                    ->cluster('App\\Filament\\Clusters\\AdminCluster')
+                    ->resource(PostResource::class)
+                    ->cluster('App\\Filament\\Clusters\\ContentCluster'),
+            ]);
+
+        // Each resource gets its specific cluster
+        expect(AdminResource::getCluster())->toBe('App\\Filament\\Clusters\\AdminCluster');
+        expect(PostResource::getCluster())->toBe('App\\Filament\\Clusters\\ContentCluster');
+    });
+
+    it('sets different tenant settings per resource', function () {
+        $this->panel
+            ->plugins([
+                MultiResourceEssentialPlugin::make()
+                    ->resource(AdminResource::class)
+                    ->scopeToTenant(true)
+                    ->tenantRelationshipName('organization')
+                    ->tenantOwnershipRelationshipName('owner')
+                    ->resource(PostResource::class)
+                    ->scopeToTenant(false)
+                    ->tenantRelationshipName('company'),
+            ]);
+
+        // AdminResource gets its specific tenant config
+        expect(AdminResource::isScopedToTenant())->toBeTrue()
+            ->and(AdminResource::getTenantRelationshipName())->toBe('organization')
+            ->and(AdminResource::getTenantOwnershipRelationshipName())->toBe('owner');
+
+        // PostResource gets its specific tenant config
+        expect(PostResource::isScopedToTenant())->toBeFalse()
+            ->and(PostResource::getTenantRelationshipName())->toBe('company')
+            ->and(PostResource::getTenantOwnershipRelationshipName())->toBeString(); // Default
+    });
+
+    it('sets different global search per resource', function () {
+        $this->panel
+            ->plugins([
+                MultiResourceEssentialPlugin::make()
+                    ->resource(AdminResource::class)
+                    ->globallySearchable(true)
+                    ->globalSearchResultsLimit(25)
+                    ->forceGlobalSearchCaseInsensitive(true)
+                    ->resource(PostResource::class)
+                    ->globallySearchable(false)
+                    ->globalSearchResultsLimit(10),
+            ]);
+
+        // AdminResource gets its specific global search config
+        expect(AdminResource::canGloballySearch())->toBeTrue()
+            ->and(AdminResource::getGlobalSearchResultsLimit())->toBe(25)
+            ->and(AdminResource::isGlobalSearchForcedCaseInsensitive())->toBeTrue();
+
+        // PostResource gets its specific global search config
+        expect(PostResource::canGloballySearch())->toBeFalse()
+            ->and(PostResource::getGlobalSearchResultsLimit())->toBe(10)
+            ->and(PostResource::isGlobalSearchForcedCaseInsensitive())->toBeNull(); // Default
     });
 });

@@ -47,7 +47,8 @@ trait DelegatesToPlugin
             }
 
             // Call the plugin method and return result (even if null)
-            return $plugin->{$methodName}();
+            // Pass the resource class for multi-resource support
+            return $plugin->{$methodName}(static::class);
         } catch (\Throwable) {
             // Gracefully fall back on any error
             return self::$NO_PLUGIN_RESULT;

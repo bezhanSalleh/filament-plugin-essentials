@@ -103,7 +103,7 @@ describe('Plugin HasNavigation Trait', function () {
         expect($result)->toBe($this->plugin)
             ->and($this->plugin->getSlug())->toBe($slug);
     })
-    ->todo();
+        ->todo();
 
     it('can set sub navigation position', function () {
         $position = SubNavigationPosition::Start;

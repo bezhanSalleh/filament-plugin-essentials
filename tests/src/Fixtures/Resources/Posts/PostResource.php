@@ -11,8 +11,8 @@ use BezhanSalleh\PluginEssentials\Resource\Concerns\BelongsToTenant;
 use BezhanSalleh\PluginEssentials\Resource\Concerns\HasGlobalSearch;
 use BezhanSalleh\PluginEssentials\Resource\Concerns\HasLabels;
 use BezhanSalleh\PluginEssentials\Resource\Concerns\HasNavigation;
-use BezhanSalleh\PluginEssentials\Tests\Fixtures\EssentialPlugin;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Models\Post;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\MultiResourceEssentialPlugin;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Posts\Pages\ManagePosts;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -39,9 +39,9 @@ class PostResource extends Resource
 
     protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    public static function pluginEssential(): ?EssentialPlugin
+    public static function pluginEssential(): ?MultiResourceEssentialPlugin
     {
-        return EssentialPlugin::get();
+        return MultiResourceEssentialPlugin::get();
     }
 
     public static function form(Schema $schema): Schema

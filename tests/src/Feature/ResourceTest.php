@@ -49,7 +49,7 @@ describe('Resource HasNavigation Trait', function () {
         expect(UserResource::shouldRegisterNavigation())->toBeBool();
         expect(UserResource::getSubNavigationPosition())->toBeInstanceOf(SubNavigationPosition::class);
 
-        expect(PostResource::getNavigationIcon())->toBeNull();
+        expect(PostResource::getNavigationIcon())->not->toBeNull();
         expect(PostResource::getNavigationLabel())->toBeString();
         expect(PostResource::getNavigationGroup())->toBeNull();
         expect(PostResource::getNavigationSort())->toBeNull();
@@ -65,7 +65,6 @@ describe('Resource HasNavigation Trait', function () {
 
         // Verify the plugin is accessible
         expect(UserResource::pluginEssential())->toBeInstanceOf(EssentialPlugin::class);
-        expect(PostResource::pluginEssential())->toBeInstanceOf(EssentialPlugin::class);
     });
 });
 
@@ -94,8 +93,8 @@ describe('Resource HasLabels Trait', function () {
         expect(UserResource::getRecordTitleAttribute())->toBeNull();
         expect(UserResource::hasTitleCaseModelLabel())->toBeTrue();
 
-        expect(PostResource::getModelLabel())->toBe('');  // Empty string from delegation
-        expect(PostResource::getPluralModelLabel())->toBe('');  // Default empty string
+        expect(PostResource::getModelLabel())->toBe('post');  // Empty string from delegation
+        expect(PostResource::getPluralModelLabel())->toBe('posts');  // Default empty string
         expect(PostResource::getRecordTitleAttribute())->toBeNull();
         expect(PostResource::hasTitleCaseModelLabel())->toBeTrue();
     });
