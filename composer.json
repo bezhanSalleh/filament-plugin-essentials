@@ -69,8 +69,8 @@
         "finalize": [
             "@analyse",
             "@refactor",
-            "@lint",
-            "@test:unit",
+            "@lint --parallel",
+            "@test:unit --parallel",
             "@test:coverage",
             "@test:type"
         ]
@@ -86,10 +86,7 @@
         "laravel": {
             "providers": [
                 "BezhanSalleh\\PluginEssentials\\PluginEssentialsServiceProvider"
-            ],
-            "aliases": {
-                "PluginEssentials": "BezhanSalleh\\PluginEssentials\\Facades\\PluginEssentials"
-            }
+            ]
         }
     },
     "minimum-stability": "beta",

@@ -15,8 +15,8 @@ class PostFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->words(),
-            'body' => fake()->unique()->paragraph(),
+            'title' => fake()->sentence(),
+            'body' => fake()->paragraph(),
             'tenant_id' => null, // Assuming tenant_id is nullable
         ];
     }

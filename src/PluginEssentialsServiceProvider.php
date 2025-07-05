@@ -12,9 +12,4 @@ class PluginEssentialsServiceProvider extends PackageServiceProvider
         $package
             ->name('filament-plugin-essentials');
     }
-
-    public function packageRegistered(): void
-    {
-        $this->app->singleton(PluginEssentials::class, fn (): \BezhanSalleh\PluginEssentials\PluginEssentials => new PluginEssentials);
-    }
 }

@@ -5,9 +5,8 @@ declare(strict_types=1);
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Models\Post;
 
 test('to array', function () {
-
     $record = Post::factory()->create()->fresh();
-    dd($record);
+
     expect(array_keys($record->toArray()))
         ->toBe([
             'id',
@@ -17,5 +16,4 @@ test('to array', function () {
             'created_at',
             'updated_at',
         ]);
-})
-    ->todo();
+});
