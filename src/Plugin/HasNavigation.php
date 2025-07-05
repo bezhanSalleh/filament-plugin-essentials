@@ -22,7 +22,7 @@ trait HasNavigation
 
     protected array | Closure | null | string $navigationBadgeColor = null;
 
-    protected bool | Closure $shouldEnableNavigationBadge = false;
+    protected Closure | string | null $navigationBadge = null;
 
     protected Closure | string | null $navigationParentItem = null;
 
@@ -57,9 +57,9 @@ trait HasNavigation
         return $this;
     }
 
-    public function navigationBadge(bool | Closure $condition = true): static
+    public function navigationBadge(Closure | null | string $value = null): static
     {
-        $this->shouldEnableNavigationBadge = $condition;
+        $this->navigationBadge = $value;
 
         return $this;
     }
@@ -135,9 +135,9 @@ trait HasNavigation
         return $this->evaluate($this->navigationBadgeTooltip);
     }
 
-    public function shouldEnableNavigationBadge(): bool
+    public function getNavigationBadge(): ?string
     {
-        return $this->evaluate($this->shouldEnableNavigationBadge);
+        return $this->evaluate($this->navigationBadge);
     }
 
     public function getNavigationBadgeColor(): array | string | null

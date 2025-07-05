@@ -14,13 +14,13 @@ In Filament plugin development, we often need to override core resource methods 
 - `getSlug()`
 - and others…
 
-These methods are defined in **Filament-provided traits** (e.g., `BelongsToCluster`, `HasNavigation`, etc.) used in resource classes.  
+These methods are defined in **Filament-provided traits** (e.g., `BelongsToCluster`, `HasNavigation`, others in `src/Plugin/*`) used in resource classes.  
 We want to **conditionally override** their behavior at runtime — only if:
 
 1. The resource defines a `pluginEssential()` method that returns a plugin instance.
 2. That plugin instance uses a trait of the **same name** as the override trait in the resource (e.g., `BelongsToCluster`, `HasNavigation`).
 3. The resource class also uses a trait with the same name that is responsible for performing the conditional override.
-
+4. the actual resource and traits in the resources are located in vendor/filament/filament/src/Resources/Resource.php and vendor/filament/filament/src/Resources/Resource/Concernts/*
 If the conditions are **not** met, the system should gracefully fall back to the original Filament behavior (via `parent::method()`), without throwing errors.
 
 ---
@@ -67,11 +67,7 @@ use PluginNamespace\Traits\BelongsToCluster;
 class MyPlugin
 {
     use BelongsToCluster;
-
-    public function getCluster(): string
-    {
-        return 'PostsCluster';
-    }
+    use HasNavigation; // Overrides conditionally
 }
 ````
 
@@ -81,7 +77,8 @@ use ResourceNamespace\Traits\BelongsToCluster;
 
 class PostResource extends Resource
 {
-    use BelongsToCluster; // Overrides conditionally
+    use BelongsToCluster;
+    use HasNavigation; // Overrides conditionally
 
     public static function pluginEssential(): MyPlugin
     {
@@ -90,7 +87,14 @@ class PostResource extends Resource
 }
 ````
 
-If `MyPlugin` uses the `BelongsToCluster` trait, the overridden method in the resource will return the plugin’s value. Otherwise, it will default to Filament’s original logic.
+```php
+$panel->plugins([
+    MyPlugin::make()->navigationLabel('Essentails')
+        ->navigationBadge(condition: true),
+]);
+```
+
+If `MyPlugin` uses the `HasNavigation` trait, the overridden method in the resource will return the plugin’s value. Otherwise, it will default to Filament’s original logic.
 
 ---
 

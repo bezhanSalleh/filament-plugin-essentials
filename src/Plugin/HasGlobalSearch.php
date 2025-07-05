@@ -49,6 +49,11 @@ trait HasGlobalSearch
         return $this->evaluate($this->isGloballySearchable);
     }
 
+    public function isGloballySearchable(): bool
+    {
+        return $this->evaluate($this->isGloballySearchable);
+    }
+
     public function getGlobalSearchResultsLimit(): int
     {
         return $this->evaluate($this->globalSearchResultsLimit);

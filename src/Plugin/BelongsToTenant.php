@@ -40,6 +40,11 @@ trait BelongsToTenant
         return $this->evaluate($this->isScopedToTenant);
     }
 
+    public function shouldScopeToTenant(): bool
+    {
+        return $this->evaluate($this->isScopedToTenant);
+    }
+
     public function getTenantRelationshipName(): ?string
     {
         return $this->evaluate($this->tenantRelationshipName);

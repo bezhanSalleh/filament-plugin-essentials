@@ -77,22 +77,22 @@ it('has default null navigation badge tooltip', function () {
     expect($this->testClass->getNavigationBadgeTooltip())->toBeNull();
 });
 
-it('can set navigation badge as boolean', function () {
-    $result = $this->testClass->navigationBadge(true);
+it('can set navigation badge as string', function () {
+    $result = $this->testClass->navigationBadge('5');
 
     expect($result)->toBe($this->testClass)
-        ->and($this->testClass->shouldEnableNavigationBadge())->toBeTrue();
+        ->and($this->testClass->getNavigationBadge())->toBe('5');
 });
 
 it('can set navigation badge as closure', function () {
-    $result = $this->testClass->navigationBadge(fn () => true);
+    $result = $this->testClass->navigationBadge(fn () => '10');
 
     expect($result)->toBe($this->testClass)
-        ->and($this->testClass->shouldEnableNavigationBadge())->toBeTrue();
+        ->and($this->testClass->getNavigationBadge())->toBe('10');
 });
 
-it('has default false navigation badge', function () {
-    expect($this->testClass->shouldEnableNavigationBadge())->toBeFalse();
+it('has default null navigation badge', function () {
+    expect($this->testClass->getNavigationBadge())->toBeNull();
 });
 
 it('can set navigation badge color as string', function () {

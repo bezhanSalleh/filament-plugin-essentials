@@ -44,7 +44,7 @@
     "autoload-dev": {
         "psr-4": {
             "BezhanSalleh\\PluginEssentials\\Tests\\": "tests/",
-            "BezhanSalleh\\PluginEssentials\\Tests\\Database\\Factories": "tests/database/factories",
+            "BezhanSalleh\\PluginEssentials\\Tests\\Database\\Factories\\": "tests/database/factories",
             "Workbench\\App\\": "workbench/app/"
         }
     },
