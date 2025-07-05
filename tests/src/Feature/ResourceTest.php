@@ -90,7 +90,7 @@ describe('Resource HasLabels Trait', function () {
         // Note: Resource parent class provides default implementations
         expect(UserResource::getModelLabel())->toBe('Essential Item (Method)');  // Plugin method override
         expect(UserResource::getPluralModelLabel())->toBe('Essential Items');  // Plugin default from array
-        expect(UserResource::getRecordTitleAttribute())->toBe('id'); // Plugin default from array 
+        expect(UserResource::getRecordTitleAttribute())->toBe('id'); // Plugin default from array
         expect(UserResource::hasTitleCaseModelLabel())->toBeFalse(); // Plugin default from array
 
         expect(PostResource::getModelLabel())->toBe('post');  // Filament default (no plugin delegation)
