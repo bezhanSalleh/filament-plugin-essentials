@@ -1,10 +1,19 @@
 <?php
 
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\EssentialPlugin;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\MultiResourceEssentialPlugin;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Posts\PostResource;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\UserResource;
+use Filament\Facades\Filament;
 use Filament\Pages\Enums\SubNavigationPosition;
 
 beforeEach(function () {
-    $this->plugin = EssentialPlugin::make();
+    $this->panel = Filament::getCurrentOrDefaultPanel();
+    $this->panel
+        ->plugins([
+            EssentialPlugin::make(),
+        ]);
+    $this->plugin = Filament::getPlugin('bezhansalleh/essentials');
 });
 
 describe('Plugin HasNavigation Trait', function () {
@@ -209,7 +218,7 @@ describe('Plugin HasLabels Trait', function () {
 
 describe('Plugin BelongsToCluster Trait', function () {
     it('can set cluster as string', function () {
-        $clusterClass = 'App\\Filament\\Clusters\\TestCluster';
+        $clusterClass = 'App\\Filament\\Clusters\\UserCluster';
         $result = $this->plugin->cluster($clusterClass);
 
         expect($result)->toBe($this->plugin)
@@ -217,7 +226,7 @@ describe('Plugin BelongsToCluster Trait', function () {
     });
 
     it('can set cluster as closure', function () {
-        $clusterClass = 'App\\Filament\\Clusters\\TestCluster';
+        $clusterClass = 'App\\Filament\\Clusters\\UserCluster';
         $result = $this->plugin->cluster(fn () => $clusterClass);
 
         expect($result)->toBe($this->plugin)
@@ -326,5 +335,207 @@ describe('Plugin HasGlobalSearch Trait', function () {
 
     it('has default false split global search terms', function () {
         expect($this->plugin->shouldSplitGlobalSearchTerms())->toBeFalse();
+    });
+});
+
+describe('Multi-Resource Plugin Support', function () {
+    beforeEach(function () {
+        $this->multiPlugin = MultiResourceEssentialPlugin::make();
+    });
+
+    describe('WithMultipleResourceSupport Trait', function () {
+        it('can set contextual navigation properties for specific resources', function () {
+            $this->multiPlugin
+                ->resource(UserResource::class)
+                ->navigationLabel('User Management')
+                ->navigationGroup('Admin')
+                ->navigationSort(10)
+                ->resource(PostResource::class)
+                ->navigationLabel('Post Management')
+                ->navigationGroup('Content')
+                ->navigationSort(20);
+
+            // Test UserResource context
+            expect($this->multiPlugin->getNavigationLabel(UserResource::class))->toBe('User Management')
+                ->and($this->multiPlugin->getNavigationGroup(UserResource::class))->toBe('Admin')
+                ->and($this->multiPlugin->getNavigationSort(UserResource::class))->toBe(10);
+
+            // Test PostResource context
+            expect($this->multiPlugin->getNavigationLabel(PostResource::class))->toBe('Post Management')
+                ->and($this->multiPlugin->getNavigationGroup(PostResource::class))->toBe('Content')
+                ->and($this->multiPlugin->getNavigationSort(PostResource::class))->toBe(20);
+        });
+
+        it('can set contextual labels for specific resources', function () {
+            $this->multiPlugin
+                ->resource(UserResource::class)
+                ->modelLabel('User')
+                ->pluralModelLabel('Users')
+                ->recordTitleAttribute('name')
+                ->resource(PostResource::class)
+                ->modelLabel('Article')
+                ->pluralModelLabel('Articles')
+                ->recordTitleAttribute('title');
+
+            // Test UserResource context
+            expect($this->multiPlugin->getModelLabel(UserResource::class))->toBe('User')
+                ->and($this->multiPlugin->getPluralModelLabel(UserResource::class))->toBe('Users')
+                ->and($this->multiPlugin->getRecordTitleAttribute(UserResource::class))->toBe('name');
+
+            // Test PostResource context
+            expect($this->multiPlugin->getModelLabel(PostResource::class))->toBe('Article')
+                ->and($this->multiPlugin->getPluralModelLabel(PostResource::class))->toBe('Articles')
+                ->and($this->multiPlugin->getRecordTitleAttribute(PostResource::class))->toBe('title');
+        });
+
+        it('can set contextual cluster settings for specific resources', function () {
+            $this->multiPlugin
+                ->resource(UserResource::class)
+                ->cluster('App\\Filament\\Clusters\\AdminCluster')
+                ->resource(PostResource::class)
+                ->cluster('App\\Filament\\Clusters\\ContentCluster');
+
+            expect($this->multiPlugin->getCluster(UserResource::class))->toBe('App\\Filament\\Clusters\\AdminCluster')
+                ->and($this->multiPlugin->getCluster(PostResource::class))->toBe('App\\Filament\\Clusters\\ContentCluster');
+        });
+
+        it('can set contextual tenant settings for specific resources', function () {
+            $this->multiPlugin
+                ->resource(UserResource::class)
+                ->scopeToTenant(false)
+                ->tenantRelationshipName('organization')
+                ->resource(PostResource::class)
+                ->scopeToTenant(true)
+                ->tenantRelationshipName('tenant');
+
+            expect($this->multiPlugin->shouldScopeToTenant(UserResource::class))->toBeFalse()
+                ->and($this->multiPlugin->getTenantRelationshipName(UserResource::class))->toBe('organization')
+                ->and($this->multiPlugin->shouldScopeToTenant(PostResource::class))->toBeTrue()
+                ->and($this->multiPlugin->getTenantRelationshipName(PostResource::class))->toBe('tenant');
+        });
+
+        it('can set contextual global search settings for specific resources', function () {
+            $this->multiPlugin
+                ->resource(UserResource::class)
+                ->globallySearchable(true)
+                ->globalSearchResultsLimit(25)
+                ->splitGlobalSearchTerms(true)
+                ->resource(PostResource::class)
+                ->globallySearchable(false)
+                ->globalSearchResultsLimit(10)
+                ->splitGlobalSearchTerms(false);
+
+            expect($this->multiPlugin->canGloballySearch(UserResource::class))->toBeTrue()
+                ->and($this->multiPlugin->getGlobalSearchResultsLimit(UserResource::class))->toBe(25)
+                ->and($this->multiPlugin->shouldSplitGlobalSearchTerms(UserResource::class))->toBeTrue()
+                ->and($this->multiPlugin->canGloballySearch(PostResource::class))->toBeFalse()
+                ->and($this->multiPlugin->getGlobalSearchResultsLimit(PostResource::class))->toBe(10)
+                ->and($this->multiPlugin->shouldSplitGlobalSearchTerms(PostResource::class))->toBeFalse();
+        });
+
+        it('can set contextual parent resource settings', function () {
+            $this->multiPlugin
+                ->resource(UserResource::class)
+                ->parentResource('App\\Filament\\Resources\\OrganizationResource')
+                ->resource(PostResource::class)
+                ->parentResource('App\\Filament\\Resources\\CategoryResource');
+
+            expect($this->multiPlugin->getParentResource(UserResource::class))->toBe('App\\Filament\\Resources\\OrganizationResource')
+                ->and($this->multiPlugin->getParentResource(PostResource::class))->toBe('App\\Filament\\Resources\\CategoryResource');
+        });
+
+        it('returns null for unset resource contexts', function () {
+            // Set properties for UserResource only
+            $this->multiPlugin
+                ->resource(UserResource::class)
+                ->navigationLabel('User Management')
+                ->modelLabel('User');
+
+            // PostResource should return null for unset properties
+            expect($this->multiPlugin->getNavigationLabel(PostResource::class))->toBe('')
+                ->and($this->multiPlugin->getModelLabel(PostResource::class))->toBeNull();
+        });
+
+        it('supports fluent method chaining across different resources', function () {
+            $result = $this->multiPlugin
+                ->resource(UserResource::class)
+                ->navigationLabel('Users')
+                ->navigationGroup('Admin')
+                ->modelLabel('User')
+                ->globallySearchable(true)
+                ->resource(PostResource::class)
+                ->navigationLabel('Posts')
+                ->navigationGroup('Content')
+                ->modelLabel('Post')
+                ->globallySearchable(false);
+
+            expect($result)->toBe($this->multiPlugin);
+
+            // Verify all properties were set correctly
+            expect($this->multiPlugin->getNavigationLabel(UserResource::class))->toBe('Users')
+                ->and($this->multiPlugin->getNavigationGroup(UserResource::class))->toBe('Admin')
+                ->and($this->multiPlugin->getModelLabel(UserResource::class))->toBe('User')
+                ->and($this->multiPlugin->canGloballySearch(UserResource::class))->toBeTrue()
+                ->and($this->multiPlugin->getNavigationLabel(PostResource::class))->toBe('Posts')
+                ->and($this->multiPlugin->getNavigationGroup(PostResource::class))->toBe('Content')
+                ->and($this->multiPlugin->getModelLabel(PostResource::class))->toBe('Post')
+                ->and($this->multiPlugin->canGloballySearch(PostResource::class))->toBeFalse();
+        });
+
+        it('can handle closures in contextual properties', function () {
+            $userLabelCalled = false;
+            $postLabelCalled = false;
+
+            $this->multiPlugin
+                ->resource(UserResource::class)
+                ->navigationLabel(function () use (&$userLabelCalled) {
+                    $userLabelCalled = true;
+
+                    return 'Dynamic User Label';
+                })
+                ->resource(PostResource::class)
+                ->navigationLabel(function () use (&$postLabelCalled) {
+                    $postLabelCalled = true;
+
+                    return 'Dynamic Post Label';
+                });
+
+            // Get labels to trigger closures
+            $userLabel = $this->multiPlugin->getNavigationLabel(UserResource::class);
+            $postLabel = $this->multiPlugin->getNavigationLabel(PostResource::class);
+
+            expect($userLabelCalled)->toBeTrue()
+                ->and($postLabelCalled)->toBeTrue()
+                ->and($userLabel)->toBe('Dynamic User Label')
+                ->and($postLabel)->toBe('Dynamic Post Label');
+        });
+    });
+
+    describe('Single-Resource Plugin Compatibility', function () {
+        it('single-resource plugin works without WithMultipleResourceSupport trait', function () {
+            // EssentialPlugin doesn't use WithMultipleResourceSupport
+            $singlePlugin = EssentialPlugin::make();
+
+            $result = $singlePlugin
+                ->navigationLabel('Single Resource Label')
+                ->navigationGroup('Single Group')
+                ->modelLabel('Single Model');
+
+            expect($result)->toBe($singlePlugin)
+                ->and($singlePlugin->getNavigationLabel())->toBe('Single Resource Label')
+                ->and($singlePlugin->getNavigationGroup())->toBe('Single Group')
+                ->and($singlePlugin->getModelLabel())->toBe('Single Model');
+        });
+
+        it('multi-resource plugin can still be used without resource context for backward compatibility', function () {
+            // When no resource context is set, should work like single-resource
+            $result = $this->multiPlugin
+                ->navigationLabel('Global Label')
+                ->modelLabel('Global Model');
+
+            expect($result)->toBe($this->multiPlugin)
+                ->and($this->multiPlugin->getNavigationLabel())->toBe('Global Label')
+                ->and($this->multiPlugin->getModelLabel())->toBe('Global Model');
+        });
     });
 });

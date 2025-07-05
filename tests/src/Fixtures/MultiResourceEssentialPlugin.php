@@ -8,12 +8,14 @@ use BezhanSalleh\PluginEssentials\Plugin\BelongsToTenant;
 use BezhanSalleh\PluginEssentials\Plugin\HasGlobalSearch;
 use BezhanSalleh\PluginEssentials\Plugin\HasLabels;
 use BezhanSalleh\PluginEssentials\Plugin\HasNavigation;
+use BezhanSalleh\PluginEssentials\Plugin\WithMultipleResourceSupport;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Posts\PostResource;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\UserResource;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Filament\Support\Concerns\EvaluatesClosures;
 
-class EssentialPlugin implements Plugin
+class MultiResourceEssentialPlugin implements Plugin
 {
     use BelongsToCluster;
     use BelongsToParent;
@@ -22,6 +24,7 @@ class EssentialPlugin implements Plugin
     use HasGlobalSearch;
     use HasLabels;
     use HasNavigation;
+    use WithMultipleResourceSupport;
 
     public static function make(): static
     {
@@ -30,13 +33,14 @@ class EssentialPlugin implements Plugin
 
     public function getId(): string
     {
-        return 'bezhansalleh/essentials';
+        return 'bezhansalleh/essentials-multi';
     }
 
     public function register(Panel $panel): void
     {
         $panel->resources([
             UserResource::class,
+            PostResource::class,
         ]);
     }
 

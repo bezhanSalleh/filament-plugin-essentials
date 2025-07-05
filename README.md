@@ -22,12 +22,13 @@ The package uses an advanced **conditional delegation system** that automaticall
 ## 🚀 Key Features
 
 - ✅ **Plug-and-play traits** for common plugin customizations
+- ✅ **Multi-resource support** with per-resource configuration (New in v2.0!)
 - ✅ **Conditional delegation system** with automatic trait detection
 - ✅ **Type-safe implementation** with full IntelliSense support
 - ✅ **Fluent API** for end-user configuration
 - ✅ **Graceful fallbacks** when plugins don't implement certain features
 - ✅ **Closure support** for dynamic values
-- ✅ **Comprehensive test coverage** (97%+)
+- ✅ **Comprehensive test coverage** (72.4% with 73 tests)
 - ✅ **Zero breaking changes** to existing Filament behavior
 
 ## 📦 Installation
@@ -220,6 +221,28 @@ $plugin
     ->splitGlobalSearchTerms(false);           // bool|Closure
 ```
 
+#### `WithMultipleResourceSupport` (New in v2.0)
+Enables per-resource configuration for plugins with multiple resources:
+
+```php
+// Add this trait to enable resource-specific configuration
+class YourPlugin implements Plugin 
+{
+    use HasNavigation;
+    use HasLabels;
+    use WithMultipleResourceSupport;  // Enables ->resource(ResourceClass::class) API
+}
+
+// Usage:
+$plugin
+    ->resource(UserResource::class)
+        ->navigationLabel('Users')
+        ->modelLabel('User')
+    ->resource(PostResource::class)
+        ->navigationLabel('Posts')
+        ->modelLabel('Article');
+```
+
 ### Resource Traits (Include in your resource classes)
 
 Each plugin trait has a corresponding resource trait:
@@ -335,6 +358,140 @@ class PostResource extends Resource
 
 The delegation system automatically handles different trait combinations per resource.
 
+## 🎯 Multi-Resource Plugin Support
+
+**New in v2.0:** For plugins that register multiple resources with different configuration needs, you can now use the `WithMultipleResourceSupport` trait to provide resource-specific settings.
+
+### Setup for Plugin Developers
+
+Add the `WithMultipleResourceSupport` trait to your plugin to enable per-resource configuration:
+
+```php
+<?php
+
+namespace YourVendor\YourPlugin;
+
+use BezhanSalleh\PluginEssentials\Plugin\HasNavigation;
+use BezhanSalleh\PluginEssentials\Plugin\HasLabels;
+use BezhanSalleh\PluginEssentials\Plugin\WithMultipleResourceSupport;
+use Filament\Contracts\Plugin;
+
+class YourMultiResourcePlugin implements Plugin
+{
+    use HasNavigation;
+    use HasLabels;
+    use WithMultipleResourceSupport; // 🎯 This enables multi-resource support
+    
+    public function register(Panel $panel): void
+    {
+        $panel->resources([
+            UserResource::class,
+            PostResource::class,
+            CategoryResource::class,
+        ]);
+    }
+    
+    // ... rest of plugin implementation
+}
+```
+
+### Usage for End Users
+
+End users can now configure different settings for each resource using the fluent `resource()` API:
+
+```php
+YourMultiResourcePlugin::make()
+    // Configure UserResource
+    ->resource(UserResource::class)
+        ->navigationLabel('User Management')
+        ->navigationGroup('Administration')
+        ->navigationIcon('heroicon-o-users')
+        ->modelLabel('User')
+        ->pluralModelLabel('Users')
+        ->cluster(AdminCluster::class)
+        
+    // Configure PostResource with different settings
+    ->resource(PostResource::class)
+        ->navigationLabel('Blog Posts')
+        ->navigationGroup('Content')
+        ->navigationIcon('heroicon-o-document-text')
+        ->modelLabel('Article')
+        ->pluralModelLabel('Articles')
+        ->cluster(ContentCluster::class)
+        
+    // Configure CategoryResource
+    ->resource(CategoryResource::class)
+        ->navigationLabel('Categories')
+        ->navigationGroup('Content')
+        ->navigationIcon('heroicon-o-folder')
+        ->globallySearchable(false);
+```
+
+### Resource-Specific Delegation
+
+Resources automatically receive their specific configuration:
+
+```php
+// UserResource will get:
+// - Navigation label: "User Management"
+// - Navigation group: "Administration" 
+// - Model label: "User"
+// - Cluster: AdminCluster::class
+
+// PostResource will get:
+// - Navigation label: "Blog Posts"
+// - Navigation group: "Content"
+// - Model label: "Article" 
+// - Cluster: ContentCluster::class
+```
+
+### Key Features
+
+- **✅ Fluent API**: Chain configurations for different resources
+- **✅ Resource Context**: Each resource gets its own isolated configuration
+- **✅ Backward Compatible**: Single-resource plugins work exactly as before
+- **✅ Closure Support**: Dynamic values work in resource-specific contexts
+- **✅ Fallback Behavior**: Unset properties fall back to global defaults
+- **✅ Type Safety**: Full IntelliSense support for all configurations
+
+### Advanced Multi-Resource Configuration
+
+```php
+YourMultiResourcePlugin::make()
+    ->resource(UserResource::class)
+        ->navigationLabel(fn() => 'Users (' . User::count() . ')')
+        ->navigationGroup('Admin')
+        ->globallySearchable(true)
+        ->globalSearchResultsLimit(25)
+        ->tenantScope(false)
+        
+    ->resource(PostResource::class)
+        ->navigationLabel(fn() => 'Posts (' . Post::published()->count() . ')')
+        ->navigationGroup('Content')
+        ->globallySearchable(true)
+        ->globalSearchResultsLimit(10)
+        ->tenantScope(true)
+        ->tenantRelationshipName('organization')
+        
+    ->resource(CategoryResource::class)
+        ->navigationLabel('Categories')
+        ->navigationGroup('Content')
+        ->globallySearchable(false)
+        ->parentResource(PostResource::class);
+```
+
+### Backward Compatibility
+
+Existing single-resource plugins continue to work without any changes:
+
+```php
+// This still works exactly as before
+YourSingleResourcePlugin::make()
+    ->navigationLabel('My Resource')
+    ->navigationGroup('My Group')
+    ->modelLabel('Item');
+```
+
 ## 🧪 Testing
 
 The package includes comprehensive tests covering all delegation scenarios:
@@ -345,7 +502,7 @@ composer test:coverage  # View coverage report
 composer test:type      # Type coverage analysis
 ```
 
-Current test coverage: **97%+** with 188 tests and 326 assertions.
+Current test coverage: **72.4%** with **73 tests** and **236 assertions**, including comprehensive multi-resource support testing.
 
 ## Changelog
 

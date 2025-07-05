@@ -13,6 +13,10 @@ trait BelongsToParent
 
     public function parentResource(?string $resource): static
     {
+        if (method_exists($this, 'setContextualProperty')) {
+            return $this->setContextualProperty('parentResource', $resource);
+        }
+
         $this->parentResource = $resource;
 
         return $this;
@@ -21,8 +25,12 @@ trait BelongsToParent
     /**
      * @return class-string | null
      */
-    public function getParentResource(): ?string
+    public function getParentResource(?string $resourceClass = null): ?string
     {
+        if (method_exists($this, 'getContextualProperty')) {
+            return $this->getContextualProperty('parentResource', $resourceClass);
+        }
+
         return $this->parentResource;
     }
 }

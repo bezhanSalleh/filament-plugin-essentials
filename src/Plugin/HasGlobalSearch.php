@@ -18,6 +18,10 @@ trait HasGlobalSearch
 
     public function globalSearchResultsLimit(int $limit): static
     {
+        if (method_exists($this, 'setContextualProperty')) {
+            return $this->setContextualProperty('globalSearchResultsLimit', $limit);
+        }
+
         $this->globalSearchResultsLimit = $limit;
 
         return $this;
@@ -25,6 +29,10 @@ trait HasGlobalSearch
 
     public function globallySearchable(bool | Closure $condition = true): static
     {
+        if (method_exists($this, 'setContextualProperty')) {
+            return $this->setContextualProperty('isGloballySearchable', $condition);
+        }
+
         $this->isGloballySearchable = $condition;
 
         return $this;
@@ -32,6 +40,10 @@ trait HasGlobalSearch
 
     public function forceGlobalSearchCaseInsensitive(bool | Closure | null $condition = true): static
     {
+        if (method_exists($this, 'setContextualProperty')) {
+            return $this->setContextualProperty('isGlobalSearchForcedCaseInsensitive', $condition);
+        }
+
         $this->isGlobalSearchForcedCaseInsensitive = $condition;
 
         return $this;
@@ -39,33 +51,67 @@ trait HasGlobalSearch
 
     public function splitGlobalSearchTerms(bool | Closure $condition = true): static
     {
+        if (method_exists($this, 'setContextualProperty')) {
+            return $this->setContextualProperty('shouldSplitGlobalSearchTerms', $condition);
+        }
+
         $this->shouldSplitGlobalSearchTerms = $condition;
 
         return $this;
     }
 
-    public function canGloballySearch(): bool
+    public function canGloballySearch(?string $resourceClass = null): bool
     {
-        return $this->evaluate($this->isGloballySearchable);
+        if (method_exists($this, 'getContextualProperty')) {
+            $value = $this->getContextualProperty('isGloballySearchable', $resourceClass);
+        } else {
+            $value = $this->isGloballySearchable;
+        }
+
+        return $this->evaluate($value);
     }
 
-    public function isGloballySearchable(): bool
+    public function isGloballySearchable(?string $resourceClass = null): bool
     {
-        return $this->evaluate($this->isGloballySearchable);
+        if (method_exists($this, 'getContextualProperty')) {
+            $value = $this->getContextualProperty('isGloballySearchable', $resourceClass);
+        } else {
+            $value = $this->isGloballySearchable;
+        }
+
+        return $this->evaluate($value);
     }
 
-    public function getGlobalSearchResultsLimit(): int
+    public function getGlobalSearchResultsLimit(?string $resourceClass = null): int
     {
-        return $this->evaluate($this->globalSearchResultsLimit);
+        if (method_exists($this, 'getContextualProperty')) {
+            $value = $this->getContextualProperty('globalSearchResultsLimit', $resourceClass);
+        } else {
+            $value = $this->globalSearchResultsLimit;
+        }
+
+        return $this->evaluate($value);
     }
 
-    public function isGlobalSearchForcedCaseInsensitive(): ?bool
+    public function isGlobalSearchForcedCaseInsensitive(?string $resourceClass = null): ?bool
     {
-        return $this->evaluate($this->isGlobalSearchForcedCaseInsensitive);
+        if (method_exists($this, 'getContextualProperty')) {
+            $value = $this->getContextualProperty('isGlobalSearchForcedCaseInsensitive', $resourceClass);
+        } else {
+            $value = $this->isGlobalSearchForcedCaseInsensitive;
+        }
+
+        return $this->evaluate($value);
     }
 
-    public function shouldSplitGlobalSearchTerms(): bool
+    public function shouldSplitGlobalSearchTerms(?string $resourceClass = null): bool
     {
-        return $this->evaluate($this->shouldSplitGlobalSearchTerms);
+        if (method_exists($this, 'getContextualProperty')) {
+            $value = $this->getContextualProperty('shouldSplitGlobalSearchTerms', $resourceClass);
+        } else {
+            $value = $this->shouldSplitGlobalSearchTerms;
+        }
+
+        return $this->evaluate($value);
     }
 }

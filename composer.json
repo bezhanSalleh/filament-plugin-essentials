@@ -56,7 +56,7 @@
         "refactor": "rector",
         "test:lint": "pint --test",
         "test:refactor": "rector --dry-run",
-        "test:unit": "pest --parallel",
+        "test:unit": "pest",
         "test:coverage": "pest --coverage --parallel",
         "test:type": "pest --type-coverage",
         "test": [

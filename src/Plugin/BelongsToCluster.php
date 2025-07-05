@@ -16,6 +16,10 @@ trait BelongsToCluster
 
     public function cluster(string | Closure | null $cluster): static
     {
+        if (method_exists($this, 'setContextualProperty')) {
+            return $this->setContextualProperty('cluster', $cluster);
+        }
+
         $this->cluster = $cluster;
 
         return $this;
@@ -24,8 +28,14 @@ trait BelongsToCluster
     /**
      * @return class-string<Cluster> | null
      */
-    public function getCluster(): ?string
+    public function getCluster(?string $resourceClass = null): ?string
     {
-        return $this->evaluate($this->cluster);
+        if (method_exists($this, 'getContextualProperty')) {
+            $value = $this->getContextualProperty('cluster', $resourceClass);
+        } else {
+            $value = $this->cluster;
+        }
+
+        return $this->evaluate($value);
     }
 }
