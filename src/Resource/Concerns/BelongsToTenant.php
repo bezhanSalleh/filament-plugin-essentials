@@ -31,7 +31,7 @@ trait BelongsToTenant
     /**
      * Get the tenant relationship name.
      */
-    public static function getTenantRelationshipName(): ?string
+    public static function getTenantRelationshipName(): string
     {
         $pluginResult = static::delegateToPlugin(
             'BelongsToTenant',
@@ -40,16 +40,16 @@ trait BelongsToTenant
         );
 
         if (! static::isNoPluginResult($pluginResult)) {
-            return $pluginResult;
+            return $pluginResult ?? '';
         }
 
-        return static::getParentResult('getTenantRelationshipName');
+        return static::getParentResult('getTenantRelationshipName') ?? '';
     }
 
     /**
      * Get the tenant ownership relationship name.
      */
-    public static function getTenantOwnershipRelationshipName(): ?string
+    public static function getTenantOwnershipRelationshipName(): string
     {
         $pluginResult = static::delegateToPlugin(
             'BelongsToTenant',
@@ -58,9 +58,9 @@ trait BelongsToTenant
         );
 
         if (! static::isNoPluginResult($pluginResult)) {
-            return $pluginResult;
+            return $pluginResult ?? '';
         }
 
-        return static::getParentResult('getTenantOwnershipRelationshipName');
+        return static::getParentResult('getTenantOwnershipRelationshipName') ?? '';
     }
 }

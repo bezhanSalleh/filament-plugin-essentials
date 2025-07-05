@@ -15,7 +15,7 @@ it('can register the plugin', function () {
             EssentialPlugin::make(),
         ]);
 
-    expect(Filament::getPlugin('bezhansalleh/essentials'))->toBeInstanceOf(CuratorPlugin::class);
+    expect(Filament::getPlugin('bezhansalleh/essentials'))->toBeInstanceOf(EssentialPlugin::class);
 });
 
 it('sets model labels', function (
