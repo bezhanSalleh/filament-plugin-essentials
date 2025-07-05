@@ -88,15 +88,15 @@ describe('Resource HasLabels Trait', function () {
 
     it('can call label methods on resources', function () {
         // Note: Resource parent class provides default implementations
-        expect(UserResource::getModelLabel())->toBe('');  // Empty string from delegation
-        expect(UserResource::getPluralModelLabel())->toBe('');  // Default empty string
-        expect(UserResource::getRecordTitleAttribute())->toBeNull();
-        expect(UserResource::hasTitleCaseModelLabel())->toBeTrue();
+        expect(UserResource::getModelLabel())->toBe('Essential Item (Method)');  // Plugin method override
+        expect(UserResource::getPluralModelLabel())->toBe('Essential Items');  // Plugin default from array
+        expect(UserResource::getRecordTitleAttribute())->toBe('id'); // Plugin default from array 
+        expect(UserResource::hasTitleCaseModelLabel())->toBeFalse(); // Plugin default from array
 
-        expect(PostResource::getModelLabel())->toBe('post');  // Empty string from delegation
-        expect(PostResource::getPluralModelLabel())->toBe('posts');  // Default empty string
-        expect(PostResource::getRecordTitleAttribute())->toBeNull();
-        expect(PostResource::hasTitleCaseModelLabel())->toBeTrue();
+        expect(PostResource::getModelLabel())->toBe('post');  // Filament default (no plugin delegation)
+        expect(PostResource::getPluralModelLabel())->toBe('posts');  // Filament default (no plugin delegation)
+        expect(PostResource::getRecordTitleAttribute())->toBeNull(); // Filament default (no plugin delegation)
+        expect(PostResource::hasTitleCaseModelLabel())->toBeTrue(); // Filament default (no plugin delegation)
     });
 });
 

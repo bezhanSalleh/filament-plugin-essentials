@@ -1,7 +1,7 @@
 <?php
 
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\EssentialPlugin;
-use BezhanSalleh\PluginEssentials\Tests\Fixtures\MultiResourceEssentialPlugin;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins\MultiResourceTestPlugin;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Posts\PostResource;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\UserResource;
 use Filament\Facades\Filament;
@@ -199,8 +199,8 @@ describe('Plugin HasLabels Trait', function () {
             ->and($this->plugin->hasTitleCaseModelLabel())->toBeFalse();
     });
 
-    it('has default true title case model label', function () {
-        expect($this->plugin->hasTitleCaseModelLabel())->toBeTrue();
+    it('has default false title case model label', function () {
+        expect($this->plugin->hasTitleCaseModelLabel())->toBeFalse();
     });
 
     it('supports method chaining for labels', function () {
@@ -341,7 +341,7 @@ describe('Plugin HasGlobalSearch Trait', function () {
 
 describe('Multi-Resource Plugin Support', function () {
     beforeEach(function () {
-        $this->multiPlugin = MultiResourceEssentialPlugin::make();
+        $this->multiPlugin = MultiResourceTestPlugin::make();
     });
 
     describe('WithMultipleResourceSupport Trait', function () {
@@ -452,9 +452,9 @@ describe('Multi-Resource Plugin Support', function () {
                 ->navigationLabel('User Management')
                 ->modelLabel('User');
 
-            // PostResource should return null for unset properties
-            expect($this->multiPlugin->getNavigationLabel(PostResource::class))->toBe('')
-                ->and($this->multiPlugin->getModelLabel(PostResource::class))->toBeNull();
+            // PostResource should return plugin defaults for unset properties
+            expect($this->multiPlugin->getNavigationLabel(PostResource::class))->toBe('') // No plugin default, falls back to Filament (empty string)
+                ->and($this->multiPlugin->getModelLabel(PostResource::class))->toBe('Multi Item'); // Plugin default
         });
 
         it('supports fluent method chaining across different resources', function () {

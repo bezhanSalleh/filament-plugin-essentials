@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\EssentialPlugin;
-use BezhanSalleh\PluginEssentials\Tests\Fixtures\MultiResourceEssentialPlugin;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins\MultiResourceTestPlugin;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Admin\AdminResource;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Posts\PostResource;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\UserResource;
@@ -27,10 +27,10 @@ describe('Plugin Registration', function () {
     it('can register multi-resource plugin', function () {
         $this->panel
             ->plugins([
-                MultiResourceEssentialPlugin::make(),
+                MultiResourceTestPlugin::make(),
             ]);
 
-        expect(Filament::getPlugin('bezhansalleh/essentials-multi'))->toBeInstanceOf(MultiResourceEssentialPlugin::class);
+        expect(Filament::getPlugin('multi-resource-test'))->toBeInstanceOf(MultiResourceTestPlugin::class);
     });
 });
 
@@ -73,15 +73,15 @@ describe('Plugin HasLabels Trait', function () {
 
         // Test plugin getter methods - mixed custom and defaults
         expect($plugin->getModelLabel())->toBe('Person')
-            ->and($plugin->getPluralModelLabel())->toBeNull() // Default null
+            ->and($plugin->getPluralModelLabel())->toBe('Essential Items') // Plugin default from array
             ->and($plugin->getRecordTitleAttribute())->toBe('name')
-            ->and($plugin->hasTitleCaseModelLabel())->toBeTrue(); // Default true
+            ->and($plugin->hasTitleCaseModelLabel())->toBeFalse(); // Plugin default false
 
         // Test that resources delegate to plugin and receive values
         expect(UserResource::getModelLabel())->toBe('Person')
-            ->and(UserResource::getPluralModelLabel())->toBe('') // Default empty string
+            ->and(UserResource::getPluralModelLabel())->toBe('Essential Items') // Plugin default
             ->and(UserResource::getRecordTitleAttribute())->toBe('name')
-            ->and(UserResource::hasTitleCaseModelLabel())->toBeTrue(); // Default true
+            ->and(UserResource::hasTitleCaseModelLabel())->toBeFalse(); // Plugin default
     });
 });
 
@@ -280,7 +280,7 @@ describe('Multi-Resource Plugin Support', function () {
     it('sets different labels per resource', function () {
         $this->panel
             ->plugins([
-                MultiResourceEssentialPlugin::make()
+                MultiResourceTestPlugin::make()
                     ->resource(AdminResource::class)
                     ->modelLabel('System Admin')
                     ->pluralModelLabel('System Admins')
@@ -305,7 +305,7 @@ describe('Multi-Resource Plugin Support', function () {
     it('uses mixed resource configs and defaults', function () {
         $this->panel
             ->plugins([
-                MultiResourceEssentialPlugin::make()
+                MultiResourceTestPlugin::make()
                     ->resource(AdminResource::class)
                     ->modelLabel('Administrator')
                         // Other properties use defaults
@@ -317,11 +317,11 @@ describe('Multi-Resource Plugin Support', function () {
 
         // AdminResource gets partial config, others default
         expect(AdminResource::getModelLabel())->toBe('Administrator')
-            ->and(AdminResource::getPluralModelLabel())->toBe('') // Default
-            ->and(AdminResource::getRecordTitleAttribute())->toBeNull(); // Default
+            ->and(AdminResource::getPluralModelLabel())->toBe('Multi Items') // Plugin default
+            ->and(AdminResource::getRecordTitleAttribute())->toBeNull(); // Resource default
 
         // PostResource gets different partial config
-        expect(PostResource::getModelLabel())->toBe('') // Default empty string
+        expect(PostResource::getModelLabel())->toBe('Multi Item') // Plugin default
             ->and(PostResource::getPluralModelLabel())->toBe('Articles')
             ->and(PostResource::getRecordTitleAttribute())->toBe('slug');
     });
@@ -329,7 +329,7 @@ describe('Multi-Resource Plugin Support', function () {
     it('sets different navigation per resource', function () {
         $this->panel
             ->plugins([
-                MultiResourceEssentialPlugin::make()
+                MultiResourceTestPlugin::make()
                     ->resource(AdminResource::class)
                     ->navigationLabel('User Management')
                     ->navigationGroup('Admin')
@@ -354,7 +354,7 @@ describe('Multi-Resource Plugin Support', function () {
     it('uses mixed navigation configs and defaults', function () {
         $this->panel
             ->plugins([
-                MultiResourceEssentialPlugin::make()
+                MultiResourceTestPlugin::make()
                     ->resource(AdminResource::class)
                     ->navigationLabel('Admins')
                     ->navigationSort(5)
@@ -370,15 +370,15 @@ describe('Multi-Resource Plugin Support', function () {
             ->and(AdminResource::getNavigationSort())->toBe(5);
 
         // PostResource gets different partial navigation config
-        expect(PostResource::getNavigationLabel())->toBe('') // Default empty string
+        expect(PostResource::getNavigationLabel())->toBe('Multi Items') // Falls back to plural model label
             ->and(PostResource::getNavigationGroup())->toBe('Publishing')
-            ->and(PostResource::getNavigationSort())->toBeNull(); // Default
+            ->and(PostResource::getNavigationSort())->toBe(20); // Plugin default
     });
 
     it('sets different cluster per resource', function () {
         $this->panel
             ->plugins([
-                MultiResourceEssentialPlugin::make()
+                MultiResourceTestPlugin::make()
                     ->resource(AdminResource::class)
                     ->cluster('App\\Filament\\Clusters\\AdminCluster')
                     ->resource(PostResource::class)
@@ -393,7 +393,7 @@ describe('Multi-Resource Plugin Support', function () {
     it('sets different tenant settings per resource', function () {
         $this->panel
             ->plugins([
-                MultiResourceEssentialPlugin::make()
+                MultiResourceTestPlugin::make()
                     ->resource(AdminResource::class)
                     ->scopeToTenant(true)
                     ->tenantRelationshipName('organization')
@@ -417,7 +417,7 @@ describe('Multi-Resource Plugin Support', function () {
     it('sets different global search per resource', function () {
         $this->panel
             ->plugins([
-                MultiResourceEssentialPlugin::make()
+                MultiResourceTestPlugin::make()
                     ->resource(AdminResource::class)
                     ->globallySearchable(true)
                     ->globalSearchResultsLimit(25)

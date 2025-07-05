@@ -1,28 +1,33 @@
 <?php
 
-namespace BezhanSalleh\PluginEssentials\Tests\Fixtures;
+namespace BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins;
 
 use BezhanSalleh\PluginEssentials\Plugin\HasGlobalSearch;
+use BezhanSalleh\PluginEssentials\Plugin\HasLabels;
+use BezhanSalleh\PluginEssentials\Plugin\HasNavigation;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\UserResource;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Filament\Support\Concerns\EvaluatesClosures;
 
-class GlobalSearchTestPlugin implements Plugin
+/**
+ * Plugin with only some defaults for testing mixed scenarios
+ */
+class MixedDefaultsTestPlugin implements Plugin
 {
     use EvaluatesClosures;
     use HasGlobalSearch;
+    use HasLabels;
+    use HasNavigation;
 
-    /**
-     * Plugin developer defaults for testing
-     */
     protected function getPluginDefaults(): array
     {
         return [
-            'globalSearchResultsLimit' => 100,
-            'isGloballySearchable' => false,
-            'isGlobalSearchForcedCaseInsensitive' => true,
-            'shouldSplitGlobalSearchTerms' => true,
+            // Only provide defaults for some properties
+            'pluralModelLabel' => 'Mixed Items',
+            'recordTitleAttribute' => 'slug',
+            'navigationSort' => 50,
+            'shouldRegisterNavigation' => false,
         ];
     }
 
@@ -33,12 +38,12 @@ class GlobalSearchTestPlugin implements Plugin
 
     public static function get(): ?static
     {
-        return \Filament\Facades\Filament::getPlugin('global-search-test');
+        return \Filament\Facades\Filament::getPlugin('mixed-defaults-test');
     }
 
     public function getId(): string
     {
-        return 'global-search-test';
+        return 'mixed-defaults-test';
     }
 
     public function register(Panel $panel): void

@@ -1,6 +1,6 @@
 <?php
 
-namespace BezhanSalleh\PluginEssentials\Tests\Fixtures;
+namespace BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins;
 
 use BezhanSalleh\PluginEssentials\Plugin\BelongsToCluster;
 use BezhanSalleh\PluginEssentials\Plugin\BelongsToParent;
@@ -15,7 +15,10 @@ use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Filament\Support\Concerns\EvaluatesClosures;
 
-class MultiResourceEssentialPlugin implements Plugin
+/**
+ * Multi-resource plugin for testing contextual property support
+ */
+class MultiResourceTestPlugin implements Plugin
 {
     use BelongsToCluster;
     use BelongsToParent;
@@ -26,14 +29,29 @@ class MultiResourceEssentialPlugin implements Plugin
     use HasNavigation;
     use WithMultipleResourceSupport;
 
+    protected function getPluginDefaults(): array
+    {
+        return [
+            'modelLabel' => 'Multi Item',
+            'pluralModelLabel' => 'Multi Items',
+            'navigationSort' => 20,
+            'globalSearchResultsLimit' => 15,
+        ];
+    }
+
     public static function make(): static
     {
         return app(static::class);
     }
 
+    public static function get(): ?static
+    {
+        return \Filament\Facades\Filament::getPlugin('multi-resource-test');
+    }
+
     public function getId(): string
     {
-        return 'bezhansalleh/essentials-multi';
+        return 'multi-resource-test';
     }
 
     public function register(Panel $panel): void
@@ -46,11 +64,6 @@ class MultiResourceEssentialPlugin implements Plugin
 
     public function boot(Panel $panel): void
     {
-        // TODO: Implement boot() method.
-    }
-
-    public static function get(): Plugin
-    {
-        return filament(app(static::class)->getId());
+        //
     }
 }

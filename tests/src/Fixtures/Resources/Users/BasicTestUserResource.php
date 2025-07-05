@@ -5,25 +5,25 @@ declare(strict_types=1);
 namespace BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users;
 
 use BackedEnum;
-use BezhanSalleh\PluginEssentials\Resource\Concerns\HasGlobalSearch;
-use BezhanSalleh\PluginEssentials\Tests\Fixtures\GlobalSearchMixedTestPlugin;
+use BezhanSalleh\PluginEssentials\Resource\Concerns\HasLabels;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Models\User;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins\BasicTestPlugin;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
-class GlobalSearchMixedUserResource extends Resource
+class BasicTestUserResource extends Resource
 {
-    use HasGlobalSearch;
+    use HasLabels;
 
     protected static ?string $model = User::class;
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static BackedEnum | string | null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    public static function pluginEssential(): ?GlobalSearchMixedTestPlugin
+    public static function pluginEssential(): ?BasicTestPlugin
     {
-        return GlobalSearchMixedTestPlugin::get();
+        return BasicTestPlugin::get();
     }
 
     public static function form(Schema $schema): Schema

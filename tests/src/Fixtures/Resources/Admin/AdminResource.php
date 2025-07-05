@@ -12,7 +12,7 @@ use BezhanSalleh\PluginEssentials\Resource\Concerns\HasGlobalSearch;
 use BezhanSalleh\PluginEssentials\Resource\Concerns\HasLabels;
 use BezhanSalleh\PluginEssentials\Resource\Concerns\HasNavigation;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Models\User;
-use BezhanSalleh\PluginEssentials\Tests\Fixtures\MultiResourceEssentialPlugin;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins\MultiResourceTestPlugin;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\Pages\CreateUser;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\Pages\EditUser;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\Pages\ListUsers;
@@ -38,9 +38,9 @@ class AdminResource extends Resource
 
     protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    public static function pluginEssential(): ?MultiResourceEssentialPlugin
+    public static function pluginEssential(): ?MultiResourceTestPlugin
     {
-        return MultiResourceEssentialPlugin::get();
+        return MultiResourceTestPlugin::get();
     }
 
     public static function form(Schema $schema): Schema

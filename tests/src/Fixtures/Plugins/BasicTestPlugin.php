@@ -1,26 +1,28 @@
 <?php
 
-namespace BezhanSalleh\PluginEssentials\Tests\Fixtures;
+namespace BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins;
 
-use BezhanSalleh\PluginEssentials\Plugin\HasGlobalSearch;
+use BezhanSalleh\PluginEssentials\Plugin\HasLabels;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\UserResource;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Filament\Support\Concerns\EvaluatesClosures;
 
-class GlobalSearchMixedTestPlugin implements Plugin
+/**
+ * Basic plugin for testing simple default scenarios
+ */
+class BasicTestPlugin implements Plugin
 {
     use EvaluatesClosures;
-    use HasGlobalSearch;
+    use HasLabels;
 
-    /**
-     * Plugin developer defaults for testing - only some properties have defaults
-     */
     protected function getPluginDefaults(): array
     {
         return [
-            'globalSearchResultsLimit' => 75,
-            'isGlobalSearchForcedCaseInsensitive' => false,
+            'modelLabel' => 'Basic Item',
+            'pluralModelLabel' => 'Basic Items',
+            'recordTitleAttribute' => 'name',
+            'hasTitleCaseModelLabel' => true,
         ];
     }
 
@@ -31,12 +33,12 @@ class GlobalSearchMixedTestPlugin implements Plugin
 
     public static function get(): ?static
     {
-        return \Filament\Facades\Filament::getPlugin('global-search-mixed-test');
+        return \Filament\Facades\Filament::getPlugin('basic-test');
     }
 
     public function getId(): string
     {
-        return 'global-search-mixed-test';
+        return 'basic-test';
     }
 
     public function register(Panel $panel): void
