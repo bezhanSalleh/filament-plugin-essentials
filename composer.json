@@ -45,11 +45,17 @@
         "psr-4": {
             "BezhanSalleh\\PluginEssentials\\Tests\\": "tests/src",
             "BezhanSalleh\\PluginEssentials\\Tests\\Database\\Factories\\": "tests/database/factories",
-            "Workbench\\App\\": "workbench/app/"
+            "Workbench\\App\\": "workbench/app/",
+            "Database\\Factories\\": "workbench/database/factories/",
+            "Database\\Seeders\\": "workbench/database/seeders/"
         }
     },
     "scripts": {
-        "post-autoload-dump": "@composer run prepare",
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare",
+            "@composer run prepare"
+        ],
         "prepare": "@php vendor/bin/testbench package:discover --ansi",
         "analyse": "vendor/bin/phpstan analyse",
         "lint": "pint --parallel",
@@ -73,6 +79,13 @@
             "@test:unit --parallel",
             "@test:coverage",
             "@test:type"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@build",
+            "@php vendor/bin/testbench serve --ansi"
         ]
     },
     "config": {
