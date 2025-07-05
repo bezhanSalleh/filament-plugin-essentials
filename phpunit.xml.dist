@@ -27,7 +27,6 @@
         <env name="DB_DATABASE" value=":memory:"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
-        <env name="CURATOR_GLIDE_TOKEN" value="1234567890"/>
     </php>
     <source>
         <include>
