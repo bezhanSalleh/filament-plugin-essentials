@@ -9,6 +9,8 @@ use Filament\Clusters\Cluster;
 
 trait BelongsToCluster
 {
+    use HasPluginDefaults;
+
     /**
      * @var class-string<Cluster> | null
      */
@@ -21,6 +23,7 @@ trait BelongsToCluster
         }
 
         $this->cluster = $cluster;
+        $this->markPropertyAsUserSet('cluster');
 
         return $this;
     }
@@ -30,12 +33,6 @@ trait BelongsToCluster
      */
     public function getCluster(?string $resourceClass = null): ?string
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('cluster', $resourceClass);
-        } else {
-            $value = $this->cluster;
-        }
-
-        return $this->evaluate($value);
+        return $this->getPropertyWithDefaults('cluster', $resourceClass);
     }
 }

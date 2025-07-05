@@ -6,6 +6,8 @@ namespace BezhanSalleh\PluginEssentials\Plugin;
 
 trait BelongsToParent
 {
+    use HasPluginDefaults;
+
     /**
      * @var class-string | null
      */
@@ -18,6 +20,7 @@ trait BelongsToParent
         }
 
         $this->parentResource = $resource;
+        $this->markPropertyAsUserSet('parentResource');
 
         return $this;
     }
@@ -27,10 +30,6 @@ trait BelongsToParent
      */
     public function getParentResource(?string $resourceClass = null): ?string
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            return $this->getContextualProperty('parentResource', $resourceClass);
-        }
-
-        return $this->parentResource;
+        return $this->getPropertyWithDefaults('parentResource', $resourceClass);
     }
 }

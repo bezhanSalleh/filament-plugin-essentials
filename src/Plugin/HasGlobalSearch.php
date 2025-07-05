@@ -8,6 +8,8 @@ use Closure;
 
 trait HasGlobalSearch
 {
+    use HasPluginDefaults;
+
     protected int $globalSearchResultsLimit = 50;
 
     protected bool | Closure $isGloballySearchable = true;
@@ -23,6 +25,7 @@ trait HasGlobalSearch
         }
 
         $this->globalSearchResultsLimit = $limit;
+        $this->markPropertyAsUserSet('globalSearchResultsLimit');
 
         return $this;
     }
@@ -34,6 +37,7 @@ trait HasGlobalSearch
         }
 
         $this->isGloballySearchable = $condition;
+        $this->markPropertyAsUserSet('isGloballySearchable');
 
         return $this;
     }
@@ -45,6 +49,7 @@ trait HasGlobalSearch
         }
 
         $this->isGlobalSearchForcedCaseInsensitive = $condition;
+        $this->markPropertyAsUserSet('isGlobalSearchForcedCaseInsensitive');
 
         return $this;
     }
@@ -56,62 +61,41 @@ trait HasGlobalSearch
         }
 
         $this->shouldSplitGlobalSearchTerms = $condition;
+        $this->markPropertyAsUserSet('shouldSplitGlobalSearchTerms');
 
         return $this;
     }
 
     public function canGloballySearch(?string $resourceClass = null): bool
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('isGloballySearchable', $resourceClass);
-        } else {
-            $value = $this->isGloballySearchable;
-        }
+        $result = $this->getPropertyWithDefaults('isGloballySearchable', $resourceClass);
 
-        return $this->evaluate($value);
+        return $result ?? true; // Default to true only if no value found
     }
 
     public function isGloballySearchable(?string $resourceClass = null): bool
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('isGloballySearchable', $resourceClass);
-        } else {
-            $value = $this->isGloballySearchable;
-        }
+        $result = $this->getPropertyWithDefaults('isGloballySearchable', $resourceClass);
 
-        return $this->evaluate($value);
+        return $result ?? true; // Default to true only if no value found
     }
 
     public function getGlobalSearchResultsLimit(?string $resourceClass = null): int
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('globalSearchResultsLimit', $resourceClass);
-        } else {
-            $value = $this->globalSearchResultsLimit;
-        }
+        $result = $this->getPropertyWithDefaults('globalSearchResultsLimit', $resourceClass);
 
-        return $this->evaluate($value);
+        return $result ?? 50; // Default to 50 only if no value found
     }
 
     public function isGlobalSearchForcedCaseInsensitive(?string $resourceClass = null): ?bool
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('isGlobalSearchForcedCaseInsensitive', $resourceClass);
-        } else {
-            $value = $this->isGlobalSearchForcedCaseInsensitive;
-        }
-
-        return $this->evaluate($value);
+        return $this->getPropertyWithDefaults('isGlobalSearchForcedCaseInsensitive', $resourceClass);
     }
 
     public function shouldSplitGlobalSearchTerms(?string $resourceClass = null): bool
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('shouldSplitGlobalSearchTerms', $resourceClass);
-        } else {
-            $value = $this->shouldSplitGlobalSearchTerms;
-        }
+        $result = $this->getPropertyWithDefaults('shouldSplitGlobalSearchTerms', $resourceClass);
 
-        return $this->evaluate($value);
+        return $result ?? false; // Default to false only if no value found
     }
 }

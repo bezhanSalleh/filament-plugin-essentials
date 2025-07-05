@@ -29,6 +29,24 @@ trait HasGlobalSearch
     }
 
     /**
+     * Check if the resource is globally searchable.
+     */
+    public static function isGloballySearchable(): bool
+    {
+        $pluginResult = static::delegateToPlugin(
+            'HasGlobalSearch',
+            'isGloballySearchable',
+            null
+        );
+
+        if (! static::isNoPluginResult($pluginResult)) {
+            return $pluginResult;
+        }
+
+        return static::getParentResult('isGloballySearchable') ?? true;
+    }
+
+    /**
      * Get the global search results limit.
      */
     public static function getGlobalSearchResultsLimit(): int

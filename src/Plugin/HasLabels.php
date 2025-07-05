@@ -8,6 +8,8 @@ use Closure;
 
 trait HasLabels
 {
+    use HasPluginDefaults;
+
     protected string | Closure | null $modelLabel = null;
 
     protected string | Closure | null $pluralModelLabel = null;
@@ -23,6 +25,7 @@ trait HasLabels
         }
 
         $this->modelLabel = $label;
+        $this->markPropertyAsUserSet('modelLabel');
 
         return $this;
     }
@@ -34,6 +37,7 @@ trait HasLabels
         }
 
         $this->pluralModelLabel = $label;
+        $this->markPropertyAsUserSet('pluralModelLabel');
 
         return $this;
     }
@@ -45,6 +49,7 @@ trait HasLabels
         }
 
         $this->hasTitleCaseModelLabel = $condition;
+        $this->markPropertyAsUserSet('hasTitleCaseModelLabel');
 
         return $this;
     }
@@ -56,51 +61,30 @@ trait HasLabels
         }
 
         $this->recordTitleAttribute = $attribute;
+        $this->markPropertyAsUserSet('recordTitleAttribute');
 
         return $this;
     }
 
     public function getModelLabel(?string $resourceClass = null): ?string
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('modelLabel', $resourceClass);
-        } else {
-            $value = $this->modelLabel;
-        }
-
-        return $this->evaluate($value);
+        return $this->getPropertyWithDefaults('modelLabel', $resourceClass);
     }
 
     public function getPluralModelLabel(?string $resourceClass = null): ?string
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('pluralModelLabel', $resourceClass);
-        } else {
-            $value = $this->pluralModelLabel;
-        }
-
-        return $this->evaluate($value);
+        return $this->getPropertyWithDefaults('pluralModelLabel', $resourceClass);
     }
 
     public function hasTitleCaseModelLabel(?string $resourceClass = null): bool
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('hasTitleCaseModelLabel', $resourceClass);
-        } else {
-            $value = $this->hasTitleCaseModelLabel;
-        }
+        $result = $this->getPropertyWithDefaults('hasTitleCaseModelLabel', $resourceClass);
 
-        return $this->evaluate($value);
+        return $result ?? true; // Default to true only if no value found
     }
 
     public function getRecordTitleAttribute(?string $resourceClass = null): ?string
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('recordTitleAttribute', $resourceClass);
-        } else {
-            $value = $this->recordTitleAttribute;
-        }
-
-        return $this->evaluate($value);
+        return $this->getPropertyWithDefaults('recordTitleAttribute', $resourceClass);
     }
 }

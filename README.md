@@ -5,7 +5,7 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/bezhansalleh/filament-plugin-essentials/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/bezhansalleh/filament-plugin-essentials/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/bezhansalleh/filament-plugin-essentials.svg?style=flat-square)](https://packagist.org/packages/bezhansalleh/filament-plugin-essentials)
 
-A comprehensive collection of essential traits that streamline Filament plugin development by providing a powerful **conditional trait-based method override system**. This allows plugin developers to offer end users a fluent, customizable API while maintaining clean separation of concerns and type safety.
+A comprehensive collection of essential traits that streamline Filament plugin development by providing a powerful **conditional trait-based method override system** with a **3-tier default/override hierarchy**. This allows plugin developers to offer end users a fluent, customizable API while maintaining clean separation of concerns and type safety.
 
 ## 🎯 What This Package Does
 
@@ -22,6 +22,7 @@ The package uses an advanced **conditional delegation system** that automaticall
 ## 🚀 Key Features
 
 - ✅ **Plug-and-play traits** for common plugin customizations
+- ✅ **3-tier default/override system** for flexible configuration (New in v2.1!)
 - ✅ **Multi-resource support** with per-resource configuration (New in v2.0!)
 - ✅ **Conditional delegation system** with automatic trait detection
 - ✅ **Type-safe implementation** with full IntelliSense support
@@ -151,6 +152,140 @@ public function panel(Panel $panel): Panel
         ]);
 }
 ```
+
+## 🎯 3-Tier Default/Override System
+
+**NEW in v2.1**: This package provides a powerful 3-tier fallback system that allows for flexible configuration at different levels, ensuring maximum flexibility for both plugin developers and end users.
+
+### How It Works
+
+The system uses three levels of configuration, checked in this priority order:
+
+1. **🔥 User Override** (Highest Priority) - Values set by end users via the fluent API
+2. **🏗️ Plugin Developer Default** (Medium Priority) - Defaults provided by plugin developers  
+3. **⚙️ Resource/Filament Default** (Lowest Priority) - Standard Filament behavior
+
+### For Plugin Developers: Setting Default Values
+
+Plugin developers can provide sensible defaults for their users by implementing the `getPluginDefaults()` method:
+
+```php
+<?php
+
+namespace YourVendor\YourPlugin;
+
+use BezhanSalleh\PluginEssentials\Plugin\HasNavigation;
+use BezhanSalleh\PluginEssentials\Plugin\HasLabels;
+use Filament\Contracts\Plugin;
+
+class YourPlugin implements Plugin
+{
+    use HasNavigation;
+    use HasLabels;
+    
+    /**
+     * Define plugin-level defaults that will be used when users don't override values
+     */
+    protected function getPluginDefaults(): array
+    {
+        return [
+            'navigationGroup' => 'My Plugin',
+            'navigationIcon' => 'heroicon-o-puzzle-piece',
+            'modelLabel' => 'Plugin Item',
+            'pluralModelLabel' => 'Plugin Items',
+            'globalSearchResultsLimit' => 25,
+        ];
+    }
+    
+    // ...existing code...
+}
+```
+
+#### Alternative: Method-Based Defaults
+
+For more complex scenarios, you can override individual getter methods:
+
+```php
+protected function getDefaultNavigationLabel(?string $resourceClass = null): string
+{
+    return match($resourceClass) {
+        UserResource::class => 'Users',
+        PostResource::class => 'Blog Posts',
+        default => 'Items'
+    };
+}
+```
+
+### For End Users: Overriding Defaults
+
+End users can override any plugin defaults using the fluent API:
+
+```php
+// Plugin provides defaults, user overrides some values
+YourPlugin::make()
+    ->navigationGroup('Custom Group')  // User override
+    ->navigationIcon('heroicon-o-star') // User override
+    // modelLabel, pluralModelLabel, globalSearchResultsLimit will use plugin defaults
+    // Other values will fall back to Filament defaults
+```
+
+### Real-World Example
+
+Here's how the 3-tier system works in practice:
+
+```php
+// 1. Plugin Developer sets defaults
+class BlogPlugin implements Plugin
+{
+    use HasNavigation, HasLabels, HasGlobalSearch;
+    
+    protected function getPluginDefaults(): array
+    {
+        return [
+            'navigationGroup' => 'Blog Management',
+            'navigationIcon' => 'heroicon-o-document-text',
+            'modelLabel' => 'Blog Post',
+            'pluralModelLabel' => 'Blog Posts',
+            'globalSearchResultsLimit' => 15,
+        ];
+    }
+}
+
+// 2. End User installs and configures
+BlogPlugin::make()
+    ->navigationGroup('Content')        // User override: "Content"
+    ->navigationIcon('heroicon-o-star') // User override: "heroicon-o-star"  
+    // modelLabel: uses plugin default "Blog Post"
+    // pluralModelLabel: uses plugin default "Blog Posts"
+    // globalSearchResultsLimit: uses plugin default 15
+    // navigationSort: uses Filament default (null)
+    // navigationBadge: uses Filament default (null)
+```
+
+### Multi-Resource Support
+
+The system also works seamlessly with multi-resource plugins:
+
+```php
+// Per-resource configuration with fallbacks
+BlogPlugin::make()
+    ->forResource(PostResource::class, fn($resource) => $resource
+        ->navigationLabel('Posts')           // User override for Posts
+        ->navigationIcon('heroicon-o-document') // User override for Posts
+    )
+    ->forResource(CategoryResource::class, fn($resource) => $resource
+        ->navigationLabel('Categories')      // User override for Categories
+        // navigationIcon will use plugin default for Categories
+    );
+```
+
+### Benefits
+
+- **🎯 DRY**: Plugin developers set defaults once, users only override what they need
+- **🔧 Flexible**: Users can override any value at any level
+- **⚡ Efficient**: No need to specify common values repeatedly
+- **🛡️ Fallback-Safe**: Always has sensible defaults even if nothing is configured
+- **🧩 Modular**: Works consistently across all plugin traits
 
 ## 📚 Available Traits
 

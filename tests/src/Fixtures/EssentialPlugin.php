@@ -23,6 +23,27 @@ class EssentialPlugin implements Plugin
     use HasLabels;
     use HasNavigation;
 
+    /**
+     * Plugin developer defaults for testing
+     */
+    protected function getPluginDefaults(): array
+    {
+        return [
+            'modelLabel' => 'Essential Item',
+            'pluralModelLabel' => 'Essential Items',
+            'recordTitleAttribute' => 'id',
+            'hasTitleCaseModelLabel' => false,
+        ];
+    }
+
+    /**
+     * Alternative: Plugin developers can also override specific methods
+     */
+    protected function getDefaultModelLabel(?string $resourceClass = null): string
+    {
+        return 'Essential Item (Method)';
+    }
+
     public static function make(): static
     {
         return app(static::class);

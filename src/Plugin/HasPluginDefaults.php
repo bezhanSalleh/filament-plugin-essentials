@@ -1,0 +1,104 @@
+<?php
+
+declare(strict_types=1);
+
+namespace BezhanSalleh\PluginEssentials\Plugin;
+
+trait HasPluginDefaults
+{
+    /**
+     * Track which properties have been explicitly set by users
+     */
+    protected array $userSetProperties = [];
+
+    /**
+     * Get a property value with plugin defaults fallback:
+     * 1. User-set values (tracked via fluent API)
+     * 2. Plugin developer defaults
+     * 3. Return null (let Resource handle its defaults)
+     */
+    protected function getPropertyWithDefaults(string $property, ?string $resourceClass = null): mixed
+    {
+        // 1. Check user-set values (highest priority)
+        $userValue = null;
+
+        if (method_exists($this, 'getContextualProperty')) {
+            $userValue = $this->getContextualProperty($property, $resourceClass);
+        }
+
+        // If no contextual value, check if user explicitly set this property
+        if ($userValue === null && $this->isPropertyUserSet($property)) {
+            $userValue = $this->$property ?? null;
+        }
+
+        if ($userValue !== null) {
+            return $this->evaluate($userValue);
+        }
+
+        // 2. Check plugin developer defaults (middle priority)
+        $pluginDefault = $this->getPluginDefault($property, $resourceClass);
+        if ($pluginDefault !== null) {
+            return $this->evaluate($pluginDefault);
+        }
+
+        // 3. Return null - let Resource handle its own defaults
+        return null;
+    }
+
+    /**
+     * Mark a property as explicitly set by the user
+     */
+    protected function markPropertyAsUserSet(string $property): void
+    {
+        $this->userSetProperties[$property] = true;
+    }
+
+    /**
+     * Check if a property was explicitly set by the user
+     */
+    protected function isPropertyUserSet(string $property): bool
+    {
+        return isset($this->userSetProperties[$property]);
+    }
+
+    /**
+     * Set a property value and mark it as user-set
+     */
+    protected function setUserProperty(string $property, mixed $value): static
+    {
+        $this->$property = $value;
+        $this->markPropertyAsUserSet($property);
+
+        return $this;
+    }
+
+    /**
+     * Get plugin developer provided defaults.
+     * Plugin developers can override this method or the specific getDefault* methods.
+     */
+    protected function getPluginDefault(string $property, ?string $resourceClass = null): mixed
+    {
+        // Try specific method first (e.g., getDefaultNavigationIcon)
+        $specificMethod = 'getDefault' . ucfirst($property);
+        if (method_exists($this, $specificMethod)) {
+            return $this->$specificMethod($resourceClass);
+        }
+
+        // Try array-based defaults
+        if (method_exists($this, 'getPluginDefaults')) {
+            $defaults = $this->getPluginDefaults();
+
+            // Check for resource-specific defaults first
+            if ($resourceClass && isset($defaults[$resourceClass][$property])) {
+                return $defaults[$resourceClass][$property];
+            }
+
+            // Check for global defaults
+            if (isset($defaults[$property])) {
+                return $defaults[$property];
+            }
+        }
+
+        return null;
+    }
+}

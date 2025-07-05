@@ -8,6 +8,8 @@ use Closure;
 
 trait BelongsToTenant
 {
+    use HasPluginDefaults;
+
     protected bool | Closure $isScopedToTenant = true;
 
     protected string | Closure | null $tenantOwnershipRelationshipName = null;
@@ -21,6 +23,7 @@ trait BelongsToTenant
         }
 
         $this->isScopedToTenant = $condition;
+        $this->markPropertyAsUserSet('isScopedToTenant');
 
         return $this;
     }
@@ -32,6 +35,7 @@ trait BelongsToTenant
         }
 
         $this->tenantOwnershipRelationshipName = $ownershipRelationshipName;
+        $this->markPropertyAsUserSet('tenantOwnershipRelationshipName');
 
         return $this;
     }
@@ -43,51 +47,32 @@ trait BelongsToTenant
         }
 
         $this->tenantRelationshipName = $relationshipName;
+        $this->markPropertyAsUserSet('tenantRelationshipName');
 
         return $this;
     }
 
     public function isScopedToTenant(?string $resourceClass = null): bool
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('isScopedToTenant', $resourceClass);
-        } else {
-            $value = $this->isScopedToTenant;
-        }
+        $result = $this->getPropertyWithDefaults('isScopedToTenant', $resourceClass);
 
-        return $this->evaluate($value);
+        return $result ?? true; // Default to true only if no value found
     }
 
     public function shouldScopeToTenant(?string $resourceClass = null): bool
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('isScopedToTenant', $resourceClass);
-        } else {
-            $value = $this->isScopedToTenant;
-        }
+        $result = $this->getPropertyWithDefaults('isScopedToTenant', $resourceClass);
 
-        return $this->evaluate($value);
+        return $result ?? true; // Default to true only if no value found
     }
 
     public function getTenantRelationshipName(?string $resourceClass = null): ?string
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('tenantRelationshipName', $resourceClass);
-        } else {
-            $value = $this->tenantRelationshipName;
-        }
-
-        return $this->evaluate($value);
+        return $this->getPropertyWithDefaults('tenantRelationshipName', $resourceClass);
     }
 
     public function getTenantOwnershipRelationshipName(?string $resourceClass = null): ?string
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('tenantOwnershipRelationshipName', $resourceClass);
-        } else {
-            $value = $this->tenantOwnershipRelationshipName;
-        }
-
-        return $this->evaluate($value);
+        return $this->getPropertyWithDefaults('tenantOwnershipRelationshipName', $resourceClass);
     }
 }

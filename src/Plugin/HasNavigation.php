@@ -12,6 +12,8 @@ use UnitEnum;
 
 trait HasNavigation
 {
+    use HasPluginDefaults;
+
     protected Closure | null | SubNavigationPosition $subNavigationPosition = null;
 
     protected bool | Closure $shouldRegisterNavigation = true;
@@ -43,6 +45,7 @@ trait HasNavigation
         }
 
         $this->subNavigationPosition = $subNavigationPosition;
+        $this->markPropertyAsUserSet('subNavigationPosition');
 
         return $this;
     }
@@ -54,6 +57,7 @@ trait HasNavigation
         }
 
         $this->shouldRegisterNavigation = $shouldRegisterNavigation;
+        $this->markPropertyAsUserSet('shouldRegisterNavigation');
 
         return $this;
     }
@@ -65,6 +69,7 @@ trait HasNavigation
         }
 
         $this->navigationBadgeTooltip = $tooltip;
+        $this->markPropertyAsUserSet('navigationBadgeTooltip');
 
         return $this;
     }
@@ -76,6 +81,7 @@ trait HasNavigation
         }
 
         $this->navigationBadge = $value;
+        $this->markPropertyAsUserSet('navigationBadge');
 
         return $this;
     }
@@ -87,6 +93,7 @@ trait HasNavigation
         }
 
         $this->navigationBadgeColor = $color;
+        $this->markPropertyAsUserSet('navigationBadgeColor');
 
         return $this;
     }
@@ -98,6 +105,7 @@ trait HasNavigation
         }
 
         $this->navigationGroup = $group;
+        $this->markPropertyAsUserSet('navigationGroup');
 
         return $this;
     }
@@ -109,6 +117,7 @@ trait HasNavigation
         }
 
         $this->navigationParentItem = $item;
+        $this->markPropertyAsUserSet('navigationParentItem');
 
         return $this;
     }
@@ -120,6 +129,7 @@ trait HasNavigation
         }
 
         $this->navigationIcon = $icon;
+        $this->markPropertyAsUserSet('navigationIcon');
 
         return $this;
     }
@@ -131,6 +141,7 @@ trait HasNavigation
         }
 
         $this->activeNavigationIcon = $icon;
+        $this->markPropertyAsUserSet('activeNavigationIcon');
 
         return $this;
     }
@@ -142,6 +153,7 @@ trait HasNavigation
         }
 
         $this->navigationLabel = $label;
+        $this->markPropertyAsUserSet('navigationLabel');
 
         return $this;
     }
@@ -153,6 +165,7 @@ trait HasNavigation
         }
 
         $this->navigationSort = $sort;
+        $this->markPropertyAsUserSet('navigationSort');
 
         return $this;
     }
@@ -170,123 +183,61 @@ trait HasNavigation
 
     public function getSubNavigationPosition(?string $resourceClass = null): SubNavigationPosition
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('subNavigationPosition', $resourceClass);
-        } else {
-            $value = $this->subNavigationPosition;
-        }
+        $result = $this->getPropertyWithDefaults('subNavigationPosition', $resourceClass);
 
-        return $this->evaluate($value) ?? SubNavigationPosition::Start;
+        return $result ?? SubNavigationPosition::Start;
     }
 
     public function shouldRegisterNavigation(?string $resourceClass = null): bool
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('shouldRegisterNavigation', $resourceClass);
-        } else {
-            $value = $this->shouldRegisterNavigation;
-        }
+        $result = $this->getPropertyWithDefaults('shouldRegisterNavigation', $resourceClass);
 
-        return $this->evaluate($value);
+        return $result ?? true; // Default to true only if no value found
     }
 
     public function getNavigationBadgeTooltip(?string $resourceClass = null): ?string
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('navigationBadgeTooltip', $resourceClass);
-        } else {
-            $value = $this->navigationBadgeTooltip;
-        }
-
-        return $this->evaluate($value);
+        return $this->getPropertyWithDefaults('navigationBadgeTooltip', $resourceClass);
     }
 
     public function getNavigationBadge(?string $resourceClass = null): ?string
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('navigationBadge', $resourceClass);
-        } else {
-            $value = $this->navigationBadge;
-        }
-
-        return $this->evaluate($value);
+        return $this->getPropertyWithDefaults('navigationBadge', $resourceClass);
     }
 
     public function getNavigationBadgeColor(?string $resourceClass = null): array | string | null
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('navigationBadgeColor', $resourceClass);
-        } else {
-            $value = $this->navigationBadgeColor;
-        }
-
-        return $this->evaluate($value);
+        return $this->getPropertyWithDefaults('navigationBadgeColor', $resourceClass);
     }
 
     public function getNavigationGroup(?string $resourceClass = null): ?string
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('navigationGroup', $resourceClass);
-        } else {
-            $value = $this->navigationGroup;
-        }
-
-        return $this->evaluate($value);
+        return $this->getPropertyWithDefaults('navigationGroup', $resourceClass);
     }
 
     public function getNavigationParentItem(?string $resourceClass = null): ?string
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('navigationParentItem', $resourceClass);
-        } else {
-            $value = $this->navigationParentItem;
-        }
-
-        return $this->evaluate($value);
+        return $this->getPropertyWithDefaults('navigationParentItem', $resourceClass);
     }
 
     public function getNavigationIcon(?string $resourceClass = null): BackedEnum | Htmlable | null | string
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('navigationIcon', $resourceClass);
-        } else {
-            $value = $this->navigationIcon;
-        }
-
-        return $this->evaluate($value);
+        return $this->getPropertyWithDefaults('navigationIcon', $resourceClass);
     }
 
     public function getActiveNavigationIcon(?string $resourceClass = null): BackedEnum | Htmlable | null | string
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('activeNavigationIcon', $resourceClass);
-        } else {
-            $value = $this->activeNavigationIcon;
-        }
-
-        return $this->evaluate($value);
+        return $this->getPropertyWithDefaults('activeNavigationIcon', $resourceClass);
     }
 
     public function getNavigationLabel(?string $resourceClass = null): string
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('navigationLabel', $resourceClass);
-        } else {
-            $value = $this->navigationLabel;
-        }
-
-        return (string) $this->evaluate($value);
+        return (string) $this->getPropertyWithDefaults('navigationLabel', $resourceClass);
     }
 
     public function getNavigationSort(?string $resourceClass = null): ?int
     {
-        if (method_exists($this, 'getContextualProperty')) {
-            $value = $this->getContextualProperty('navigationSort', $resourceClass);
-        } else {
-            $value = $this->navigationSort;
-        }
-
-        return $this->evaluate($value);
+        return $this->getPropertyWithDefaults('navigationSort', $resourceClass);
     }
 
     // public function getSlug(?string $resourceClass = null): ?string
