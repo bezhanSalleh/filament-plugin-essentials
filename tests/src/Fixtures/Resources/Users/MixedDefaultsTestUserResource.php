@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users;
 
 use BackedEnum;
+use BezhanSalleh\PluginEssentials\Resource\Concerns\HasGlobalSearch;
 use BezhanSalleh\PluginEssentials\Resource\Concerns\HasLabels;
 use BezhanSalleh\PluginEssentials\Resource\Concerns\HasNavigation;
-use BezhanSalleh\PluginEssentials\Resource\Concerns\HasGlobalSearch;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Models\User;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins\MixedDefaultsTestPlugin;
 use Filament\Resources\Resource;
@@ -17,9 +17,9 @@ use Filament\Tables\Table;
 
 class MixedDefaultsTestUserResource extends Resource
 {
+    use HasGlobalSearch;
     use HasLabels;
     use HasNavigation;
-    use HasGlobalSearch;
 
     protected static ?string $model = User::class;
 
