@@ -9,7 +9,7 @@ trait BelongsToTenant
     use DelegatesToPlugin;
 
     /**
-     * Check if the resource is scoped to tenant.
+     * Check if the forResource is scoped to tenant.
      */
     public static function isScopedToTenant(): bool
     {

@@ -10,7 +10,7 @@ use BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins\EnhancedDefaultsTestPlu
 use Filament\Resources\Resource;
 
 /**
- * UserResource for testing enhanced resource-specific defaults
+ * UserResource for testing enhanced forResource-specific defaults
  */
 class EnhancedTestUserResource extends Resource
 {

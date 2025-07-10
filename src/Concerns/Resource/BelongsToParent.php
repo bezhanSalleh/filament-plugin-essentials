@@ -9,7 +9,7 @@ trait BelongsToParent
     use DelegatesToPlugin;
 
     /**
-     * Get the parent resource for this resource.
+     * Get the parent forResource for this forResource.
      */
     public static function getParentResource(): ?string
     {

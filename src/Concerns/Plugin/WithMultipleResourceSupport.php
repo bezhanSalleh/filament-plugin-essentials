@@ -12,14 +12,14 @@ trait WithMultipleResourceSupport
     protected array $resourceContexts = [];
 
     /**
-     * Currently active resource context for chaining
+     * Currently active forResource context for chaining
      */
     protected ?string $activeResourceContext = null;
 
     /**
-     * Set the resource context for the next configuration call
+     * Set the forResource context for the next configuration call
      */
-    public function resource(string $resourceClass): static
+    public function forResource(string $resourceClass): static
     {
         $this->activeResourceContext = $resourceClass;
 
@@ -27,12 +27,12 @@ trait WithMultipleResourceSupport
     }
 
     /**
-     * Set a property value with resource context awareness
+     * Set a property value with forResource context awareness
      */
     protected function setContextualProperty(string $property, mixed $value): static
     {
         if ($this->activeResourceContext) {
-            // Store in resource-specific context
+            // Store in forResource-specific context
             if (! isset($this->resourceContexts[$this->activeResourceContext])) {
                 $this->resourceContexts[$this->activeResourceContext] = [];
             }
@@ -52,16 +52,16 @@ trait WithMultipleResourceSupport
     }
 
     /**
-     * Get a property value with resource context awareness
+     * Get a property value with forResource context awareness
      */
     protected function getContextualProperty(string $property, ?string $resourceClass = null): mixed
     {
-        // If resource class is specified and has specific config, use it
+        // If forResource class is specified and has specific config, use it
         if ($resourceClass && isset($this->resourceContexts[$resourceClass][$property])) {
             return $this->resourceContexts[$resourceClass][$property];
         }
 
-        // If no resource class or no resource-specific config, check if user explicitly set global property
+        // If no forResource class or no forResource-specific config, check if user explicitly set global property
         if (method_exists($this, 'isPropertyUserSet') && $this->isPropertyUserSet($property)) {
             return $this->$property ?? null;
         }
@@ -71,7 +71,7 @@ trait WithMultipleResourceSupport
     }
 
     /**
-     * Check if this plugin supports multi-resource configuration
+     * Check if this plugin supports multi-forResource configuration
      */
     public function supportsMultipleResources(): bool
     {

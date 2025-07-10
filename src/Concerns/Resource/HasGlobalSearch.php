@@ -9,7 +9,7 @@ trait HasGlobalSearch
     use DelegatesToPlugin;
 
     /**
-     * Check if the resource is globally searchable.
+     * Check if the forResource is globally searchable.
      */
     public static function canGloballySearch(): bool
     {
@@ -27,7 +27,7 @@ trait HasGlobalSearch
     }
 
     /**
-     * Check if the resource is globally searchable.
+     * Check if the forResource is globally searchable.
      */
     public static function isGloballySearchable(): bool
     {

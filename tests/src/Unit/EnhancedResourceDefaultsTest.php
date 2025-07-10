@@ -18,7 +18,7 @@ beforeEach(function () {
 });
 
 describe('Enhanced Resource-Specific Default System', function () {
-    it('uses resource-specific defaults from nested structure', function () {
+    it('uses forResource-specific defaults from nested structure', function () {
         // Arrange: Set up plugin with NO user configuration (pure defaults)
         $this->panel
             ->plugins([
@@ -27,7 +27,7 @@ describe('Enhanced Resource-Specific Default System', function () {
 
         // Act: No explicit action needed - panel configuration triggers the system
 
-        // Assert: EnhancedTestUserResource should get resource-specific defaults
+        // Assert: EnhancedTestUserResource should get forResource-specific defaults
         expect(EnhancedTestUserResource::getModelLabel())->toBe('Enhanced User') // Resource-specific default
             ->and(EnhancedTestUserResource::getPluralModelLabel())->toBe('Enhanced Users') // Resource-specific default
             ->and(EnhancedTestUserResource::getNavigationLabel())->toBe('Enhanced Users') // Resource-specific default
@@ -36,7 +36,7 @@ describe('Enhanced Resource-Specific Default System', function () {
             ->and(EnhancedTestUserResource::getNavigationGroup())->toBe('Enhanced Plugin') // Falls back to global default
             ->and(EnhancedTestUserResource::getNavigationSort())->toBe(20); // Falls back to global default
 
-        // Assert: EnhancedTestPostResource should get different resource-specific defaults
+        // Assert: EnhancedTestPostResource should get different forResource-specific defaults
         expect(EnhancedTestPostResource::getModelLabel())->toBe('Enhanced Post') // Resource-specific default
             ->and(EnhancedTestPostResource::getPluralModelLabel())->toBe('Enhanced Posts') // Resource-specific default
             ->and(EnhancedTestPostResource::getNavigationLabel())->toBe('Enhanced Posts') // Resource-specific default
@@ -46,38 +46,38 @@ describe('Enhanced Resource-Specific Default System', function () {
             ->and(EnhancedTestPostResource::getGlobalSearchResultsLimit())->toBe(15); // Falls back to global default
     });
 
-    it('prioritizes user overrides over resource-specific defaults', function () {
-        // Arrange: Set up plugin with user configuration that overrides some resource-specific defaults
+    it('prioritizes user overrides over forResource-specific defaults', function () {
+        // Arrange: Set up plugin with user configuration that overrides some forResource-specific defaults
         $this->panel
             ->plugins([
                 EnhancedDefaultsTestPlugin::make()
-                    ->resource(EnhancedTestUserResource::class)
+                    ->forResource(EnhancedTestUserResource::class)
                     ->modelLabel('User Override') // User override
                     ->navigationIcon('heroicon-o-user-group') // User override
-                    ->resource(EnhancedTestPostResource::class)
+                    ->forResource(EnhancedTestPostResource::class)
                     ->pluralModelLabel('Post Override'), // User override
             ]);
 
         // Act: No explicit action needed - panel configuration triggers the system
 
-        // Assert: EnhancedTestUserResource should prioritize user overrides, then resource-specific defaults, then global defaults
+        // Assert: EnhancedTestUserResource should prioritize user overrides, then forResource-specific defaults, then global defaults
         expect(EnhancedTestUserResource::getModelLabel())->toBe('User Override') // User override (highest priority)
             ->and(EnhancedTestUserResource::getNavigationIcon())->toBe('heroicon-o-user-group') // User override (highest priority)
             ->and(EnhancedTestUserResource::getPluralModelLabel())->toBe('Enhanced Users') // Resource-specific default (no user override)
             ->and(EnhancedTestUserResource::getNavigationLabel())->toBe('Enhanced Users') // Resource-specific default (no user override)
             ->and(EnhancedTestUserResource::getGlobalSearchResultsLimit())->toBe(25) // Resource-specific default (overrides global)
-            ->and(EnhancedTestUserResource::getNavigationGroup())->toBe('Enhanced Plugin'); // Global default (no resource-specific or user override)
+            ->and(EnhancedTestUserResource::getNavigationGroup())->toBe('Enhanced Plugin'); // Global default (no forResource-specific or user override)
 
-        // Assert: EnhancedTestPostResource should prioritize user overrides, then resource-specific defaults, then global defaults
+        // Assert: EnhancedTestPostResource should prioritize user overrides, then forResource-specific defaults, then global defaults
         expect(EnhancedTestPostResource::getPluralModelLabel())->toBe('Post Override') // User override (highest priority)
             ->and(EnhancedTestPostResource::getModelLabel())->toBe('Enhanced Post') // Resource-specific default (no user override)
             ->and(EnhancedTestPostResource::getNavigationLabel())->toBe('Enhanced Posts') // Resource-specific default (no user override)
             ->and(EnhancedTestPostResource::getNavigationIcon())->toBe('heroicon-o-document-text') // Resource-specific default (no user override)
             ->and(EnhancedTestPostResource::getNavigationSort())->toBe(10) // Resource-specific default (overrides global)
-            ->and(EnhancedTestPostResource::getNavigationGroup())->toBe('Enhanced Plugin'); // Global default (no resource-specific or user override)
+            ->and(EnhancedTestPostResource::getNavigationGroup())->toBe('Enhanced Plugin'); // Global default (no forResource-specific or user override)
     });
 
-    it('falls back to global defaults when no resource-specific defaults exist', function () {
+    it('falls back to global defaults when no forResource-specific defaults exist', function () {
         // Arrange: Use a dedicated plugin with only global defaults (no 'resources' key)
         $this->panel->plugins([
             GlobalDefaultsOnlyTestPlugin::make(),
@@ -85,7 +85,7 @@ describe('Enhanced Resource-Specific Default System', function () {
 
         // Act: No explicit action needed - panel configuration triggers the system
 
-        // Assert: Both resources should use global defaults (no resource-specific defaults available)
+        // Assert: Both resources should use global defaults (no forResource-specific defaults available)
         expect(GlobalDefaultsOnlyTestUserResource::getModelLabel())->toBe('Global Only') // Global default
             ->and(GlobalDefaultsOnlyTestUserResource::getPluralModelLabel())->toBe('Global Only Items') // Global default
             ->and(GlobalDefaultsOnlyTestUserResource::getNavigationSort())->toBe(99) // Global default
@@ -100,7 +100,7 @@ describe('Enhanced Resource-Specific Default System', function () {
     });
 
     it('supports backward compatibility with legacy flat structure', function () {
-        // Arrange: Use a dedicated plugin that uses the legacy flat structure for resource-specific defaults
+        // Arrange: Use a dedicated plugin that uses the legacy flat structure for forResource-specific defaults
         $this->panel->plugins([
             LegacyStructureTestPlugin::make(),
         ]);

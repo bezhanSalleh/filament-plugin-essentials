@@ -11,7 +11,7 @@ use Filament\Panel;
 use Filament\Support\Concerns\EvaluatesClosures;
 
 /**
- * Plugin for testing fallback to global defaults (no resource-specific defaults)
+ * Plugin for testing fallback to global defaults (no forResource-specific defaults)
  */
 class GlobalDefaultsOnlyTestPlugin implements Plugin
 {

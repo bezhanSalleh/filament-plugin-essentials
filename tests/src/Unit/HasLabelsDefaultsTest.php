@@ -81,7 +81,7 @@ describe('HasLabels Trait - 3-Tier Default System', function () {
             ->and(UserResource::hasTitleCaseModelLabel())->toBeFalse();
     });
 
-    it('falls back to resource defaults when no plugin defaults exist', function () {
+    it('falls back to forResource defaults when no plugin defaults exist', function () {
         // Create a plugin instance without calling any fluent methods
         // and without overriding the getPluginDefaults method
         $this->panel

@@ -6,7 +6,7 @@ mode: agent
 
 ## 🧠 Objective
 
-In Filament plugin development, we often need to override core resource methods such as:
+In Filament plugin development, we often need to override core forResource methods such as:
 
 - `getCluster()`
 - `getNavigationLabel()`
@@ -14,13 +14,13 @@ In Filament plugin development, we often need to override core resource methods 
 - `getSlug()`
 - and others…
 
-These methods are defined in **Filament-provided traits** (e.g., `BelongsToCluster`, `HasNavigation`, others in `src/Plugin/*`) used in resource classes.  
+These methods are defined in **Filament-provided traits** (e.g., `BelongsToCluster`, `HasNavigation`, others in `src/Plugin/*`) used in forResource classes.  
 We want to **conditionally override** their behavior at runtime — only if:
 
-1. The resource defines a `pluginEssential()` method that returns a plugin instance.
-2. That plugin instance uses a trait of the **same name** as the override trait in the resource (e.g., `BelongsToCluster`, `HasNavigation`).
-3. The resource class also uses a trait with the same name that is responsible for performing the conditional override.
-4. the actual resource and traits in the resources are located in vendor/filament/filament/src/Resources/Resource.php and vendor/filament/filament/src/Resources/Resource/Concernts/*
+1. The forResource defines a `pluginEssential()` method that returns a plugin instance.
+2. That plugin instance uses a trait of the **same name** as the override trait in the forResource (e.g., `BelongsToCluster`, `HasNavigation`).
+3. The forResource class also uses a trait with the same name that is responsible for performing the conditional override.
+4. the actual forResource and traits in the resources are located in vendor/filament/filament/src/Resources/Resource.php and vendor/filament/filament/src/Resources/Resource/Concernts/*
 If the conditions are **not** met, the system should gracefully fall back to the original Filament behavior (via `parent::method()`), without throwing errors.
 
 ---
@@ -29,7 +29,7 @@ If the conditions are **not** met, the system should gracefully fall back to the
 
 - Conditional override should occur only if:
   - `pluginEssential()` exists and returns an object.
-  - The returned plugin object uses the **same trait** as the overriding resource trait.
+  - The returned plugin object uses the **same trait** as the overriding forResource trait.
 - Fallback to original behavior if any condition is not met.
 - Support multiple methods across multiple resources.
 - Avoid repeated boilerplate logic.
@@ -42,8 +42,8 @@ If the conditions are **not** met, the system should gracefully fall back to the
 ### Traits Involved
 
 - **Plugin Trait**: e.g., `BelongsToCluster` used in the plugin class
-- **Resource Base Trait**: e.g., `BelongsToCluster` from Filament, used in the parent resource class
-- **Resource Override Trait**: e.g., `BelongsToCluster`, used in the child resource class to conditionally override
+- **Resource Base Trait**: e.g., `BelongsToCluster` from Filament, used in the parent forResource class
+- **Resource Override Trait**: e.g., `BelongsToCluster`, used in the child forResource class to conditionally override
 
 All three share the same name, but come from different namespaces.
 
@@ -72,7 +72,7 @@ class MyPlugin
 ````
 
 ````php
-// In the resource class
+// In the forResource class
 use ResourceNamespace\Traits\BelongsToCluster;
 
 class PostResource extends Resource
@@ -94,14 +94,14 @@ $panel->plugins([
 ]);
 ```
 
-If `MyPlugin` uses the `HasNavigation` trait, the overridden method in the resource will return the plugin’s value. Otherwise, it will default to Filament’s original logic.
+If `MyPlugin` uses the `HasNavigation` trait, the overridden method in the forResource will return the plugin’s value. Otherwise, it will default to Filament’s original logic.
 
 ---
 
 ## ✅ Outcomes
 
 - DRY and maintainable logic for conditional delegation.
-- Shared trait naming makes intent clear and aligns plugin-resource behavior.
+- Shared trait naming makes intent clear and aligns plugin-forResource behavior.
 - Minimal performance impact and high flexibility.
 - Avoids runtime exceptions or developer confusion.
 

@@ -9,13 +9,13 @@ Essential traits that provide a **3-tier default/override system** for Filament 
 
 ## Features
 
-- **🎯 Navigation Management** - Complete control over resource navigation (labels, icons, groups, sorting, badges)
+- **🎯 Navigation Management** - Complete control over forResource navigation (labels, icons, groups, sorting, badges)
 - **🏷️ Label Customization** - Model labels, plural forms, title attributes, and casing options
 - **🔍 Global Search Integration** - Searchability controls, result limits, and case sensitivity options
 - **🗂️ Cluster Support** - Organize resources into clusters for better navigation
 - **👥 Multi-Tenancy Ready** - Tenant scoping and relationship configuration
-- **🔗 Parent-Child Resources** - Hierarchical resource relationships
-- **⚙️ Multi-Resource Configuration** - Different settings per resource in a single plugin
+- **🔗 Parent-Child Resources** - Hierarchical forResource relationships
+- **⚙️ Multi-Resource Configuration** - Different settings per forResource in a single plugin
 - **📦 3-Tier Default System** - User overrides → Plugin defaults → Filament defaults
 - **🔄 Dynamic Values** - Closure support for conditional logic and real-time data
 - **🛠️ Developer-Friendly** - Minimal boilerplate with maximum customization
@@ -42,7 +42,7 @@ class YourPlugin implements Plugin
     use HasNavigation;
     use HasLabels;
     use HasGlobalSearch;
-    use WithMultipleResourceSupport; // For multi-resource plugins
+    use WithMultipleResourceSupport; // For multi-forResource plugins
     
     public static function make(): static
     {
@@ -58,7 +58,7 @@ class YourPlugin implements Plugin
 }
 ```
 
-### 2. Add matching traits to your resource classes
+### 2. Add matching traits to your forResource classes
 
 ```php
 <?php
@@ -75,13 +75,13 @@ class UserResource extends Resource
     
     protected static ?string $model = User::class;
     
-    // Required: Link resource to plugin
+    // Required: Link forResource to plugin
     public static function pluginEssential(): ?YourPlugin
     {
         return YourPlugin::get();
     }
     
-    // ... rest of resource implementation
+    // ... rest of forResource implementation
 }
 ```
 
@@ -144,18 +144,18 @@ public function panel(Panel $panel): Panel
 }
 ```
 
-### Multi-resource configuration
+### Multi-forResource configuration
 
 ```php
 YourPlugin::make()
     // Configure UserResource
-    ->resource(UserResource::class)
+    ->forResource(UserResource::class)
         ->navigationLabel('Users')
         ->modelLabel('User')
         ->globalSearchResultsLimit(25)
         
     // Configure PostResource  
-    ->resource(PostResource::class)
+    ->forResource(PostResource::class)
         ->navigationLabel('Posts')
         ->modelLabel('Article')
         ->globalSearchResultsLimit(10)
@@ -172,10 +172,10 @@ YourPlugin::make()
 
 ## Plugin & Resource Trait Mapping
 
-Each plugin trait has a corresponding resource trait that must be added to your resource classes:
+Each plugin trait has a corresponding forResource trait that must be added to your forResource classes:
 ```php
 use BezhanSalleh\PluginEssentials\Concerns\Plugin; // plugin
-use BezhanSalleh\PluginEssentials\Concerns\Resource; // resource
+use BezhanSalleh\PluginEssentials\Concerns\Resource; // forResource
 ```
 | Plugin Trait | Resource Trait |
 |--------------|----------------|
@@ -185,7 +185,7 @@ use BezhanSalleh\PluginEssentials\Concerns\Resource; // resource
 | `Plugin\BelongsToCluster` | `Resource\BelongsToCluster` |
 | `Plugin\BelongsToParent` | `Resource\BelongsToParent` |
 | `Plugin\BelongsToTenant` | `Resource\BelongsToTenant` |
-| `Plugin\WithMultipleResourceSupport` | *(No resource trait needed - enables multi-resource configuration)* |
+| `Plugin\WithMultipleResourceSupport` | *(No forResource trait needed - enables multi-forResource configuration)* |
 
 ## Configuration Options Provided by Each Trait
 
@@ -325,7 +325,7 @@ protected function getPluginDefaults(): array
 
 ### `WithMultipleResourceSupport`
 
-Enables per-resource configuration:
+Enables per-forResource configuration:
 
 ```php
 class YourPlugin implements Plugin 
@@ -336,9 +336,9 @@ class YourPlugin implements Plugin
 
 // Usage:
 $plugin
-    ->resource(UserResource::class)
+    ->forResource(UserResource::class)
         ->navigationLabel('Users')
-    ->resource(PostResource::class)
+    ->forResource(PostResource::class)
         ->navigationLabel('Posts');
 ```
 

@@ -9,7 +9,7 @@ trait BelongsToCluster
     use DelegatesToPlugin;
 
     /**
-     * Get the cluster for this resource.
+     * Get the cluster for this forResource.
      */
     public static function getCluster(): ?string
     {

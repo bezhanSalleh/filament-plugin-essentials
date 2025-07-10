@@ -10,7 +10,7 @@ use Filament\Panel;
 use Filament\Support\Concerns\EvaluatesClosures;
 
 /**
- * Plugin without defaults for testing resource fallback
+ * Plugin without defaults for testing forResource fallback
  */
 class NoDefaultsTestPlugin implements Plugin
 {
@@ -18,7 +18,7 @@ class NoDefaultsTestPlugin implements Plugin
     use HasLabels;
     use HasNavigation;
 
-    // No getPluginDefaults() method - should fall back to resource defaults
+    // No getPluginDefaults() method - should fall back to forResource defaults
 
     public static function make(): static
     {

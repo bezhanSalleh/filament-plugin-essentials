@@ -24,13 +24,13 @@ describe('Plugin Registration', function () {
         expect(Filament::getPlugin('bezhansalleh/essentials'))->toBeInstanceOf(EssentialPlugin::class);
     });
 
-    it('can register multi-resource plugin', function () {
+    it('can register multi-forResource plugin', function () {
         $this->panel
             ->plugins([
                 MultiResourceTestPlugin::make(),
             ]);
 
-        expect(Filament::getPlugin('multi-resource-test'))->toBeInstanceOf(MultiResourceTestPlugin::class);
+        expect(Filament::getPlugin('multi-forResource-test'))->toBeInstanceOf(MultiResourceTestPlugin::class);
     });
 });
 
@@ -197,7 +197,7 @@ describe('Plugin BelongsToCluster Trait', function () {
 });
 
 describe('Plugin BelongsToParent Trait', function () {
-    it('sets custom parent resource', function () {
+    it('sets custom parent forResource', function () {
         $this->panel
             ->plugins([
                 EssentialPlugin::make()
@@ -207,10 +207,10 @@ describe('Plugin BelongsToParent Trait', function () {
         expect(UserResource::getParentResource())->toBe('App\\Filament\\Resources\\OrganizationResource');
     });
 
-    it('uses default parent resource', function () {
+    it('uses default parent forResource', function () {
         $this->panel
             ->plugins([
-                EssentialPlugin::make(), // No parent resource configuration
+                EssentialPlugin::make(), // No parent forResource configuration
             ]);
 
         expect(UserResource::getParentResource())->toBeNull();
@@ -277,15 +277,15 @@ describe('Plugin HasGlobalSearch Trait', function () {
 });
 
 describe('Multi-Resource Plugin Support', function () {
-    it('sets different labels per resource', function () {
+    it('sets different labels per forResource', function () {
         $this->panel
             ->plugins([
                 MultiResourceTestPlugin::make()
-                    ->resource(AdminResource::class)
+                    ->forResource(AdminResource::class)
                     ->modelLabel('System Admin')
                     ->pluralModelLabel('System Admins')
                     ->recordTitleAttribute('email')
-                    ->resource(PostResource::class)
+                    ->forResource(PostResource::class)
                     ->modelLabel('Blog Post')
                     ->pluralModelLabel('Blog Posts')
                     ->recordTitleAttribute('title'),
@@ -302,14 +302,14 @@ describe('Multi-Resource Plugin Support', function () {
             ->and(PostResource::getRecordTitleAttribute())->toBe('title');
     });
 
-    it('uses mixed resource configs and defaults', function () {
+    it('uses mixed forResource configs and defaults', function () {
         $this->panel
             ->plugins([
                 MultiResourceTestPlugin::make()
-                    ->resource(AdminResource::class)
+                    ->forResource(AdminResource::class)
                     ->modelLabel('Administrator')
                         // Other properties use defaults
-                    ->resource(PostResource::class)
+                    ->forResource(PostResource::class)
                     ->pluralModelLabel('Articles')
                     ->recordTitleAttribute('slug'),
                 // modelLabel uses default
@@ -326,15 +326,15 @@ describe('Multi-Resource Plugin Support', function () {
             ->and(PostResource::getRecordTitleAttribute())->toBe('slug');
     });
 
-    it('sets different navigation per resource', function () {
+    it('sets different navigation per forResource', function () {
         $this->panel
             ->plugins([
                 MultiResourceTestPlugin::make()
-                    ->resource(AdminResource::class)
+                    ->forResource(AdminResource::class)
                     ->navigationLabel('User Management')
                     ->navigationGroup('Admin')
                     ->navigationSort(10)
-                    ->resource(PostResource::class)
+                    ->forResource(PostResource::class)
                     ->navigationLabel('Blog Posts')
                     ->navigationGroup('Content')
                     ->navigationSort(20),
@@ -355,11 +355,11 @@ describe('Multi-Resource Plugin Support', function () {
         $this->panel
             ->plugins([
                 MultiResourceTestPlugin::make()
-                    ->resource(AdminResource::class)
+                    ->forResource(AdminResource::class)
                     ->navigationLabel('Admins')
                     ->navigationSort(5)
                         // Group uses default
-                    ->resource(PostResource::class)
+                    ->forResource(PostResource::class)
                     ->navigationGroup('Publishing'),
                 // Label and sort use defaults
             ]);
@@ -375,30 +375,30 @@ describe('Multi-Resource Plugin Support', function () {
             ->and(PostResource::getNavigationSort())->toBe(20); // Plugin default
     });
 
-    it('sets different cluster per resource', function () {
+    it('sets different cluster per forResource', function () {
         $this->panel
             ->plugins([
                 MultiResourceTestPlugin::make()
-                    ->resource(AdminResource::class)
+                    ->forResource(AdminResource::class)
                     ->cluster('App\\Filament\\Clusters\\AdminCluster')
-                    ->resource(PostResource::class)
+                    ->forResource(PostResource::class)
                     ->cluster('App\\Filament\\Clusters\\ContentCluster'),
             ]);
 
-        // Each resource gets its specific cluster
+        // Each forResource gets its specific cluster
         expect(AdminResource::getCluster())->toBe('App\\Filament\\Clusters\\AdminCluster');
         expect(PostResource::getCluster())->toBe('App\\Filament\\Clusters\\ContentCluster');
     });
 
-    it('sets different tenant settings per resource', function () {
+    it('sets different tenant settings per forResource', function () {
         $this->panel
             ->plugins([
                 MultiResourceTestPlugin::make()
-                    ->resource(AdminResource::class)
+                    ->forResource(AdminResource::class)
                     ->scopeToTenant(true)
                     ->tenantRelationshipName('organization')
                     ->tenantOwnershipRelationshipName('owner')
-                    ->resource(PostResource::class)
+                    ->forResource(PostResource::class)
                     ->scopeToTenant(false)
                     ->tenantRelationshipName('company'),
             ]);
@@ -414,15 +414,15 @@ describe('Multi-Resource Plugin Support', function () {
             ->and(PostResource::getTenantOwnershipRelationshipName())->toBeString(); // Default
     });
 
-    it('sets different global search per resource', function () {
+    it('sets different global search per forResource', function () {
         $this->panel
             ->plugins([
                 MultiResourceTestPlugin::make()
-                    ->resource(AdminResource::class)
+                    ->forResource(AdminResource::class)
                     ->globallySearchable(true)
                     ->globalSearchResultsLimit(25)
                     ->forceGlobalSearchCaseInsensitive(true)
-                    ->resource(PostResource::class)
+                    ->forResource(PostResource::class)
                     ->globallySearchable(false)
                     ->globalSearchResultsLimit(10),
             ]);

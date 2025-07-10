@@ -69,12 +69,12 @@ describe('HasGlobalSearch Trait - 3-Tier Default System', function () {
                 MixedDefaultsTestPlugin::make()
                     ->globalSearchResultsLimit(30) // User override
                     ->splitGlobalSearchTerms(true), // User override
-                // globallySearchable uses resource defaults (no plugin default)
+                // globallySearchable uses forResource defaults (no plugin default)
             ]);
 
         $plugin = Filament::getPlugin('mixed-defaults-test');
 
-        // Test mixed values: some user, some resource defaults
+        // Test mixed values: some user, some forResource defaults
         expect($plugin->getGlobalSearchResultsLimit())->toBe(30) // User override
             ->and($plugin->isGloballySearchable())->toBeTrue() // Resource default (no plugin default)
             ->and($plugin->canGloballySearch())->toBeTrue() // Resource default (no plugin default)

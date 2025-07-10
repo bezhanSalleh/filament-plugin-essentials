@@ -247,7 +247,7 @@ describe('Plugin BelongsToCluster Trait', function () {
 });
 
 describe('Plugin BelongsToParent Trait', function () {
-    it('can set parent resource as string', function () {
+    it('can set parent forResource as string', function () {
         $parentClass = 'App\\Filament\\Resources\\ParentResource';
         $result = $this->plugin->parentResource($parentClass);
 
@@ -255,14 +255,14 @@ describe('Plugin BelongsToParent Trait', function () {
             ->and($this->plugin->getParentResource())->toBe($parentClass);
     });
 
-    it('can set parent resource as null', function () {
+    it('can set parent forResource as null', function () {
         $result = $this->plugin->parentResource(null);
 
         expect($result)->toBe($this->plugin)
             ->and($this->plugin->getParentResource())->toBeNull();
     });
 
-    it('has default null parent resource', function () {
+    it('has default null parent forResource', function () {
         expect($this->plugin->getParentResource())->toBeNull();
     });
 });
@@ -347,11 +347,11 @@ describe('Multi-Resource Plugin Support', function () {
     describe('WithMultipleResourceSupport Trait', function () {
         it('can set contextual navigation properties for specific resources', function () {
             $this->multiPlugin
-                ->resource(UserResource::class)
+                ->forResource(UserResource::class)
                 ->navigationLabel('User Management')
                 ->navigationGroup('Admin')
                 ->navigationSort(10)
-                ->resource(PostResource::class)
+                ->forResource(PostResource::class)
                 ->navigationLabel('Post Management')
                 ->navigationGroup('Content')
                 ->navigationSort(20);
@@ -369,11 +369,11 @@ describe('Multi-Resource Plugin Support', function () {
 
         it('can set contextual labels for specific resources', function () {
             $this->multiPlugin
-                ->resource(UserResource::class)
+                ->forResource(UserResource::class)
                 ->modelLabel('User')
                 ->pluralModelLabel('Users')
                 ->recordTitleAttribute('name')
-                ->resource(PostResource::class)
+                ->forResource(PostResource::class)
                 ->modelLabel('Article')
                 ->pluralModelLabel('Articles')
                 ->recordTitleAttribute('title');
@@ -391,9 +391,9 @@ describe('Multi-Resource Plugin Support', function () {
 
         it('can set contextual cluster settings for specific resources', function () {
             $this->multiPlugin
-                ->resource(UserResource::class)
+                ->forResource(UserResource::class)
                 ->cluster('App\\Filament\\Clusters\\AdminCluster')
-                ->resource(PostResource::class)
+                ->forResource(PostResource::class)
                 ->cluster('App\\Filament\\Clusters\\ContentCluster');
 
             expect($this->multiPlugin->getCluster(UserResource::class))->toBe('App\\Filament\\Clusters\\AdminCluster')
@@ -402,10 +402,10 @@ describe('Multi-Resource Plugin Support', function () {
 
         it('can set contextual tenant settings for specific resources', function () {
             $this->multiPlugin
-                ->resource(UserResource::class)
+                ->forResource(UserResource::class)
                 ->scopeToTenant(false)
                 ->tenantRelationshipName('organization')
-                ->resource(PostResource::class)
+                ->forResource(PostResource::class)
                 ->scopeToTenant(true)
                 ->tenantRelationshipName('tenant');
 
@@ -417,11 +417,11 @@ describe('Multi-Resource Plugin Support', function () {
 
         it('can set contextual global search settings for specific resources', function () {
             $this->multiPlugin
-                ->resource(UserResource::class)
+                ->forResource(UserResource::class)
                 ->globallySearchable(true)
                 ->globalSearchResultsLimit(25)
                 ->splitGlobalSearchTerms(true)
-                ->resource(PostResource::class)
+                ->forResource(PostResource::class)
                 ->globallySearchable(false)
                 ->globalSearchResultsLimit(10)
                 ->splitGlobalSearchTerms(false);
@@ -434,21 +434,21 @@ describe('Multi-Resource Plugin Support', function () {
                 ->and($this->multiPlugin->shouldSplitGlobalSearchTerms(PostResource::class))->toBeFalse();
         });
 
-        it('can set contextual parent resource settings', function () {
+        it('can set contextual parent forResource settings', function () {
             $this->multiPlugin
-                ->resource(UserResource::class)
+                ->forResource(UserResource::class)
                 ->parentResource('App\\Filament\\Resources\\OrganizationResource')
-                ->resource(PostResource::class)
+                ->forResource(PostResource::class)
                 ->parentResource('App\\Filament\\Resources\\CategoryResource');
 
             expect($this->multiPlugin->getParentResource(UserResource::class))->toBe('App\\Filament\\Resources\\OrganizationResource')
                 ->and($this->multiPlugin->getParentResource(PostResource::class))->toBe('App\\Filament\\Resources\\CategoryResource');
         });
 
-        it('returns null for unset resource contexts', function () {
+        it('returns null for unset forResource contexts', function () {
             // Set properties for UserResource only
             $this->multiPlugin
-                ->resource(UserResource::class)
+                ->forResource(UserResource::class)
                 ->navigationLabel('User Management')
                 ->modelLabel('User');
 
@@ -459,12 +459,12 @@ describe('Multi-Resource Plugin Support', function () {
 
         it('supports fluent method chaining across different resources', function () {
             $result = $this->multiPlugin
-                ->resource(UserResource::class)
+                ->forResource(UserResource::class)
                 ->navigationLabel('Users')
                 ->navigationGroup('Admin')
                 ->modelLabel('User')
                 ->globallySearchable(true)
-                ->resource(PostResource::class)
+                ->forResource(PostResource::class)
                 ->navigationLabel('Posts')
                 ->navigationGroup('Content')
                 ->modelLabel('Post')
@@ -488,13 +488,13 @@ describe('Multi-Resource Plugin Support', function () {
             $postLabelCalled = false;
 
             $this->multiPlugin
-                ->resource(UserResource::class)
+                ->forResource(UserResource::class)
                 ->navigationLabel(function () use (&$userLabelCalled) {
                     $userLabelCalled = true;
 
                     return 'Dynamic User Label';
                 })
-                ->resource(PostResource::class)
+                ->forResource(PostResource::class)
                 ->navigationLabel(function () use (&$postLabelCalled) {
                     $postLabelCalled = true;
 
@@ -513,7 +513,7 @@ describe('Multi-Resource Plugin Support', function () {
     });
 
     describe('Single-Resource Plugin Compatibility', function () {
-        it('single-resource plugin works without WithMultipleResourceSupport trait', function () {
+        it('single-forResource plugin works without WithMultipleResourceSupport trait', function () {
             // EssentialPlugin doesn't use WithMultipleResourceSupport
             $singlePlugin = EssentialPlugin::make();
 
@@ -528,8 +528,8 @@ describe('Multi-Resource Plugin Support', function () {
                 ->and($singlePlugin->getModelLabel())->toBe('Single Model');
         });
 
-        it('multi-resource plugin can still be used without resource context for backward compatibility', function () {
-            // When no resource context is set, should work like single-resource
+        it('multi-forResource plugin can still be used without forResource context for backward compatibility', function () {
+            // When no forResource context is set, should work like single-forResource
             $result = $this->multiPlugin
                 ->navigationLabel('Global Label')
                 ->modelLabel('Global Model');

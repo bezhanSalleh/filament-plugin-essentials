@@ -16,7 +16,7 @@ use Filament\Panel;
 use Filament\Support\Concerns\EvaluatesClosures;
 
 /**
- * Multi-resource plugin for testing contextual property support
+ * Multi-forResource plugin for testing contextual property support
  */
 class MultiResourceTestPlugin implements Plugin
 {
@@ -46,12 +46,12 @@ class MultiResourceTestPlugin implements Plugin
 
     public static function get(): ?static
     {
-        return \Filament\Facades\Filament::getPlugin('multi-resource-test');
+        return \Filament\Facades\Filament::getPlugin('multi-forResource-test');
     }
 
     public function getId(): string
     {
-        return 'multi-resource-test';
+        return 'multi-forResource-test';
     }
 
     public function register(Panel $panel): void

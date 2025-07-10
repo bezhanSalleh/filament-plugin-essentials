@@ -100,9 +100,9 @@ describe('All Plugin Traits - Universal 3-Tier System', function () {
                     ->modelLabel('User Override') // User override
                     ->navigationLabel('User Nav'), // User override
                 // navigationSort: will use plugin default (75)
-                // cluster: will fall back to resource default (null)
+                // cluster: will fall back to forResource default (null)
                 // tenantRelationshipName: will use plugin default ('organization')
-                // other properties: will fall back to resource defaults
+                // other properties: will fall back to forResource defaults
             ]);
 
         $plugin = Filament::getPlugin('bezhansalleh/essentials');

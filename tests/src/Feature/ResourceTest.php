@@ -59,7 +59,7 @@ describe('Resource HasNavigation Trait', function () {
 
     it('delegates to plugin when plugin has navigation trait', function () {
         // This test verifies that the delegation system works
-        // The actual plugin configuration will be tested in multi-resource support
+        // The actual plugin configuration will be tested in multi-forResource support
         expect(method_exists(UserResource::class, 'getEssentialsPlugin'))->toBeTrue();
         expect(method_exists(PostResource::class, 'getEssentialsPlugin'))->toBeTrue();
 

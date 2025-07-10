@@ -14,7 +14,7 @@ use Filament\Panel;
 use Filament\Support\Concerns\EvaluatesClosures;
 
 /**
- * Plugin for testing enhanced resource-specific defaults using the new nested structure
+ * Plugin for testing enhanced forResource-specific defaults using the new nested structure
  */
 class EnhancedDefaultsTestPlugin implements Plugin
 {
@@ -26,7 +26,7 @@ class EnhancedDefaultsTestPlugin implements Plugin
     use WithMultipleResourceSupport;
 
     /**
-     * Demonstrate the enhanced nested resource-specific defaults structure
+     * Demonstrate the enhanced nested forResource-specific defaults structure
      */
     protected function getPluginDefaults(): array
     {

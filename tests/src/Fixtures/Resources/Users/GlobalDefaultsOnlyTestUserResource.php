@@ -10,7 +10,7 @@ use BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins\GlobalDefaultsOnlyTestP
 use Filament\Resources\Resource;
 
 /**
- * UserResource for testing global defaults only (no resource-specific defaults)
+ * UserResource for testing global defaults only (no forResource-specific defaults)
  */
 class GlobalDefaultsOnlyTestUserResource extends Resource
 {
