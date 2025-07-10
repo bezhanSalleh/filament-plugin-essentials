@@ -175,24 +175,6 @@ trait HasNavigation
     }
 
     /**
-     * Get the slug.
-     */
-    // public static function getSlug(?Panel $panel = null): string
-    // {
-    //     $pluginResult = static::delegateToPlugin(
-    //         'HasNavigation',
-    //         'getSlug',
-    //         null
-    //     );
-
-    //     if (! static::isNoPluginResult($pluginResult)) {
-    //         return $pluginResult ?? '';
-    //     }
-
-    //     return static::getParentResult('getSlug') ?? '';
-    // }
-
-    /**
      * Get the navigation parent item.
      */
     public static function getNavigationParentItem(): ?string

@@ -5,7 +5,7 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/bezhansalleh/filament-plugin-essentials/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/bezhansalleh/filament-plugin-essentials/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/bezhansalleh/filament-plugin-essentials.svg?style=flat-square)](https://packagist.org/packages/bezhansalleh/filament-plugin-essentials)
 
-Essential traits that provide a **3-tier default/override system** for Filament plugins. Plugin developers can set defaults, plugin users can override them, and everything falls back to sensible Filament defaults.
+A collection of essential traits that streamline Filament plugin development by taking care of the boilerplate, so you can focus on shipping real features faster
 
 ## Features
 
@@ -35,14 +35,15 @@ composer require bezhansalleh/filament-plugin-essentials
 
 namespace YourVendor\YourPlugin;
 
-use BezhanSalleh\PluginEssentials\Concerns\Plugin\HasGlobalSearch;use BezhanSalleh\PluginEssentials\Concerns\Plugin\HasLabels;use BezhanSalleh\PluginEssentials\Concerns\Plugin\HasNavigation;use BezhanSalleh\PluginEssentials\Concerns\Plugin\WithMultipleResourceSupport;use Filament\Contracts\Plugin;
+use BezhanSalleh\PluginEssentials\Concerns\Plugin;
+use Filament\Contracts\Plugin;
 
 class YourPlugin implements Plugin
 {
-    use HasNavigation;
-    use HasLabels;
-    use HasGlobalSearch;
-    use WithMultipleResourceSupport; // For multi-forResource plugins
+    use Plugin\HasNavigation;
+    use Plugin\HasLabels;
+    use Plugin\HasGlobalSearch;
+    use Plugin\WithMultipleResourceSupport; // For multi-forResource plugins
     
     public static function make(): static
     {
@@ -65,18 +66,19 @@ class YourPlugin implements Plugin
 
 namespace YourVendor\YourPlugin\Resources;
 
-use BezhanSalleh\PluginEssentials\Concerns\Resource\HasGlobalSearch;use BezhanSalleh\PluginEssentials\Concerns\Resource\HasLabels;use BezhanSalleh\PluginEssentials\Concerns\Resource\HasNavigation;use Filament\Resources\Resource;
+use BezhanSalleh\PluginEssentials\Concerns;
+use Filament\Resources\Resource;
 
 class UserResource extends Resource
 {
-    use HasNavigation;
-    use HasLabels;
-    use HasGlobalSearch;
+    use Concerns\Resource\HasNavigation;
+    use Concerns\Resource\HasLabels;
+    use Concerns\Resource\HasGlobalSearch;
     
     protected static ?string $model = User::class;
     
     // Required: Link forResource to plugin
-    public static function pluginEssential(): ?YourPlugin
+    public static function getEssentialsPlugin(): ?YourPlugin
     {
         return YourPlugin::get();
     }

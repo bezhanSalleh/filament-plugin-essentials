@@ -36,8 +36,6 @@ trait HasNavigation
 
     protected Closure | int | null $navigationSort = null;
 
-    // protected Closure | null | string $slug = null;
-
     public function subNavigationPosition(Closure | SubNavigationPosition $subNavigationPosition): static
     {
         if (method_exists($this, 'setContextualProperty')) {
@@ -170,17 +168,6 @@ trait HasNavigation
         return $this;
     }
 
-    // public function slug(string | Closure | null $slug): static
-    // {
-    //     if (method_exists($this, 'setContextualProperty')) {
-    //         return $this->setContextualProperty('slug', $slug);
-    //     }
-
-    //     $this->slug = $slug;
-
-    //     return $this;
-    // }
-
     public function getSubNavigationPosition(?string $resourceClass = null): SubNavigationPosition
     {
         $result = $this->getPropertyWithDefaults('subNavigationPosition', $resourceClass);
@@ -239,15 +226,4 @@ trait HasNavigation
     {
         return $this->getPropertyWithDefaults('navigationSort', $resourceClass);
     }
-
-    // public function getSlug(?string $resourceClass = null): ?string
-    // {
-    //     if (method_exists($this, 'getContextualProperty')) {
-    //         $value = $this->getContextualProperty('slug', $resourceClass);
-    //     } else {
-    //         $value = $this->slug;
-    //     }
-
-    //     return $this->evaluate($value);
-    // }
 }
