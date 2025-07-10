@@ -1,96 +1,108 @@
 # Filament Plugin Essentials
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/bezhansalleh/filament-plugin-essentials.svg?style=flat-square)](https://packagist.org/packages/bezhansalle### Alternative: Method-Based Defaults
-
-For complex scenarios, override individual getter methods:
-
-```php
-protected function getDefaultNavigationLabel(?string $resourceClass = null): string
-{
-    return match($resourceClass) {
-        UserResource::class => 'Users',
-        PostResource::class => 'Blog Posts',
-        default => 'Items'
-    };
-}
-```
-
-### Enhanced: Nested Resource-Specific Defaults
-
-For better organization, you can use the nested `resources` structure to define resource-specific defaults:
-
-```php
-protected function getPluginDefaults(): array
-{
-    return [
-        // Global defaults (apply to all resources)
-        'navigationGroup' => 'My Plugin',
-        'globalSearchResultsLimit' => 25,
-        
-        // Resource-specific defaults (NEW)
-        'resources' => [
-            UserResource::class => [
-                'modelLabel' => 'Plugin User',
-                'pluralModelLabel' => 'Plugin Users',
-                'navigationIcon' => 'heroicon-o-users',
-                'globalSearchResultsLimit' => 50, // Override global default
-            ],
-            PostResource::class => [
-                'modelLabel' => 'Plugin Post', 
-                'pluralModelLabel' => 'Plugin Posts',
-                'navigationIcon' => 'heroicon-o-document-text',
-                'navigationSort' => 10,
-            ],
-        ],
-    ];
-}
-```
-
-The system supports both the flat structure and the nested structure for backward compatibility.gin-essentials)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/bezhansalleh/filament-plugin-essentials.svg?style=flat-square)](https://packagist.org/packages/bezhansalleh/filament-plugin-essentials)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/bezhansalleh/filament-plugin-essentials/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/bezhansalleh/filament-plugin-essentials/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/bezhansalleh/filament-plugin-essentials/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/bezhansalleh/filament-plugin-essentials/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/bezhansalleh/filament-plugin-essentials.svg?style=flat-square)](https://packagist.org/packages/bezhansalleh/filament-plugin-essentials)
 
-A comprehensive collection of essential traits that streamline Filament plugin development by providing a powerful **conditional trait-based method override system** with a **3-tier default/override hierarchy**. This allows plugin developers to offer end users a fluent, customizable API while maintaining clean separation of concerns and type safety.
+A comprehensive collection of essential traits that streamline Filament plugin development by providing a **3-tier default/override system** with **multi-resource support**. This package allows plugin developers to create customizable plugins with minimal boilerplate while giving end users a fluent, intuitive configuration API.
 
-## 🎯 What This Package Does
+## 🎯 What This Package Provides
 
-**Filament Plugin Essentials** provides a standardized way for plugin developers to offer customizable resource and page configurations to end users. Instead of manually implementing configuration methods and delegation logic, plugin developers can simply include traits that automatically provide:
+**For Plugin Developers:**
+- 🛠️ **Ready-to-use traits** for common Filament functionality (navigation, labels, global search, tenancy, etc.)
+- 📦 **3-tier default system** with global and resource-specific defaults
+- 🎯 **Multi-resource support** with per-resource configuration
+- 🔗 **Automatic delegation** between plugins and resources
+- 📝 **Minimal boilerplate** - just add traits and optionally define defaults
 
-- **Navigation customization** (icons, labels, grouping, badges, etc.)
-- **Clustering and hierarchy management**
-- **Multi-tenancy configuration**
-- **Global search settings**
-- **Label and display customization**
-
-The package uses an advanced **conditional delegation system** that automatically detects which traits a plugin uses and delegates method calls accordingly, with intelligent fallback to parent implementations when needed.
+**For End Users:**
+- 🎨 **Fluent API** for configuring any plugin that uses these traits
+- 🎛️ **Per-resource customization** for multi-resource plugins
+- ⚡ **Dynamic values** using closures for conditional logic
+- 🛡️ **Intelligent fallbacks** to sensible defaults
+- 🔧 **Zero configuration** required - works out of the box
 
 ## 🚀 Key Features
 
-- ✅ **Plug-and-play traits** for common plugin customizations
-- ✅ **3-tier default/override system** for flexible configuration (New in v2.1!)
-- ✅ **Multi-resource support** with per-resource configuration (New in v2.0!)
-- ✅ **Conditional delegation system** with automatic trait detection
-- ✅ **Type-safe implementation** with full IntelliSense support
-- ✅ **Fluent API** for end-user configuration
-- ✅ **Graceful fallbacks** when plugins don't implement certain features
-- ✅ **Closure support** for dynamic values
-- ✅ **Comprehensive test coverage** (72.4% with 73 tests)
-- ✅ **Zero breaking changes** to existing Filament behavior
+- ✅ **3-tier default/override system** - Global → Resource-specific → User overrides
+- ✅ **Multi-resource support** - Configure different settings per resource
+- ✅ **Resource-specific defaults** - Plugin developers can set different defaults per resource
+- ✅ **Fluent API** - Intuitive method chaining for configuration
+- ✅ **Closure support** - Dynamic values and conditional logic
+- ✅ **Type safety** - Full IntelliSense support
+- ✅ **Backward compatibility** - Zero breaking changes
+- ✅ **Comprehensive test coverage** - 103 tests with 476 assertions
 
-## 📦 Installation
+## � Quick Start
 
-Install the package via Composer:
+### 1. Install the Package
 
 ```bash
 composer require bezhansalleh/filament-plugin-essentials
 ```
 
-## 🛠 Usage
+### 2. Add Traits to Your Plugin
 
-### For Plugin Developers
+```php
+use BezhanSalleh\PluginEssentials\Plugin\HasNavigation;
+use BezhanSalleh\PluginEssentials\Plugin\HasLabels;
 
-Include the desired traits in your plugin class to provide users with standardized customization options:
+class YourPlugin implements Plugin
+{
+    use HasNavigation;
+    use HasLabels;
+    
+    // Your plugin implementation...
+}
+```
+
+### 3. Add Matching Traits to Your Resources
+
+```php
+use BezhanSalleh\PluginEssentials\Resource\Concerns\HasNavigation;
+use BezhanSalleh\PluginEssentials\Resource\Concerns\HasLabels;
+
+class YourResource extends Resource
+{
+    use HasNavigation;
+    use HasLabels;
+    
+    public static function pluginEssential(): ?YourPlugin
+    {
+        return YourPlugin::get();
+    }
+}
+```
+
+### 4. Configure the Plugin (Optional)
+
+```php
+YourPlugin::make()
+    ->navigationLabel('My Custom Label')
+    ->navigationIcon('heroicon-o-star')
+    ->modelLabel('Custom Item')
+```
+
+**That's it!** Your plugin now has a fluent configuration API with intelligent defaults.
+
+## �📦 Installation
+
+## 📦 Detailed Installation
+
+For more detailed setup instructions:
+
+```bash
+composer require bezhansalleh/filament-plugin-essentials
+```
+
+No additional configuration or service provider registration is required.
+
+## 🛠 For Plugin Developers
+
+### Basic Setup
+
+Include the desired traits in your plugin class:
 
 ```php
 <?php
@@ -99,7 +111,8 @@ namespace YourVendor\YourPlugin;
 
 use BezhanSalleh\PluginEssentials\Plugin\HasNavigation;
 use BezhanSalleh\PluginEssentials\Plugin\HasLabels;
-use BezhanSalleh\PluginEssentials\Plugin\BelongsToCluster;
+use BezhanSalleh\PluginEssentials\Plugin\HasGlobalSearch;
+use BezhanSalleh\PluginEssentials\Plugin\WithMultipleResourceSupport;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 
@@ -107,7 +120,8 @@ class YourPlugin implements Plugin
 {
     use HasNavigation;
     use HasLabels;
-    use BelongsToCluster;
+    use HasGlobalSearch;
+    use WithMultipleResourceSupport; // For multi-resource plugins
     
     public static function make(): static
     {
@@ -122,7 +136,8 @@ class YourPlugin implements Plugin
     public function register(Panel $panel): void
     {
         $panel->resources([
-            YourResource::class,
+            UserResource::class,
+            PostResource::class,
         ]);
     }
     
@@ -133,7 +148,51 @@ class YourPlugin implements Plugin
 }
 ```
 
-Then, in your resource classes, include the corresponding resource traits:
+### Setting Plugin Defaults
+
+Provide sensible defaults for your users by implementing the `getPluginDefaults()` method:
+
+```php
+class YourPlugin implements Plugin
+{
+    use HasNavigation, HasLabels, HasGlobalSearch;
+    
+    /**
+     * Define default values for your plugin
+     */
+    protected function getPluginDefaults(): array
+    {
+        return [
+            // Global defaults (apply to all resources)
+            'navigationGroup' => 'Your Plugin',
+            'navigationIcon' => 'heroicon-o-puzzle-piece', 
+            'globalSearchResultsLimit' => 25,
+            
+            // Resource-specific defaults (optional)
+            'resources' => [
+                UserResource::class => [
+                    'modelLabel' => 'Plugin User',
+                    'pluralModelLabel' => 'Plugin Users',
+                    'navigationIcon' => 'heroicon-o-users',
+                    'globalSearchResultsLimit' => 50, // Override global
+                ],
+                PostResource::class => [
+                    'modelLabel' => 'Plugin Post',
+                    'pluralModelLabel' => 'Plugin Posts', 
+                    'navigationIcon' => 'heroicon-o-document-text',
+                    'navigationSort' => 10,
+                ],
+            ],
+        ];
+    }
+    
+    // ...rest of plugin
+}
+```
+
+### Resource Setup
+
+In your resource classes, include the corresponding resource traits:
 
 ```php
 <?php
@@ -142,30 +201,32 @@ namespace YourVendor\YourPlugin\Resources;
 
 use BezhanSalleh\PluginEssentials\Resource\Concerns\HasNavigation;
 use BezhanSalleh\PluginEssentials\Resource\Concerns\HasLabels;
-use BezhanSalleh\PluginEssentials\Resource\Concerns\BelongsToCluster;
+use BezhanSalleh\PluginEssentials\Resource\Concerns\HasGlobalSearch;
 use Filament\Resources\Resource;
 
-class YourResource extends Resource
+class UserResource extends Resource
 {
     use HasNavigation;
     use HasLabels;
-    use BelongsToCluster;
+    use HasGlobalSearch;
     
-    protected static ?string $model = YourModel::class;
+    protected static ?string $model = User::class;
     
-    // Add this method to enable plugin delegation
+    // Required: Link resource to plugin
     public static function pluginEssential(): ?YourPlugin
     {
-        return filament('your-plugin');
+        return YourPlugin::get();
     }
     
     // Your resource implementation...
 }
 ```
 
-### For End Users
+## 🎯 For End Users
 
-Once a plugin uses these traits, end users can configure the plugin with a fluent API:
+Once a plugin uses these traits, configure it with a fluent API:
+
+### Basic Configuration
 
 ```php
 use YourVendor\YourPlugin\YourPlugin;
@@ -175,172 +236,149 @@ public function panel(Panel $panel): Panel
     return $panel
         ->plugins([
             YourPlugin::make()
-                // Navigation customization
+                // Navigation
                 ->navigationLabel('Custom Label')
-                ->navigationIcon('heroicon-o-custom')
+                ->navigationIcon('heroicon-o-star')
                 ->navigationGroup('My Group')
                 ->navigationSort(10)
                 ->navigationBadge('NEW')
                 ->navigationBadgeColor('success')
-                ->navigationBadgeTooltip('This is new!')
-                
-                // Clustering
-                ->cluster(MyCluster::class)
                 
                 // Labels
-                ->modelLabel('Custom Model')
-                ->pluralModelLabel('Custom Models')
-                ->recordTitleAttribute('name')
+                ->modelLabel('Custom Item')
+                ->pluralModelLabel('Custom Items')
                 
-                // Dynamic values with closures
-                ->navigationLabel(fn() => auth()->user()->isAdmin() ? 'Admin View' : 'User View')
-                ->navigationBadge(fn() => Model::whereNew()->count()),
+                // Global Search
+                ->globallySearchable(true)
+                ->globalSearchResultsLimit(30),
         ]);
 }
 ```
 
-## 🎯 3-Tier Default/Override System
+### Multi-Resource Configuration
 
-**NEW in v2.1**: This package provides a powerful 3-tier fallback system that allows for flexible configuration at different levels, ensuring maximum flexibility for both plugin developers and end users.
-
-### How It Works
-
-The system uses three levels of configuration, checked in this priority order:
-
-1. **🔥 User Override** (Highest Priority) - Values set by end users via the fluent API
-2. **🏗️ Plugin Developer Default** (Medium Priority) - Defaults provided by plugin developers  
-3. **⚙️ Resource/Filament Default** (Lowest Priority) - Standard Filament behavior
-
-### For Plugin Developers: Setting Default Values
-
-Plugin developers can provide sensible defaults for their users by implementing the `getPluginDefaults()` method:
+For plugins with multiple resources, configure each resource separately:
 
 ```php
-<?php
-
-namespace YourVendor\YourPlugin;
-
-use BezhanSalleh\PluginEssentials\Plugin\HasNavigation;
-use BezhanSalleh\PluginEssentials\Plugin\HasLabels;
-use Filament\Contracts\Plugin;
-
-class YourPlugin implements Plugin
-{
-    use HasNavigation;
-    use HasLabels;
-    
-    /**
-     * Define plugin-level defaults that will be used when users don't override values
-     */
-    protected function getPluginDefaults(): array
-    {
-        return [
-            'navigationGroup' => 'My Plugin',
-            'navigationIcon' => 'heroicon-o-puzzle-piece',
-            'modelLabel' => 'Plugin Item',
-            'pluralModelLabel' => 'Plugin Items',
-            'globalSearchResultsLimit' => 25,
-        ];
-    }
-    
-    // ...existing code...
-}
-```
-
-#### Alternative: Method-Based Defaults
-
-For more complex scenarios, you can override individual getter methods:
-
-```php
-protected function getDefaultNavigationLabel(?string $resourceClass = null): string
-{
-    return match($resourceClass) {
-        UserResource::class => 'Users',
-        PostResource::class => 'Blog Posts',
-        default => 'Items'
-    };
-}
-```
-
-### For End Users: Overriding Defaults
-
-End users can override any plugin defaults using the fluent API:
-
-```php
-// Plugin provides defaults, user overrides some values
 YourPlugin::make()
-    ->navigationGroup('Custom Group')  // User override
-    ->navigationIcon('heroicon-o-star') // User override
-    // modelLabel, pluralModelLabel, globalSearchResultsLimit will use plugin defaults
-    // Other values will fall back to Filament defaults
+    // Configure UserResource
+    ->resource(UserResource::class)
+        ->navigationLabel('User Management')
+        ->navigationIcon('heroicon-o-users')
+        ->modelLabel('User')
+        ->globalSearchResultsLimit(25)
+        
+    // Configure PostResource  
+    ->resource(PostResource::class)
+        ->navigationLabel('Blog Posts')
+        ->navigationIcon('heroicon-o-document-text')
+        ->modelLabel('Article')
+        ->globalSearchResultsLimit(10)
 ```
 
-### Real-World Example
+### Dynamic Values with Closures
 
-Here's how the 3-tier system works in practice:
+All methods support closures for dynamic values:
+
+```php
+YourPlugin::make()
+    ->navigationLabel(fn() => 'Users (' . User::count() . ')')
+    ->navigationBadge(fn() => User::whereNull('email_verified_at')->count())
+    ->navigationBadgeColor(fn() => 
+        User::whereNull('email_verified_at')->count() > 0 ? 'warning' : 'success'
+    )
+    ->modelLabel(fn() => auth()->user()->isAdmin() ? 'Admin User' : 'User')
+```
+
+## 🎯 Understanding the 3-Tier System
+
+This package provides a powerful **3-tier priority system** that ensures maximum flexibility:
+
+### Priority Order (Highest to Lowest)
+
+1. **🔥 User Overrides** - Values set by end users via the fluent API
+2. **🏗️ Plugin Defaults** - Defaults provided by plugin developers  
+3. **⚙️ Filament Defaults** - Standard Filament behavior
+
+### Example: How Values Are Resolved
 
 ```php
 // 1. Plugin Developer sets defaults
 class BlogPlugin implements Plugin
 {
-    use HasNavigation, HasLabels, HasGlobalSearch;
-    
     protected function getPluginDefaults(): array
     {
         return [
-            'navigationGroup' => 'Blog Management',
-            'navigationIcon' => 'heroicon-o-document-text',
-            'modelLabel' => 'Blog Post',
-            'pluralModelLabel' => 'Blog Posts',
-            'globalSearchResultsLimit' => 15,
+            'navigationGroup' => 'Blog Management',    // Plugin default
+            'navigationIcon' => 'heroicon-o-document', // Plugin default
+            'globalSearchResultsLimit' => 15,          // Plugin default
         ];
     }
 }
 
-// 2. End User installs and configures
+// 2. End User configures plugin
 BlogPlugin::make()
-    ->navigationGroup('Content')        // User override: "Content"
-    ->navigationIcon('heroicon-o-star') // User override: "heroicon-o-star"  
-    // modelLabel: uses plugin default "Blog Post"
-    // pluralModelLabel: uses plugin default "Blog Posts"
-    // globalSearchResultsLimit: uses plugin default 15
-    // navigationSort: uses Filament default (null)
-    // navigationBadge: uses Filament default (null)
+    ->navigationGroup('Content')          // ✅ User override
+    ->navigationIcon('heroicon-o-star')   // ✅ User override
+    // globalSearchResultsLimit not set  // ⬇️ Will use plugin default
+    // navigationSort not set            // ⬇️ Will use Filament default
+
+// 3. Final Result:
+// ✅ navigationGroup: "Content" (user override wins)
+// ✅ navigationIcon: "heroicon-o-star" (user override wins)  
+// 🏗️ globalSearchResultsLimit: 15 (plugin default used)
+// ⚙️ navigationSort: null (Filament default used)
 ```
 
-### Multi-Resource Support
+### Resource-Specific Defaults
 
-The system also works seamlessly with multi-resource plugins:
+Plugin developers can also set different defaults per resource:
 
 ```php
-// Per-resource configuration with fallbacks
-BlogPlugin::make()
-    ->forResource(PostResource::class, fn($resource) => $resource
-        ->navigationLabel('Posts')           // User override for Posts
-        ->navigationIcon('heroicon-o-document') // User override for Posts
-    )
-    ->forResource(CategoryResource::class, fn($resource) => $resource
-        ->navigationLabel('Categories')      // User override for Categories
-        // navigationIcon will use plugin default for Categories
-    );
+protected function getPluginDefaults(): array
+{
+    return [
+        // 🌐 Global defaults (apply to all resources)
+        'navigationGroup' => 'My Plugin',
+        'globalSearchResultsLimit' => 25,
+        
+        // 🎯 Resource-specific defaults (higher priority than global)
+        'resources' => [
+            UserResource::class => [
+                'modelLabel' => 'User Account',
+                'navigationIcon' => 'heroicon-o-users',
+                'globalSearchResultsLimit' => 50, // Overrides global default
+            ],
+            PostResource::class => [
+                'modelLabel' => 'Blog Post',
+                'navigationIcon' => 'heroicon-o-document-text',
+                'navigationSort' => 10,
+                // globalSearchResultsLimit not set, will use global default (25)
+            ],
+        ],
+    ];
+}
 ```
 
-### Benefits
+This means for `UserResource`, the search limit will be 50, but for `PostResource` it will be 25.
 
-- **🎯 DRY**: Plugin developers set defaults once, users only override what they need
-- **🔧 Flexible**: Users can override any value at any level
-- **⚡ Efficient**: No need to specify common values repeatedly
-- **🛡️ Fallback-Safe**: Always has sensible defaults even if nothing is configured
-- **🧩 Modular**: Works consistently across all plugin traits
+### Benefits of This System
+
+- **🎯 DRY Principle** - Plugin developers set defaults once, users only override what they need
+- **🔧 Maximum Flexibility** - Users can override any value at any level
+- **⚡ Zero Configuration** - Works perfectly out of the box with sensible defaults
+- **🛡️ Fallback Safety** - Always has sensible defaults even if nothing is configured
+- **🧩 Consistent API** - Works the same way across all plugin traits
 
 ## 📚 Available Traits
 
-### Plugin Traits (Include in your plugin class)
+### Plugin Traits (Add to your plugin class)
 
 #### `HasNavigation`
-Provides navigation customization options:
+Provides navigation customization for resources:
 
 ```php
+// Available methods for end users:
 $plugin
     ->navigationLabel('Custom Label')           // string|Closure|null
     ->navigationIcon('heroicon-o-home')         // string|Closure|null  
@@ -349,7 +387,6 @@ $plugin
     ->navigationSort(10)                        // int|Closure|null
     ->navigationBadge('5')                      // string|Closure|null
     ->navigationBadgeColor('success')           // string|array|Closure|null
-    ->navigationBadgeTooltip('Tooltip')         // string|Closure|null
     ->navigationParentItem('parent.item')       // string|Closure|null
     ->slug('custom-slug')                       // string|Closure|null
     ->subNavigationPosition(SubNavigationPosition::Top) // SubNavigationPosition|Closure|null
@@ -365,6 +402,17 @@ $plugin
     ->pluralModelLabel('Custom Models')        // string|Closure|null
     ->recordTitleAttribute('name')             // string|Closure|null
     ->titleCaseModelLabel(false);              // bool|Closure
+```
+
+#### `HasGlobalSearch`
+Configures global search behavior:
+
+```php
+$plugin
+    ->globallySearchable(true)                 // bool|Closure
+    ->globalSearchResultsLimit(50)            // int|Closure
+    ->forceGlobalSearchCaseInsensitive(true)   // bool|Closure|null
+    ->splitGlobalSearchTerms(false);           // bool|Closure
 ```
 
 #### `BelongsToCluster`
@@ -386,32 +434,21 @@ Provides multi-tenancy configuration:
 
 ```php
 $plugin
-    ->tenantScope(true)                        // bool|Closure
+    ->scopeToTenant(true)                      // bool|Closure
     ->tenantRelationshipName('organization')   // string|Closure|null
     ->tenantOwnershipRelationshipName('owner'); // string|Closure|null
 ```
 
-#### `HasGlobalSearch`
-Configures global search behavior:
+#### `WithMultipleResourceSupport`
+Enables per-resource configuration for multi-resource plugins:
 
 ```php
-$plugin
-    ->globallySearchable(true)                 // bool|Closure
-    ->globalSearchResultsLimit(50)            // int|Closure
-    ->forceGlobalSearchCaseInsensitive(true)   // bool|Closure|null
-    ->splitGlobalSearchTerms(false);           // bool|Closure
-```
-
-#### `WithMultipleResourceSupport` (New in v2.0)
-Enables per-resource configuration for plugins with multiple resources:
-
-```php
-// Add this trait to enable resource-specific configuration
+// Add this trait to enable ->resource(ResourceClass::class) API
 class YourPlugin implements Plugin 
 {
     use HasNavigation;
     use HasLabels;
-    use WithMultipleResourceSupport;  // Enables ->resource(ResourceClass::class) API
+    use WithMultipleResourceSupport;  // Enables multi-resource support
 }
 
 // Usage:
@@ -424,284 +461,149 @@ $plugin
         ->modelLabel('Article');
 ```
 
-### Resource Traits (Include in your resource classes)
+### Resource Traits (Add to your resource classes)
 
-Each plugin trait has a corresponding resource trait:
+Each plugin trait has a corresponding resource trait that must be added to your resource classes:
 
-- `HasNavigation` → `Resource\Concerns\HasNavigation`
-- `HasLabels` → `Resource\Concerns\HasLabels`  
-- `BelongsToCluster` → `Resource\Concerns\BelongsToCluster`
-- `BelongsToParent` → `Resource\Concerns\BelongsToParent`
-- `BelongsToTenant` → `Resource\Concerns\BelongsToTenant`
-- `HasGlobalSearch` → `Resource\Concerns\HasGlobalSearch`
-
-## 🔄 How The Delegation System Works
-
-The delegation system automatically determines whether to use plugin-configured values or fall back to the resource's parent implementation:
-
-1. **Plugin Check**: Is a plugin instance available via `pluginEssential()`?
-2. **Trait Detection**: Does the plugin use the required trait?
-3. **Method Availability**: Does the plugin implement the method?
-4. **Value Delegation**: Use plugin value (even if `null`)
-5. **Fallback**: If any check fails, use parent implementation
+| Plugin Trait | Resource Trait |
+|--------------|----------------|
+| `HasNavigation` | `Resource\Concerns\HasNavigation` |
+| `HasLabels` | `Resource\Concerns\HasLabels` |
+| `HasGlobalSearch` | `Resource\Concerns\HasGlobalSearch` |
+| `BelongsToCluster` | `Resource\Concerns\BelongsToCluster` |
+| `BelongsToParent` | `Resource\Concerns\BelongsToParent` |
+| `BelongsToTenant` | `Resource\Concerns\BelongsToTenant` |
 
 ```php
-// Example: getNavigationLabel() flow
-public static function getNavigationLabel(): string
+use BezhanSalleh\PluginEssentials\Resource\Concerns\HasNavigation;
+use BezhanSalleh\PluginEssentials\Resource\Concerns\HasLabels;
+
+class YourResource extends Resource
 {
-    $pluginResult = static::delegateToPlugin('HasNavigation', 'getNavigationLabel', null);
+    use HasNavigation;
+    use HasLabels;
     
-    if (!static::isNoPluginResult($pluginResult)) {
-        return $pluginResult ?? '';  // Use plugin result (even null)
+    // Required: Link to your plugin
+    public static function pluginEssential(): ?YourPlugin
+    {
+        return YourPlugin::get();
     }
-    
-    return static::getParentResult('getNavigationLabel') ?? '';  // Fallback to parent
 }
 ```
-
-## 💡 Advanced Usage
-
-### Conditional Values with Closures
-
-All configuration methods support closures for dynamic values:
-
-```php
-$plugin
-    ->navigationLabel(fn() => match(app()->getLocale()) {
-        'es' => 'Etiqueta Personalizada',
-        'fr' => 'Étiquette Personnalisée', 
-        default => 'Custom Label'
-    })
-    ->navigationBadge(fn() => Cache::remember('badge-count', 300, fn() => 
-        Model::where('status', 'pending')->count()
-    ))
-    ->registerNavigation(fn() => auth()->user()?->can('viewAny', Model::class));
-```
+##  Advanced Usage Examples
 
 ### Complex Plugin Configuration
 
 ```php
 YourPlugin::make()
-    // Basic navigation
+    // Static values
     ->navigationLabel('User Management')
     ->navigationIcon('heroicon-o-users')
     ->navigationGroup('Administration')
     
-    // Dynamic badge with count
-    ->navigationBadge(fn() => \App\Models\User::where('email_verified_at', null)->count())
+    // Dynamic values with closures
+    ->navigationBadge(fn() => User::whereNull('email_verified_at')->count())
     ->navigationBadgeColor(fn() => 
-        \App\Models\User::where('email_verified_at', null)->count() > 0 ? 'warning' : 'success'
+        User::whereNull('email_verified_at')->count() > 0 ? 'warning' : 'success'
     )
     
-    // Conditional clustering based on user role
+    // Conditional logic
     ->cluster(fn() => auth()->user()?->isAdmin() ? AdminCluster::class : null)
-    
-    // Dynamic labels based on tenant
     ->modelLabel(fn() => Filament::getTenant()?->type === 'enterprise' ? 'Employee' : 'User')
-    ->pluralModelLabel(fn() => Filament::getTenant()?->type === 'enterprise' ? 'Employees' : 'Users')
-    
-    // Multi-tenancy setup
-    ->tenantScope(true)
-    ->tenantRelationshipName('organization')
     
     // Global search configuration
     ->globallySearchable(fn() => config('app.enable_global_search'))
-    ->globalSearchResultsLimit(25);
+    ->globalSearchResultsLimit(25)
 ```
 
-### Multiple Resource Support
-
-If your plugin registers multiple resources, each can have different configurations:
-
-```php
-// UserResource.php
-class UserResource extends Resource
-{
-    use HasNavigation, HasLabels;
-    
-    public static function pluginEssential(): ?YourPlugin
-    {
-        return filament('your-plugin');
-    }
-}
-
-// PostResource.php  
-class PostResource extends Resource
-{
-    use HasNavigation, BelongsToCluster;
-    
-    public static function pluginEssential(): ?YourPlugin
-    {
-        return filament('your-plugin');
-    }
-}
-```
-
-The delegation system automatically handles different trait combinations per resource.
-
-## 🎯 Multi-Resource Plugin Support
-
-**New in v2.0:** For plugins that register multiple resources with different configuration needs, you can now use the `WithMultipleResourceSupport` trait to provide resource-specific settings.
-
-### Setup for Plugin Developers
-
-Add the `WithMultipleResourceSupport` trait to your plugin to enable per-resource configuration:
-
-```php
-<?php
-
-namespace YourVendor\YourPlugin;
-
-use BezhanSalleh\PluginEssentials\Plugin\HasNavigation;
-use BezhanSalleh\PluginEssentials\Plugin\HasLabels;
-use BezhanSalleh\PluginEssentials\Plugin\WithMultipleResourceSupport;
-use Filament\Contracts\Plugin;
-
-class YourMultiResourcePlugin implements Plugin
-{
-    use HasNavigation;
-    use HasLabels;
-    use WithMultipleResourceSupport; // 🎯 This enables multi-resource support
-    
-    public function register(Panel $panel): void
-    {
-        $panel->resources([
-            UserResource::class,
-            PostResource::class,
-            CategoryResource::class,
-        ]);
-    }
-    
-    // ... rest of plugin implementation
-}
-```
-
-### Usage for End Users
-
-End users can now configure different settings for each resource using the fluent `resource()` API:
+### Multi-Resource Plugin with Different Settings
 
 ```php
 YourMultiResourcePlugin::make()
     // Configure UserResource
     ->resource(UserResource::class)
-        ->navigationLabel('User Management')
+        ->navigationLabel(fn() => 'Users (' . User::count() . ')')
         ->navigationGroup('Administration')
-        ->navigationIcon('heroicon-o-users')
-        ->modelLabel('User')
-        ->pluralModelLabel('Users')
+        ->globallySearchable(true)
+        ->globalSearchResultsLimit(25)
         ->cluster(AdminCluster::class)
         
     // Configure PostResource with different settings
     ->resource(PostResource::class)
-        ->navigationLabel('Blog Posts')
+        ->navigationLabel(fn() => 'Posts (' . Post::published()->count() . ')')
         ->navigationGroup('Content')
-        ->navigationIcon('heroicon-o-document-text')
-        ->modelLabel('Article')
-        ->pluralModelLabel('Articles')
+        ->globallySearchable(true)
+        ->globalSearchResultsLimit(10)
         ->cluster(ContentCluster::class)
         
     // Configure CategoryResource
     ->resource(CategoryResource::class)
         ->navigationLabel('Categories')
         ->navigationGroup('Content')
-        ->navigationIcon('heroicon-o-folder')
-        ->globallySearchable(false);
-```
-
-### Resource-Specific Delegation
-
-Resources automatically receive their specific configuration:
-
-```php
-// UserResource will get:
-// - Navigation label: "User Management"
-// - Navigation group: "Administration" 
-// - Model label: "User"
-// - Cluster: AdminCluster::class
-
-// PostResource will get:
-// - Navigation label: "Blog Posts"
-// - Navigation group: "Content"
-// - Model label: "Article" 
-// - Cluster: ContentCluster::class
-```
-
-### Key Features
-
-- **✅ Fluent API**: Chain configurations for different resources
-- **✅ Resource Context**: Each resource gets its own isolated configuration
-- **✅ Backward Compatible**: Single-resource plugins work exactly as before
-- **✅ Closure Support**: Dynamic values work in resource-specific contexts
-- **✅ Fallback Behavior**: Unset properties fall back to global defaults
-- **✅ Type Safety**: Full IntelliSense support for all configurations
-
-### Advanced Multi-Resource Configuration
-
-```php
-YourMultiResourcePlugin::make()
-    ->resource(UserResource::class)
-        ->navigationLabel(fn() => 'Users (' . User::count() . ')')
-        ->navigationGroup('Admin')
-        ->globallySearchable(true)
-        ->globalSearchResultsLimit(25)
-        ->tenantScope(false)
-        
-    ->resource(PostResource::class)
-        ->navigationLabel(fn() => 'Posts (' . Post::published()->count() . ')')
-        ->navigationGroup('Content')
-        ->globallySearchable(true)
-        ->globalSearchResultsLimit(10)
-        ->tenantScope(true)
-        ->tenantRelationshipName('organization')
-        
-    ->resource(CategoryResource::class)
-        ->navigationLabel('Categories')
-        ->navigationGroup('Content')
         ->globallySearchable(false)
-        ->parentResource(PostResource::class);
+        ->parentResource(PostResource::class)
 ```
 
-### Backward Compatibility
-
-Existing single-resource plugins continue to work without any changes:
+### Plugin with Resource-Specific Defaults
 
 ```php
-// This still works exactly as before
-YourSingleResourcePlugin::make()
-    ->navigationLabel('My Resource')
-    ->navigationGroup('My Group')
-    ->modelLabel('Item');
+class BlogPlugin implements Plugin
+{
+    use HasNavigation, HasLabels, HasGlobalSearch, WithMultipleResourceSupport;
+    
+    protected function getPluginDefaults(): array
+    {
+        return [
+            // Global defaults
+            'navigationGroup' => 'Blog Management',
+            'globalSearchResultsLimit' => 15,
+            
+            // Resource-specific defaults  
+            'resources' => [
+                PostResource::class => [
+                    'modelLabel' => 'Blog Post',
+                    'pluralModelLabel' => 'Blog Posts',
+                    'navigationIcon' => 'heroicon-o-document-text',
+                    'navigationSort' => 10,
+                    'globalSearchResultsLimit' => 20, // Override global
+                ],
+                CategoryResource::class => [
+                    'modelLabel' => 'Blog Category',
+                    'pluralModelLabel' => 'Blog Categories', 
+                    'navigationIcon' => 'heroicon-o-folder',
+                    'navigationSort' => 20,
+                    'globallySearchable' => false, // Disable for this resource
+                ],
+            ],
+        ];
+    }
+}
 ```
 
 ## 🧪 Testing
 
-The package includes comprehensive tests covering all delegation scenarios:
+Run the package tests:
 
 ```bash
 composer test
 composer test:coverage  # View coverage report
-composer test:type      # Type coverage analysis
 ```
 
-Current test coverage: **72.4%** with **73 tests** and **236 assertions**, including comprehensive multi-resource support testing.
+Current test coverage: **103 tests** with **476 assertions**.
 
-## Changelog
+## 📄 License
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
-## Contributing
+## 🤝 Contributing
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
-## Security Vulnerabilities
+## 🔒 Security
 
 Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
 
-## Credits
+## 🙏 Credits
 
 - [Bezhan Salleh](https://github.com/bezhanSalleh)
 - [All Contributors](../../contributors)
-
-## License
-
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.

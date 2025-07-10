@@ -94,7 +94,7 @@ trait HasPluginDefaults
                 if (isset($defaults['resources'][$resourceClass][$property])) {
                     return $defaults['resources'][$resourceClass][$property];
                 }
-                
+
                 // Legacy flat structure: ResourceClass::class => [...]
                 if (isset($defaults[$resourceClass][$property])) {
                     return $defaults[$resourceClass][$property];
