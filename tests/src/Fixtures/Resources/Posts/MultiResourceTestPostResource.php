@@ -9,7 +9,7 @@ use BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins\MultiResourceTestPlugin
  */
 class MultiResourceTestPostResource extends PostResource
 {
-    public static function pluginEssential(): ?MultiResourceTestPlugin
+    public static function getEssentialsPlugin(): ?MultiResourceTestPlugin
     {
         return MultiResourceTestPlugin::get();
     }

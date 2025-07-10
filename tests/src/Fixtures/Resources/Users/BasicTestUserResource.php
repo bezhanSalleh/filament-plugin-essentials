@@ -21,7 +21,7 @@ class BasicTestUserResource extends Resource
 
     protected static BackedEnum | string | null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    public static function pluginEssential(): ?BasicTestPlugin
+    public static function getEssentialsPlugin(): ?BasicTestPlugin
     {
         return BasicTestPlugin::get();
     }

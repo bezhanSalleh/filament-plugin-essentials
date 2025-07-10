@@ -20,7 +20,7 @@ class EnhancedTestUserResource extends Resource
 
     protected static ?string $model = User::class;
 
-    public static function pluginEssential(): ?EnhancedDefaultsTestPlugin
+    public static function getEssentialsPlugin(): ?EnhancedDefaultsTestPlugin
     {
         return EnhancedDefaultsTestPlugin::get();
     }

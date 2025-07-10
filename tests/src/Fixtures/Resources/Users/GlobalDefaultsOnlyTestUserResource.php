@@ -20,7 +20,7 @@ class GlobalDefaultsOnlyTestUserResource extends Resource
 
     protected static ?string $model = User::class;
 
-    public static function pluginEssential(): ?GlobalDefaultsOnlyTestPlugin
+    public static function getEssentialsPlugin(): ?GlobalDefaultsOnlyTestPlugin
     {
         return GlobalDefaultsOnlyTestPlugin::get();
     }

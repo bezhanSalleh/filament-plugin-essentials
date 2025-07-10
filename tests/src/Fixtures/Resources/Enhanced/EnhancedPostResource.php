@@ -21,7 +21,7 @@ class EnhancedPostResource extends Resource
 
     protected static ?string $model = Post::class;
 
-    public static function pluginEssential(): ?EnhancedMultiResourceTestPlugin
+    public static function getEssentialsPlugin(): ?EnhancedMultiResourceTestPlugin
     {
         return EnhancedMultiResourceTestPlugin::get();
     }

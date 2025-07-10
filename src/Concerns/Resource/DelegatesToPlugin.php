@@ -23,14 +23,14 @@ trait DelegatesToPlugin
      */
     protected static function delegateToPlugin(string $traitName, string $methodName, mixed $fallback = null): mixed
     {
-        // Check if pluginEssential method exists
-        if (! method_exists(static::class, 'pluginEssential')) {
+        // Check if getEssentialsPlugin method exists
+        if (! method_exists(static::class, 'getEssentialsPlugin')) {
             return self::$NO_PLUGIN_RESULT;
         }
 
         try {
             // Get plugin instance
-            $plugin = static::pluginEssential();
+            $plugin = static::getEssentialsPlugin();
 
             if (! is_object($plugin)) {
                 return self::$NO_PLUGIN_RESULT;

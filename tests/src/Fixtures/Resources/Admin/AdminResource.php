@@ -38,7 +38,7 @@ class AdminResource extends Resource
 
     protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    public static function pluginEssential(): ?MultiResourceTestPlugin
+    public static function getEssentialsPlugin(): ?MultiResourceTestPlugin
     {
         return MultiResourceTestPlugin::get();
     }

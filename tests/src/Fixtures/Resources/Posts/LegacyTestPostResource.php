@@ -20,7 +20,7 @@ class LegacyTestPostResource extends Resource
 
     protected static ?string $model = Post::class;
 
-    public static function pluginEssential(): ?LegacyStructureTestPlugin
+    public static function getEssentialsPlugin(): ?LegacyStructureTestPlugin
     {
         return LegacyStructureTestPlugin::get();
     }

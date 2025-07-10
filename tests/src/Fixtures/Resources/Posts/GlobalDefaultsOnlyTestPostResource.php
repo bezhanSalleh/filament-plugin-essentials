@@ -20,7 +20,7 @@ class GlobalDefaultsOnlyTestPostResource extends Resource
 
     protected static ?string $model = Post::class;
 
-    public static function pluginEssential(): ?GlobalDefaultsOnlyTestPlugin
+    public static function getEssentialsPlugin(): ?GlobalDefaultsOnlyTestPlugin
     {
         return GlobalDefaultsOnlyTestPlugin::get();
     }

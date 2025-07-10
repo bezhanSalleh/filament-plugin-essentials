@@ -31,7 +31,7 @@ class FullFeaturesTestUserResource extends Resource
 
     protected static BackedEnum | string | null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    public static function pluginEssential(): ?FullFeaturesTestPlugin
+    public static function getEssentialsPlugin(): ?FullFeaturesTestPlugin
     {
         return FullFeaturesTestPlugin::get();
     }

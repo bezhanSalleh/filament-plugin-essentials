@@ -22,7 +22,7 @@ class NoDefaultsTestUserResource extends Resource
 
     protected static ?string $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    public static function pluginEssential(): ?NoDefaultsTestPlugin
+    public static function getEssentialsPlugin(): ?NoDefaultsTestPlugin
     {
         return NoDefaultsTestPlugin::get();
     }

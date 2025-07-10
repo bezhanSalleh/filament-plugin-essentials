@@ -38,7 +38,7 @@ class UserResource extends Resource
 
     protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    public static function pluginEssential(): ?EssentialPlugin
+    public static function getEssentialsPlugin(): ?EssentialPlugin
     {
         return EssentialPlugin::get();
     }

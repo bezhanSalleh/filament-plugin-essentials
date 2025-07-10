@@ -10,7 +10,7 @@ use BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins\MultiResourceTestPlugin
  */
 class MultiResourceTestUserResource extends UserResource
 {
-    public static function pluginEssential(): ?EssentialPlugin
+    public static function getEssentialsPlugin(): ?EssentialPlugin
     {
         return MultiResourceTestPlugin::get();
     }
