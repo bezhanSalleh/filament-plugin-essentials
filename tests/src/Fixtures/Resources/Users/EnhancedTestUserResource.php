@@ -5,8 +5,8 @@ namespace BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users;
 use BezhanSalleh\PluginEssentials\Resource\Concerns\HasGlobalSearch;
 use BezhanSalleh\PluginEssentials\Resource\Concerns\HasLabels;
 use BezhanSalleh\PluginEssentials\Resource\Concerns\HasNavigation;
-use BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins\EnhancedDefaultsTestPlugin;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Models\User;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins\EnhancedDefaultsTestPlugin;
 use Filament\Resources\Resource;
 
 /**
@@ -14,9 +14,9 @@ use Filament\Resources\Resource;
  */
 class EnhancedTestUserResource extends Resource
 {
+    use HasGlobalSearch;
     use HasLabels;
     use HasNavigation;
-    use HasGlobalSearch;
 
     protected static ?string $model = User::class;
 

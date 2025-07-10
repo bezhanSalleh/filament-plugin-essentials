@@ -16,9 +16,9 @@ use Filament\Support\Concerns\EvaluatesClosures;
 class GlobalDefaultsOnlyTestPlugin implements Plugin
 {
     use EvaluatesClosures;
+    use HasGlobalSearch;
     use HasLabels;
     use HasNavigation;
-    use HasGlobalSearch;
     use WithMultipleResourceSupport;
 
     protected function getPluginDefaults(): array

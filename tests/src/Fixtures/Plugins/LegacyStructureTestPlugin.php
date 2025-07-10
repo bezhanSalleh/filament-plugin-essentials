@@ -6,8 +6,8 @@ use BezhanSalleh\PluginEssentials\Plugin\HasGlobalSearch;
 use BezhanSalleh\PluginEssentials\Plugin\HasLabels;
 use BezhanSalleh\PluginEssentials\Plugin\HasNavigation;
 use BezhanSalleh\PluginEssentials\Plugin\WithMultipleResourceSupport;
-use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\LegacyTestUserResource;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Posts\LegacyTestPostResource;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\LegacyTestUserResource;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Filament\Support\Concerns\EvaluatesClosures;
@@ -18,9 +18,9 @@ use Filament\Support\Concerns\EvaluatesClosures;
 class LegacyStructureTestPlugin implements Plugin
 {
     use EvaluatesClosures;
+    use HasGlobalSearch;
     use HasLabels;
     use HasNavigation;
-    use HasGlobalSearch;
     use WithMultipleResourceSupport;
 
     protected function getPluginDefaults(): array

@@ -7,8 +7,8 @@ use BezhanSalleh\PluginEssentials\Plugin\HasLabels;
 use BezhanSalleh\PluginEssentials\Plugin\HasNavigation;
 use BezhanSalleh\PluginEssentials\Plugin\HasPluginDefaults;
 use BezhanSalleh\PluginEssentials\Plugin\WithMultipleResourceSupport;
-use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\EnhancedTestUserResource;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Posts\EnhancedTestPostResource;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\EnhancedTestUserResource;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Filament\Support\Concerns\EvaluatesClosures;
@@ -19,10 +19,10 @@ use Filament\Support\Concerns\EvaluatesClosures;
 class EnhancedDefaultsTestPlugin implements Plugin
 {
     use EvaluatesClosures;
-    use HasPluginDefaults;  // This is the key trait for the enhanced functionality!
+    use HasGlobalSearch;  // This is the key trait for the enhanced functionality!
     use HasLabels;
     use HasNavigation;
-    use HasGlobalSearch;
+    use HasPluginDefaults;
     use WithMultipleResourceSupport;
 
     /**

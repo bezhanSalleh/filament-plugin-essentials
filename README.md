@@ -370,15 +370,14 @@ This means for `UserResource`, the search limit will be 50, but for `PostResourc
 - **🛡️ Fallback Safety** - Always has sensible defaults even if nothing is configured
 - **🧩 Consistent API** - Works the same way across all plugin traits
 
-## 📚 Available Traits
+## 📚 Complete API Reference
 
 ### Plugin Traits (Add to your plugin class)
 
 #### `HasNavigation`
-Provides navigation customization for resources:
+Provides complete navigation customization:
 
 ```php
-// Available methods for end users:
 $plugin
     ->navigationLabel('Custom Label')           // string|Closure|null
     ->navigationIcon('heroicon-o-home')         // string|Closure|null  
@@ -463,7 +462,7 @@ $plugin
 
 ### Resource Traits (Add to your resource classes)
 
-Each plugin trait has a corresponding resource trait that must be added to your resource classes:
+Each plugin trait has a corresponding resource trait:
 
 | Plugin Trait | Resource Trait |
 |--------------|----------------|

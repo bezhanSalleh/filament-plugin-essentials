@@ -89,7 +89,7 @@ trait HasPluginDefaults
             $defaults = $this->getPluginDefaults();
 
             // Check for resource-specific defaults first
-            if ($resourceClass) {
+            if ($resourceClass !== null && $resourceClass !== '' && $resourceClass !== '0') {
                 // New nested structure: 'resources' => [ResourceClass::class => [...]]
                 if (isset($defaults['resources'][$resourceClass][$property])) {
                     return $defaults['resources'][$resourceClass][$property];

@@ -5,12 +5,12 @@ declare(strict_types=1);
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins\EnhancedDefaultsTestPlugin;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins\GlobalDefaultsOnlyTestPlugin;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins\LegacyStructureTestPlugin;
-use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\EnhancedTestUserResource;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Posts\EnhancedTestPostResource;
-use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\GlobalDefaultsOnlyTestUserResource;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Posts\GlobalDefaultsOnlyTestPostResource;
-use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\LegacyTestUserResource;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Posts\LegacyTestPostResource;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\EnhancedTestUserResource;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\GlobalDefaultsOnlyTestUserResource;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\LegacyTestUserResource;
 use Filament\Facades\Filament;
 
 beforeEach(function () {
