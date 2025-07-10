@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace BezhanSalleh\PluginEssentials\Concerns\Plugin;
 
+use Filament\Support\Concerns\EvaluatesClosures;
+
 trait HasPluginDefaults
 {
+    use EvaluatesClosures;
+
     /**
      * Track which properties have been explicitly set by users
      */

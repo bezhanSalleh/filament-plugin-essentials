@@ -11,14 +11,12 @@ use BezhanSalleh\PluginEssentials\Concerns\Plugin\HasNavigation;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\UserResource;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
-use Filament\Support\Concerns\EvaluatesClosures;
 
 class EssentialPlugin implements Plugin
 {
     use BelongsToCluster;
     use BelongsToParent;
     use BelongsToTenant;
-    use EvaluatesClosures;
     use HasGlobalSearch;
     use HasLabels;
     use HasNavigation;
