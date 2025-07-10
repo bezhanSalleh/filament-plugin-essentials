@@ -14,6 +14,7 @@ beforeEach(function () {
             EssentialPlugin::make(),
         ]);
     $this->plugin = Filament::getPlugin('bezhansalleh/essentials');
+    $this->multiPlugin = MultiResourceTestPlugin::make();
 });
 
 describe('Plugin HasNavigation Trait', function () {
@@ -340,10 +341,6 @@ describe('Plugin HasGlobalSearch Trait', function () {
 });
 
 describe('Multi-Resource Plugin Support', function () {
-    beforeEach(function () {
-        $this->multiPlugin = MultiResourceTestPlugin::make();
-    });
-
     describe('WithMultipleResourceSupport Trait', function () {
         it('can set contextual navigation properties for specific resources', function () {
             $this->multiPlugin
