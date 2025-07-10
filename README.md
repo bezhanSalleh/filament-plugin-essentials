@@ -35,11 +35,7 @@ composer require bezhansalleh/filament-plugin-essentials
 
 namespace YourVendor\YourPlugin;
 
-use BezhanSalleh\PluginEssentials\Plugin\HasNavigation;
-use BezhanSalleh\PluginEssentials\Plugin\HasLabels;
-use BezhanSalleh\PluginEssentials\Plugin\HasGlobalSearch;
-use BezhanSalleh\PluginEssentials\Plugin\WithMultipleResourceSupport;
-use Filament\Contracts\Plugin;
+use BezhanSalleh\PluginEssentials\Concerns\Plugin\HasGlobalSearch;use BezhanSalleh\PluginEssentials\Concerns\Plugin\HasLabels;use BezhanSalleh\PluginEssentials\Concerns\Plugin\HasNavigation;use BezhanSalleh\PluginEssentials\Concerns\Plugin\WithMultipleResourceSupport;use Filament\Contracts\Plugin;
 
 class YourPlugin implements Plugin
 {
@@ -69,10 +65,7 @@ class YourPlugin implements Plugin
 
 namespace YourVendor\YourPlugin\Resources;
 
-use BezhanSalleh\PluginEssentials\Resource\Concerns\HasNavigation;
-use BezhanSalleh\PluginEssentials\Resource\Concerns\HasLabels;
-use BezhanSalleh\PluginEssentials\Resource\Concerns\HasGlobalSearch;
-use Filament\Resources\Resource;
+use BezhanSalleh\PluginEssentials\Concerns\Resource\HasGlobalSearch;use BezhanSalleh\PluginEssentials\Concerns\Resource\HasLabels;use BezhanSalleh\PluginEssentials\Concerns\Resource\HasNavigation;use Filament\Resources\Resource;
 
 class UserResource extends Resource
 {
@@ -180,16 +173,19 @@ YourPlugin::make()
 ## Plugin & Resource Trait Mapping
 
 Each plugin trait has a corresponding resource trait that must be added to your resource classes:
-
+```php
+use BezhanSalleh\PluginEssentials\Concerns\Plugin; // plugin
+use BezhanSalleh\PluginEssentials\Concerns\Resource; // resource
+```
 | Plugin Trait | Resource Trait |
 |--------------|----------------|
-| `BezhanSalleh\PluginEssentials\Plugin\HasNavigation` | `BezhanSalleh\PluginEssentials\Resource\Concerns\HasNavigation` |
-| `BezhanSalleh\PluginEssentials\Plugin\HasLabels` | `BezhanSalleh\PluginEssentials\Resource\Concerns\HasLabels` |
-| `BezhanSalleh\PluginEssentials\Plugin\HasGlobalSearch` | `BezhanSalleh\PluginEssentials\Resource\Concerns\HasGlobalSearch` |
-| `BezhanSalleh\PluginEssentials\Plugin\BelongsToCluster` | `BezhanSalleh\PluginEssentials\Resource\Concerns\BelongsToCluster` |
-| `BezhanSalleh\PluginEssentials\Plugin\BelongsToParent` | `BezhanSalleh\PluginEssentials\Resource\Concerns\BelongsToParent` |
-| `BezhanSalleh\PluginEssentials\Plugin\BelongsToTenant` | `BezhanSalleh\PluginEssentials\Resource\Concerns\BelongsToTenant` |
-| `BezhanSalleh\PluginEssentials\Plugin\WithMultipleResourceSupport` | *(No resource trait needed - enables multi-resource configuration)* |
+| `Plugin\HasNavigation` | `Resource\HasNavigation` |
+| `Plugin\HasLabels` | `Resource\HasLabels` |
+| `Plugin\HasGlobalSearch` | `Resource\HasGlobalSearch` |
+| `Plugin\BelongsToCluster` | `Resource\BelongsToCluster` |
+| `Plugin\BelongsToParent` | `Resource\BelongsToParent` |
+| `Plugin\BelongsToTenant` | `Resource\BelongsToTenant` |
+| `Plugin\WithMultipleResourceSupport` | *(No resource trait needed - enables multi-resource configuration)* |
 
 ## Configuration Options Provided by Each Trait
 

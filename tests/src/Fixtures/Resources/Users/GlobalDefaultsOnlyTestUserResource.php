@@ -2,9 +2,9 @@
 
 namespace BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users;
 
-use BezhanSalleh\PluginEssentials\Resource\Concerns\HasGlobalSearch;
-use BezhanSalleh\PluginEssentials\Resource\Concerns\HasLabels;
-use BezhanSalleh\PluginEssentials\Resource\Concerns\HasNavigation;
+use BezhanSalleh\PluginEssentials\Concerns\Resource\HasGlobalSearch;
+use BezhanSalleh\PluginEssentials\Concerns\Resource\HasLabels;
+use BezhanSalleh\PluginEssentials\Concerns\Resource\HasNavigation;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Models\User;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins\GlobalDefaultsOnlyTestPlugin;
 use Filament\Resources\Resource;

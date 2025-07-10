@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BezhanSalleh\PluginEssentials\Resource;
+namespace BezhanSalleh\PluginEssentials\Concerns\Resource;
 
 use ReflectionClass;
 use ReflectionException;

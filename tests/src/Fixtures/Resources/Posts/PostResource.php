@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Posts;
 
 use BackedEnum;
-use BezhanSalleh\PluginEssentials\Resource\Concerns\BelongsToCluster;
-use BezhanSalleh\PluginEssentials\Resource\Concerns\BelongsToParent;
-use BezhanSalleh\PluginEssentials\Resource\Concerns\BelongsToTenant;
-use BezhanSalleh\PluginEssentials\Resource\Concerns\HasGlobalSearch;
-use BezhanSalleh\PluginEssentials\Resource\Concerns\HasLabels;
-use BezhanSalleh\PluginEssentials\Resource\Concerns\HasNavigation;
+use BezhanSalleh\PluginEssentials\Concerns\Resource\BelongsToCluster;
+use BezhanSalleh\PluginEssentials\Concerns\Resource\BelongsToParent;
+use BezhanSalleh\PluginEssentials\Concerns\Resource\BelongsToTenant;
+use BezhanSalleh\PluginEssentials\Concerns\Resource\HasGlobalSearch;
+use BezhanSalleh\PluginEssentials\Concerns\Resource\HasLabels;
+use BezhanSalleh\PluginEssentials\Concerns\Resource\HasNavigation;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Models\Post;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins\MultiResourceTestPlugin;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Posts\Pages\ManagePosts;

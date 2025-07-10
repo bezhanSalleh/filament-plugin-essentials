@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users;
 
 use BackedEnum;
-use BezhanSalleh\PluginEssentials\Resource\Concerns\HasLabels;
+use BezhanSalleh\PluginEssentials\Concerns\Resource\HasLabels;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Models\User;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins\BasicTestPlugin;
 use Filament\Resources\Resource;

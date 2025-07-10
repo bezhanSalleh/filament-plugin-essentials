@@ -88,7 +88,7 @@ describe('HasLabels Trait - 3-Tier Default System', function () {
             ->plugins([
                 new class implements \Filament\Contracts\Plugin
                 {
-                    use \BezhanSalleh\PluginEssentials\Plugin\HasLabels;
+                    use BezhanSalleh\PluginEssentials\Concerns\Plugin\HasLabels;
                     use \Filament\Support\Concerns\EvaluatesClosures;
 
                     public function getId(): string

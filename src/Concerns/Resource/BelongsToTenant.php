@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BezhanSalleh\PluginEssentials\Resource\Concerns;
-
-use BezhanSalleh\PluginEssentials\Resource\DelegatesToPlugin;
+namespace BezhanSalleh\PluginEssentials\Concerns\Resource;
 
 trait BelongsToTenant
 {

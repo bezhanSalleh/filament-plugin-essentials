@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BezhanSalleh\PluginEssentials\Plugin;
+namespace BezhanSalleh\PluginEssentials\Concerns\Plugin;
 
 use Closure;
 

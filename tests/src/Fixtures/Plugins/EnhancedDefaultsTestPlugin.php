@@ -2,11 +2,11 @@
 
 namespace BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins;
 
-use BezhanSalleh\PluginEssentials\Plugin\HasGlobalSearch;
-use BezhanSalleh\PluginEssentials\Plugin\HasLabels;
-use BezhanSalleh\PluginEssentials\Plugin\HasNavigation;
-use BezhanSalleh\PluginEssentials\Plugin\HasPluginDefaults;
-use BezhanSalleh\PluginEssentials\Plugin\WithMultipleResourceSupport;
+use BezhanSalleh\PluginEssentials\Concerns\Plugin\HasGlobalSearch;
+use BezhanSalleh\PluginEssentials\Concerns\Plugin\HasLabels;
+use BezhanSalleh\PluginEssentials\Concerns\Plugin\HasNavigation;
+use BezhanSalleh\PluginEssentials\Concerns\Plugin\HasPluginDefaults;
+use BezhanSalleh\PluginEssentials\Concerns\Plugin\WithMultipleResourceSupport;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Posts\EnhancedTestPostResource;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\EnhancedTestUserResource;
 use Filament\Contracts\Plugin;

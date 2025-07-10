@@ -2,12 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BezhanSalleh\PluginEssentials\Resource\Concerns;
+namespace BezhanSalleh\PluginEssentials\Concerns\Resource;
 
 use BackedEnum;
-use BezhanSalleh\PluginEssentials\Resource\DelegatesToPlugin;
 use Filament\Pages\Enums\SubNavigationPosition;
-use Filament\Panel;
 use Illuminate\Contracts\Support\Htmlable;
 
 trait HasNavigation
