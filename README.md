@@ -1,6 +1,52 @@
 # Filament Plugin Essentials
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/bezhansalleh/filament-plugin-essentials.svg?style=flat-square)](https://packagist.org/packages/bezhansalleh/filament-plugin-essentials)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/bezhansalleh/filament-plugin-essentials.svg?style=flat-square)](https://packagist.org/packages/bezhansalle### Alternative: Method-Based Defaults
+
+For complex scenarios, override individual getter methods:
+
+```php
+protected function getDefaultNavigationLabel(?string $resourceClass = null): string
+{
+    return match($resourceClass) {
+        UserResource::class => 'Users',
+        PostResource::class => 'Blog Posts',
+        default => 'Items'
+    };
+}
+```
+
+### Enhanced: Nested Resource-Specific Defaults
+
+For better organization, you can use the nested `resources` structure to define resource-specific defaults:
+
+```php
+protected function getPluginDefaults(): array
+{
+    return [
+        // Global defaults (apply to all resources)
+        'navigationGroup' => 'My Plugin',
+        'globalSearchResultsLimit' => 25,
+        
+        // Resource-specific defaults (NEW)
+        'resources' => [
+            UserResource::class => [
+                'modelLabel' => 'Plugin User',
+                'pluralModelLabel' => 'Plugin Users',
+                'navigationIcon' => 'heroicon-o-users',
+                'globalSearchResultsLimit' => 50, // Override global default
+            ],
+            PostResource::class => [
+                'modelLabel' => 'Plugin Post', 
+                'pluralModelLabel' => 'Plugin Posts',
+                'navigationIcon' => 'heroicon-o-document-text',
+                'navigationSort' => 10,
+            ],
+        ],
+    ];
+}
+```
+
+The system supports both the flat structure and the nested structure for backward compatibility.gin-essentials)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/bezhansalleh/filament-plugin-essentials/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/bezhansalleh/filament-plugin-essentials/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/bezhansalleh/filament-plugin-essentials/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/bezhansalleh/filament-plugin-essentials/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/bezhansalleh/filament-plugin-essentials.svg?style=flat-square)](https://packagist.org/packages/bezhansalleh/filament-plugin-essentials)

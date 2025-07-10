@@ -42,6 +42,10 @@ trait WithMultipleResourceSupport
         } else {
             // Store as default/global value
             $this->$property = $value;
+            // Mark as user-set so getContextualProperty knows it was explicitly set
+            if (method_exists($this, 'markPropertyAsUserSet')) {
+                $this->markPropertyAsUserSet($property);
+            }
         }
 
         return $this;
@@ -57,8 +61,13 @@ trait WithMultipleResourceSupport
             return $this->resourceContexts[$resourceClass][$property];
         }
 
-        // Fall back to default/global value
-        return $this->$property ?? null;
+        // If no resource class or no resource-specific config, check if user explicitly set global property
+        if (method_exists($this, 'isPropertyUserSet') && $this->isPropertyUserSet($property)) {
+            return $this->$property ?? null;
+        }
+
+        // Return null to allow fallback to plugin defaults
+        return null;
     }
 
     /**
