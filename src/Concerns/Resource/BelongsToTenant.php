@@ -8,9 +8,6 @@ trait BelongsToTenant
 {
     use DelegatesToPlugin;
 
-    /**
-     * Check if the forResource is scoped to tenant.
-     */
     public static function isScopedToTenant(): bool
     {
         $pluginResult = static::delegateToPlugin(
@@ -26,9 +23,6 @@ trait BelongsToTenant
         return static::getParentResult('isScopedToTenant') ?? false;
     }
 
-    /**
-     * Get the tenant relationship name.
-     */
     public static function getTenantRelationshipName(): string
     {
         $pluginResult = static::delegateToPlugin(
@@ -44,9 +38,6 @@ trait BelongsToTenant
         return static::getParentResult('getTenantRelationshipName') ?? '';
     }
 
-    /**
-     * Get the tenant ownership relationship name.
-     */
     public static function getTenantOwnershipRelationshipName(): string
     {
         $pluginResult = static::delegateToPlugin(

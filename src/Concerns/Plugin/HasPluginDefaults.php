@@ -10,9 +10,6 @@ trait HasPluginDefaults
 {
     use EvaluatesClosures;
 
-    /**
-     * Track which properties have been explicitly set by users
-     */
     protected array $userSetProperties = [];
 
     /**
@@ -49,25 +46,16 @@ trait HasPluginDefaults
         return null;
     }
 
-    /**
-     * Mark a property as explicitly set by the user
-     */
     protected function markPropertyAsUserSet(string $property): void
     {
         $this->userSetProperties[$property] = true;
     }
 
-    /**
-     * Check if a property was explicitly set by the user
-     */
     protected function isPropertyUserSet(string $property): bool
     {
         return isset($this->userSetProperties[$property]);
     }
 
-    /**
-     * Set a property value and mark it as user-set
-     */
     protected function setUserProperty(string $property, mixed $value): static
     {
         $this->$property = $value;
@@ -76,10 +64,6 @@ trait HasPluginDefaults
         return $this;
     }
 
-    /**
-     * Get plugin developer provided defaults.
-     * Plugin developers can override this method or the specific getDefault* methods.
-     */
     protected function getPluginDefault(string $property, ?string $resourceClass = null): mixed
     {
         // Try specific method first (e.g., getDefaultNavigationIcon)

@@ -8,9 +8,6 @@ trait BelongsToParent
 {
     use DelegatesToPlugin;
 
-    /**
-     * Get the parent forResource for this forResource.
-     */
     public static function getParentResource(): ?string
     {
         $pluginResult = static::delegateToPlugin(

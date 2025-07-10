@@ -8,9 +8,6 @@ trait HasGlobalSearch
 {
     use DelegatesToPlugin;
 
-    /**
-     * Check if the forResource is globally searchable.
-     */
     public static function canGloballySearch(): bool
     {
         $pluginResult = static::delegateToPlugin(
@@ -26,9 +23,6 @@ trait HasGlobalSearch
         return static::getParentResult('canGloballySearch') ?? true;
     }
 
-    /**
-     * Check if the forResource is globally searchable.
-     */
     public static function isGloballySearchable(): bool
     {
         $pluginResult = static::delegateToPlugin(
@@ -44,9 +38,6 @@ trait HasGlobalSearch
         return static::getParentResult('isGloballySearchable') ?? true;
     }
 
-    /**
-     * Get the global search results limit.
-     */
     public static function getGlobalSearchResultsLimit(): int
     {
         $pluginResult = static::delegateToPlugin(
@@ -62,9 +53,6 @@ trait HasGlobalSearch
         return static::getParentResult('getGlobalSearchResultsLimit') ?? 50;
     }
 
-    /**
-     * Check if global search should be case insensitive.
-     */
     public static function isGlobalSearchForcedCaseInsensitive(): ?bool
     {
         $pluginResult = static::delegateToPlugin(
@@ -80,9 +68,6 @@ trait HasGlobalSearch
         return static::getParentResult('isGlobalSearchForcedCaseInsensitive');
     }
 
-    /**
-     * Check if global search terms should be split.
-     */
     public static function shouldSplitGlobalSearchTerms(): bool
     {
         $pluginResult = static::delegateToPlugin(

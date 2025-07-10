@@ -8,9 +8,6 @@ trait HasLabels
 {
     use DelegatesToPlugin;
 
-    /**
-     * Get the model label.
-     */
     public static function getModelLabel(): string
     {
         $pluginResult = static::delegateToPlugin(
@@ -26,9 +23,6 @@ trait HasLabels
         return static::getParentResult('getModelLabel') ?? '';
     }
 
-    /**
-     * Get the plural model label.
-     */
     public static function getPluralModelLabel(): string
     {
         $pluginResult = static::delegateToPlugin(
@@ -44,9 +38,6 @@ trait HasLabels
         return static::getParentResult('getPluralModelLabel') ?? '';
     }
 
-    /**
-     * Get the record title attribute.
-     */
     public static function getRecordTitleAttribute(): ?string
     {
         $pluginResult = static::delegateToPlugin(
@@ -62,9 +53,6 @@ trait HasLabels
         return static::getParentResult('getRecordTitleAttribute');
     }
 
-    /**
-     * Check if model labels should be title case.
-     */
     public static function hasTitleCaseModelLabel(): bool
     {
         $pluginResult = static::delegateToPlugin(

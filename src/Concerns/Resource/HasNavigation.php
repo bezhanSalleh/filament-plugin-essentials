@@ -12,9 +12,6 @@ trait HasNavigation
 {
     use DelegatesToPlugin;
 
-    /**
-     * Get the navigation label.
-     */
     public static function getNavigationLabel(): string
     {
         $pluginResult = static::delegateToPlugin(
@@ -30,9 +27,6 @@ trait HasNavigation
         return static::getParentResult('getNavigationLabel') ?? '';
     }
 
-    /**
-     * Get the navigation icon.
-     */
     public static function getNavigationIcon(): string | BackedEnum | Htmlable | null
     {
         $pluginResult = static::delegateToPlugin(
@@ -48,9 +42,6 @@ trait HasNavigation
         return static::getParentResult('getNavigationIcon');
     }
 
-    /**
-     * Get the active navigation icon.
-     */
     public static function getActiveNavigationIcon(): BackedEnum | Htmlable | null | string
     {
         $pluginResult = static::delegateToPlugin(
@@ -66,9 +57,6 @@ trait HasNavigation
         return static::getParentResult('getActiveNavigationIcon');
     }
 
-    /**
-     * Get the navigation group.
-     */
     public static function getNavigationGroup(): ?string
     {
         $pluginResult = static::delegateToPlugin(
@@ -84,9 +72,6 @@ trait HasNavigation
         return static::getParentResult('getNavigationGroup');
     }
 
-    /**
-     * Get the navigation sort order.
-     */
     public static function getNavigationSort(): ?int
     {
         $pluginResult = static::delegateToPlugin(
@@ -102,9 +87,6 @@ trait HasNavigation
         return static::getParentResult('getNavigationSort');
     }
 
-    /**
-     * Get the navigation badge.
-     */
     public static function getNavigationBadge(): ?string
     {
         $pluginResult = static::delegateToPlugin(
@@ -120,9 +102,6 @@ trait HasNavigation
         return static::getParentResult('getNavigationBadge');
     }
 
-    /**
-     * Get the navigation badge color.
-     */
     public static function getNavigationBadgeColor(): string | array | null
     {
         $pluginResult = static::delegateToPlugin(
@@ -138,9 +117,6 @@ trait HasNavigation
         return static::getParentResult('getNavigationBadgeColor');
     }
 
-    /**
-     * Get the navigation badge tooltip.
-     */
     public static function getNavigationBadgeTooltip(): ?string
     {
         $pluginResult = static::delegateToPlugin(
@@ -156,9 +132,6 @@ trait HasNavigation
         return static::getParentResult('getNavigationBadgeTooltip');
     }
 
-    /**
-     * Check if navigation should be registered.
-     */
     public static function shouldRegisterNavigation(): bool
     {
         $pluginResult = static::delegateToPlugin(
@@ -174,9 +147,6 @@ trait HasNavigation
         return static::getParentResult('shouldRegisterNavigation') ?? true;
     }
 
-    /**
-     * Get the navigation parent item.
-     */
     public static function getNavigationParentItem(): ?string
     {
         $pluginResult = static::delegateToPlugin(
@@ -192,9 +162,6 @@ trait HasNavigation
         return static::getParentResult('getNavigationParentItem');
     }
 
-    /**
-     * Get the sub navigation position.
-     */
     public static function getSubNavigationPosition(): SubNavigationPosition
     {
         $pluginResult = static::delegateToPlugin(

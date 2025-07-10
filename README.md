@@ -9,13 +9,14 @@ A collection of essential traits that streamline Filament plugin development by 
 
 ## Features
 
-- **🎯 Navigation Management** - Complete control over forResource navigation (labels, icons, groups, sorting, badges)
-- **🏷️ Label Customization** - Model labels, plural forms, title attributes, and casing options
-- **🔍 Global Search Integration** - Searchability controls, result limits, and case sensitivity options
-- **🗂️ Cluster Support** - Organize resources into clusters for better navigation
-- **👥 Multi-Tenancy Ready** - Tenant scoping and relationship configuration
-- **🔗 Parent-Child Resources** - Hierarchical forResource relationships
-- **⚙️ Multi-Resource Configuration** - Different settings per forResource in a single plugin
+- **Easily Configure**
+  - **🎯 Navigation** - Complete control over resource navigation (labels, icons, groups, sorting, badges)
+  - **🏷️ Label** - Model labels, plural forms, title attributes, and casing options
+  - **🔍 Global Search** - Searchability controls, result limits, and case sensitivity options
+  - **🗂️ Resource Cluster** - Organize resources into clusters for better navigation
+  - **👥 Resource Tenant options** - Tenant scoping and relationship configuration
+  - **🔗 Parent Resource** - Hierarchical resource relationships
+- **⚙️ Multi-Resource Configuration** - Different settings per `Resource` in a single plugin
 - **📦 3-Tier Default System** - User overrides → Plugin defaults → Filament defaults
 - **🔄 Dynamic Values** - Closure support for conditional logic and real-time data
 - **🛠️ Developer-Friendly** - Minimal boilerplate with maximum customization
@@ -77,7 +78,7 @@ class UserResource extends Resource
     
     protected static ?string $model = User::class;
     
-    // Required: Link forResource to plugin
+    // Required: Link resource to plugin
     public static function getEssentialsPlugin(): ?YourPlugin
     {
         return YourPlugin::get();
@@ -343,6 +344,10 @@ $plugin
     ->forResource(PostResource::class)
         ->navigationLabel('Posts');
 ```
+
+## Todo
+- [ ] Add support for pages
+- [ ] ...features you want to see? [Open an issue]()
 
 ## License
 

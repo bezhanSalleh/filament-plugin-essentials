@@ -8,9 +8,6 @@ trait BelongsToCluster
 {
     use DelegatesToPlugin;
 
-    /**
-     * Get the cluster for this forResource.
-     */
     public static function getCluster(): ?string
     {
         $pluginResult = static::delegateToPlugin(
