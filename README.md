@@ -25,6 +25,36 @@
 
 A collection of essential traits that streamline Filament plugin development by taking care of the boilerplate, so you can focus on shipping real features faster
 
+## Table of Contents
+
+- [Filament Plugin Essentials](#filament-plugin-essentials)
+  - [Features](#features)
+  - [Requirements](#requirements)
+  - [Installation](#installation)
+  - [For Plugin Developers](#for-plugin-developers)
+    - [1. Add traits to your plugin class](#1-add-traits-to-your-plugin-class)
+    - [2. Add matching traits to your forResource classes](#2-add-matching-traits-to-your-forresource-classes)
+    - [3. Set defaults for your plugin (optional)](#3-set-defaults-for-your-plugin-optional)
+  - [How Plugin Users Can Configure Your Plugin](#how-plugin-users-can-configure-your-plugin)
+    - [Multi-forResource configuration](#multi-forresource-configuration)
+    - [Dynamic values with closures](#dynamic-values-with-closures)
+  - [Plugin & Resource Trait Mapping](#plugin--resource-trait-mapping)
+  - [Configuration Options Provided by Each Trait](#configuration-options-provided-by-each-trait)
+    - [`HasNavigation`](#hasnavigation)
+    - [`HasLabels`](#haslabels)
+    - [`HasGlobalSearch`](#hasglobalsearch)
+    - [`BelongsToCluster`](#belongstocluster)
+    - [`BelongsToParent`](#belongstoparent)
+    - [`BelongsToTenant`](#belongstotenant)
+    - [`WithMultipleResourceSupport`](#withmultipleresourcesupport)
+  - [Todo](#todo)
+  - [Testing](#testing)
+  - [Changelog](#changelog)
+  - [Contributing](#contributing)
+  - [Security Vulnerabilities](#security-vulnerabilities)
+  - [Credits](#credits)
+  - [License](#license)
+
 ## Features
 
 - **Easily Configure**
@@ -39,7 +69,10 @@ A collection of essential traits that streamline Filament plugin development by 
 - **🔄 Dynamic Values** - Closure support for conditional logic and real-time data
 - **🛠️ Developer-Friendly** - Minimal boilerplate with maximum customization
 
-
+## Requirements
+- [Filament 4.x](https://filamentphp.com/docs/4.x/introduction/installation)
+- PHP 8.2+
+  
 ## Installation
 
 ```bash
