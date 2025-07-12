@@ -1,9 +1,25 @@
-# Filament Plugin Essentials
+<p align="center" class="flex items-center justify-center">
+    <a href="https://filamentphp.com/docs/4.x/introduction/installation">
+        <img alt="FILAMENT 8.x" src="https://img.shields.io/badge/FILAMENT-4.x-EBB304?style=for-the-badge">
+    </a>
+    <a href="https://packagist.org/packages/bezhansalleh/filament-plugin-essentials">
+        <img alt="Packagist" src="https://img.shields.io/packagist/v/bezhansalleh/filament-plugin-essentials.svg?style=for-the-badge&logo=packagist">
+    </a>
+    <a href="https://github.com/bezhansalleh/filament-plugin-essentials/actions?query=workflow%3Arun-tests+branch%3Amain" class="filament-hidden">
+        <img alt="Tests Passing" src="https://img.shields.io/github/actions/workflow/status/bezhansalleh/filament-plugin-essentials/run-tests.yml?style=for-the-badge&logo=github&label=tests" class="filament-hidden">
+    </a>
+    <a href="https://github.com/bezhansalleh/filament-plugin-essentials/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain class="filament-hidden">
+        <img alt="Code Style Passing" src="https://img.shields.io/github/actions/workflow/status/bezhansalleh/filament-plugin-essentials/fix-php-code-style-issues.yml?style=for-the-badge&logo=github&label=code%20style">
+    </a>
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/bezhansalleh/filament-plugin-essentials.svg?style=flat-square)](https://packagist.org/packages/bezhansalleh/filament-plugin-essentials)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/bezhansalleh/filament-plugin-essentials/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/bezhansalleh/filament-plugin-essentials/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/bezhansalleh/filament-plugin-essentials/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/bezhansalleh/filament-plugin-essentials/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/bezhansalleh/filament-plugin-essentials.svg?style=flat-square)](https://packagist.org/packages/bezhansalleh/filament-plugin-essentials)
+<a href="https://packagist.org/packages/bezhansalleh/filament-plugin-essentials">
+    <img alt="Downloads" src="https://img.shields.io/packagist/dt/bezhansalleh/filament-plugin-essentials.svg?style=for-the-badge" >
+    </a>
+</p>
+
+---
+
+# Filament Plugin Essentials
 
 A collection of essential traits that streamline Filament plugin development by taking care of the boilerplate, so you can focus on shipping real features faster
 
@@ -20,6 +36,8 @@ A collection of essential traits that streamline Filament plugin development by 
 - **📦 3-Tier Default System** - User overrides → Plugin defaults → Filament defaults
 - **🔄 Dynamic Values** - Closure support for conditional logic and real-time data
 - **🛠️ Developer-Friendly** - Minimal boilerplate with maximum customization
+
+---
 
 ## Installation
 
@@ -349,11 +367,30 @@ $plugin
 - [ ] Add support for pages
 - [ ] ...features you want to see? [Open an issue]()
 
-## License
+## Testing
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+```bash
+composer test:unit
+composer finalize
+```
+
+## Changelog
+
+Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+
+## Contributing
+
+Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
+
+## Security Vulnerabilities
+
+Please review [our security policy](.github/security/policy) on how to report security vulnerabilities.
 
 ## Credits
 
 - [Bezhan Salleh](https://github.com/bezhanSalleh)
 - [All Contributors](../../contributors)
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
