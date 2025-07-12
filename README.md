@@ -1,3 +1,6 @@
+<a href="https://github.com/bezhansalleh/filament-plugin-essentials" class="filament-hidden">
+<img style="width: 100%; max-width: 100%;" alt="filament-plugin-essentials-art" src="https://github.com/bezhanSalleh/filament-plugin-essentials/blob/main/art/filament-plugin-essentials.png" >
+</a>
 <p align="center" class="flex items-center justify-center">
     <a href="https://filamentphp.com/docs/4.x/introduction/installation">
         <img alt="FILAMENT 8.x" src="https://img.shields.io/badge/FILAMENT-4.x-EBB304?style=for-the-badge">
@@ -17,7 +20,6 @@
     </a>
 </p>
 
----
 
 # Filament Plugin Essentials
 
@@ -37,7 +39,6 @@ A collection of essential traits that streamline Filament plugin development by 
 - **🔄 Dynamic Values** - Closure support for conditional logic and real-time data
 - **🛠️ Developer-Friendly** - Minimal boilerplate with maximum customization
 
----
 
 ## Installation
 
