@@ -43,7 +43,6 @@ A collection of essential traits that streamline Filament plugin development by 
     - [`HasNavigation`](#hasnavigation)
     - [`HasLabels`](#haslabels)
     - [`HasGlobalSearch`](#hasglobalsearch)
-    - [`BelongsToCluster`](#belongstocluster)
     - [`BelongsToParent`](#belongstoparent)
     - [`BelongsToTenant`](#belongstotenant)
     - [`WithMultipleResourceSupport`](#withmultipleresourcesupport)
@@ -61,7 +60,6 @@ A collection of essential traits that streamline Filament plugin development by 
   - **🎯 Navigation** - Complete control over resource navigation (labels, icons, groups, sorting, badges)
   - **🏷️ Label** - Model labels, plural forms, title attributes, and casing options
   - **🔍 Global Search** - Searchability controls, result limits, and case sensitivity options
-  - **🗂️ Resource Cluster** - Organize resources into clusters for better navigation
   - **👥 Resource Tenant options** - Tenant scoping and relationship configuration
   - **🔗 Parent Resource** - Hierarchical resource relationships
 - **⚙️ Multi-Resource Configuration** - Different settings per `Resource` in a single plugin
@@ -237,7 +235,6 @@ use BezhanSalleh\PluginEssentials\Concerns\Resource; // forResource
 | `Plugin\HasNavigation` | `Resource\HasNavigation` |
 | `Plugin\HasLabels` | `Resource\HasLabels` |
 | `Plugin\HasGlobalSearch` | `Resource\HasGlobalSearch` |
-| `Plugin\BelongsToCluster` | `Resource\BelongsToCluster` |
 | `Plugin\BelongsToParent` | `Resource\BelongsToParent` |
 | `Plugin\BelongsToTenant` | `Resource\BelongsToTenant` |
 | `Plugin\WithMultipleResourceSupport` | *(No forResource trait needed - enables multi-forResource configuration)* |
@@ -325,21 +322,6 @@ protected function getPluginDefaults(): array
 }
 ```
 
-### `BelongsToCluster`
-
-```php
-$plugin->cluster(MyCluster::class);             // string|Closure|null
-```
-
-**Copy-paste defaults:**
-```php
-protected function getPluginDefaults(): array
-{
-    return [
-        'cluster' => null,
-    ];
-}
-```
 
 ### `BelongsToParent`
 

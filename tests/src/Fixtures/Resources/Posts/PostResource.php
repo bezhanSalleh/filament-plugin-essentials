@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Posts;
 
-use BackedEnum;
-use BezhanSalleh\PluginEssentials\Concerns\Resource\BelongsToCluster;
 use BezhanSalleh\PluginEssentials\Concerns\Resource\BelongsToParent;
 use BezhanSalleh\PluginEssentials\Concerns\Resource\BelongsToTenant;
 use BezhanSalleh\PluginEssentials\Concerns\Resource\HasGlobalSearch;
@@ -22,13 +20,11 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class PostResource extends Resource
 {
-    use BelongsToCluster;
     use BelongsToParent;
     use BelongsToTenant;
     use HasGlobalSearch;
@@ -36,8 +32,6 @@ class PostResource extends Resource
     use HasNavigation;
 
     protected static ?string $model = Post::class;
-
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function getEssentialsPlugin(): ?MultiResourceTestPlugin
     {

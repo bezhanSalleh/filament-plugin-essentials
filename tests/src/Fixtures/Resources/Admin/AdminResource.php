@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Admin;
 
 use BackedEnum;
-use BezhanSalleh\PluginEssentials\Concerns\Resource\BelongsToCluster;
 use BezhanSalleh\PluginEssentials\Concerns\Resource\BelongsToParent;
 use BezhanSalleh\PluginEssentials\Concerns\Resource\BelongsToTenant;
 use BezhanSalleh\PluginEssentials\Concerns\Resource\HasGlobalSearch;
@@ -27,7 +26,6 @@ use Filament\Tables\Table;
 
 class AdminResource extends Resource
 {
-    use BelongsToCluster;
     use BelongsToParent;
     use BelongsToTenant;
     use HasGlobalSearch;

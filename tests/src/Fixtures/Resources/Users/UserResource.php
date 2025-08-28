@@ -4,43 +4,38 @@ declare(strict_types=1);
 
 namespace BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users;
 
-use BackedEnum;
-use BezhanSalleh\PluginEssentials\Concerns\Resource\BelongsToCluster;
+use Filament\Tables\Table;
+use Filament\Schemas\Schema;
+use Filament\Resources\Resource;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Models\User;
+use BezhanSalleh\PluginEssentials\Concerns\Resource\HasLabels;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\EssentialPlugin;
+use BezhanSalleh\PluginEssentials\Concerns\Resource\HasNavigation;
 use BezhanSalleh\PluginEssentials\Concerns\Resource\BelongsToParent;
 use BezhanSalleh\PluginEssentials\Concerns\Resource\BelongsToTenant;
 use BezhanSalleh\PluginEssentials\Concerns\Resource\HasGlobalSearch;
-use BezhanSalleh\PluginEssentials\Concerns\Resource\HasLabels;
-use BezhanSalleh\PluginEssentials\Concerns\Resource\HasNavigation;
-use BezhanSalleh\PluginEssentials\Tests\Fixtures\EssentialPlugin;
-use BezhanSalleh\PluginEssentials\Tests\Fixtures\Models\User;
-use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\Pages\CreateUser;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins\FullFeaturesTestPlugin;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\Pages\EditUser;
-use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\Pages\ListUsers;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\Pages\ViewUser;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\Pages\ListUsers;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\Pages\CreateUser;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\Schemas\UserForm;
-use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\Schemas\UserInfolist;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\Tables\UsersTable;
-use Filament\Resources\Resource;
-use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Table;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\Schemas\UserInfolist;
 
 class UserResource extends Resource
 {
-    use BelongsToCluster;
-    use BelongsToParent;
+    // use BelongsToParent;
     use BelongsToTenant;
-    use HasGlobalSearch;
-    use HasLabels;
-    use HasNavigation;
+    // use HasGlobalSearch;
+    // use HasLabels;
+    // use HasNavigation;
 
     protected static ?string $model = User::class;
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedRectangleStack;
-
-    public static function getEssentialsPlugin(): ?EssentialPlugin
+    public static function getEssentialsPlugin(): ?FullFeaturesTestPlugin
     {
-        return EssentialPlugin::get();
+        return FullFeaturesTestPlugin::get();
     }
 
     public static function form(Schema $schema): Schema

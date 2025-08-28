@@ -2,7 +2,6 @@
 
 namespace BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins;
 
-use BezhanSalleh\PluginEssentials\Concerns\Plugin\BelongsToCluster;
 use BezhanSalleh\PluginEssentials\Concerns\Plugin\BelongsToParent;
 use BezhanSalleh\PluginEssentials\Concerns\Plugin\BelongsToTenant;
 use BezhanSalleh\PluginEssentials\Concerns\Plugin\HasGlobalSearch;
@@ -20,7 +19,6 @@ use Filament\Support\Concerns\EvaluatesClosures;
  */
 class MultiResourceTestPlugin implements Plugin
 {
-    use BelongsToCluster;
     use BelongsToParent;
     use BelongsToTenant;
     use EvaluatesClosures;
@@ -36,6 +34,12 @@ class MultiResourceTestPlugin implements Plugin
             'pluralModelLabel' => 'Multi Items',
             'navigationSort' => 20,
             'globalSearchResultsLimit' => 15,
+            // Resource-specific defaults
+            'resources' => [
+                PostResource::class => [
+                    'navigationIcon' => 'heroicon-o-document-text',
+                ],
+            ],
         ];
     }
 

@@ -2,7 +2,6 @@
 
 namespace BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Enhanced;
 
-use BezhanSalleh\PluginEssentials\Concerns\Resource\BelongsToCluster;
 use BezhanSalleh\PluginEssentials\Concerns\Resource\HasGlobalSearch;
 use BezhanSalleh\PluginEssentials\Concerns\Resource\HasLabels;
 use BezhanSalleh\PluginEssentials\Concerns\Resource\HasNavigation;
@@ -13,7 +12,6 @@ use Filament\Resources\Resource;
 
 class EnhancedPostResource extends Resource
 {
-    use BelongsToCluster;
     use DelegatesToPlugin;
     use HasGlobalSearch;
     use HasLabels;

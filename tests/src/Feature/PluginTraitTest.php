@@ -218,35 +218,6 @@ describe('Plugin HasLabels Trait', function () {
     });
 });
 
-describe('Plugin BelongsToCluster Trait', function () {
-    it('can set cluster as string', function () {
-        $clusterClass = 'App\\Filament\\Clusters\\UserCluster';
-        $result = $this->plugin->cluster($clusterClass);
-
-        expect($result)->toBe($this->plugin)
-            ->and($this->plugin->getCluster())->toBe($clusterClass);
-    });
-
-    it('can set cluster as closure', function () {
-        $clusterClass = 'App\\Filament\\Clusters\\UserCluster';
-        $result = $this->plugin->cluster(fn () => $clusterClass);
-
-        expect($result)->toBe($this->plugin)
-            ->and($this->plugin->getCluster())->toBe($clusterClass);
-    });
-
-    it('can set cluster as null', function () {
-        $result = $this->plugin->cluster(null);
-
-        expect($result)->toBe($this->plugin)
-            ->and($this->plugin->getCluster())->toBeNull();
-    });
-
-    it('has default null cluster', function () {
-        expect($this->plugin->getCluster())->toBeNull();
-    });
-});
-
 describe('Plugin BelongsToParent Trait', function () {
     it('can set parent forResource as string', function () {
         $parentClass = 'App\\Filament\\Resources\\ParentResource';
@@ -384,17 +355,6 @@ describe('Multi-Resource Plugin Support', function () {
             expect($this->multiPlugin->getModelLabel(PostResource::class))->toBe('Article')
                 ->and($this->multiPlugin->getPluralModelLabel(PostResource::class))->toBe('Articles')
                 ->and($this->multiPlugin->getRecordTitleAttribute(PostResource::class))->toBe('title');
-        });
-
-        it('can set contextual cluster settings for specific resources', function () {
-            $this->multiPlugin
-                ->forResource(UserResource::class)
-                ->cluster('App\\Filament\\Clusters\\AdminCluster')
-                ->forResource(PostResource::class)
-                ->cluster('App\\Filament\\Clusters\\ContentCluster');
-
-            expect($this->multiPlugin->getCluster(UserResource::class))->toBe('App\\Filament\\Clusters\\AdminCluster')
-                ->and($this->multiPlugin->getCluster(PostResource::class))->toBe('App\\Filament\\Clusters\\ContentCluster');
         });
 
         it('can set contextual tenant settings for specific resources', function () {

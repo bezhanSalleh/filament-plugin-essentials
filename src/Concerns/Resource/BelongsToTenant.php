@@ -4,52 +4,49 @@ declare(strict_types=1);
 
 namespace BezhanSalleh\PluginEssentials\Concerns\Resource;
 
+use Filament\Resources\Resource\Concerns\BelongsToTenant as FilamentBelongsToTenant;
+
 trait BelongsToTenant
 {
+    use FilamentBelongsToTenant {
+        isScopedToTenant as filamentIsScopedToTenant;
+        getTenantRelationshipName as filamentGetTenantRelationshipName;
+        getTenantOwnershipRelationshipName as filamentGetTenantOwnershipRelationshipName;
+    }
     use DelegatesToPlugin;
 
     public static function isScopedToTenant(): bool
     {
-        $pluginResult = static::delegateToPlugin(
-            'BelongsToTenant',
-            'shouldScopeToTenant',
-            null
-        );
+        $pluginResult = static::delegateToPlugin('BelongsToTenant', 'shouldScopeToTenant');
 
         if (! static::isNoPluginResult($pluginResult)) {
             return $pluginResult;
         }
 
-        return static::getParentResult('isScopedToTenant') ?? false;
+        return static::filamentIsScopedToTenant();
     }
 
     public static function getTenantRelationshipName(): string
     {
+        $fallback = static::filamentGetTenantRelationshipName();
+
         $pluginResult = static::delegateToPlugin(
-            'BelongsToTenant',
-            'getTenantRelationshipName',
-            null
+            traitName: 'BelongsToTenant',
+            methodName: 'getTenantRelationshipName',
+            fallback: $fallback
         );
 
-        if (! static::isNoPluginResult($pluginResult)) {
-            return $pluginResult ?? '';
-        }
-
-        return static::getParentResult('getTenantRelationshipName') ?? '';
+        return $pluginResult;
     }
 
     public static function getTenantOwnershipRelationshipName(): string
     {
-        $pluginResult = static::delegateToPlugin(
-            'BelongsToTenant',
-            'getTenantOwnershipRelationshipName',
-            null
-        );
+        $pluginResult = static::delegateToPlugin('BelongsToTenant', 'getTenantOwnershipRelationshipName');
 
-        if (! static::isNoPluginResult($pluginResult)) {
-            return $pluginResult ?? '';
+        if (! static::isNoPluginResult($pluginResult) && $pluginResult !== null) {
+            return $pluginResult;
         }
 
-        return static::getParentResult('getTenantOwnershipRelationshipName') ?? '';
+        return static::filamentGetTenantOwnershipRelationshipName();
     }
 }

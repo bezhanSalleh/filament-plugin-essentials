@@ -2,7 +2,6 @@
 
 namespace BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins;
 
-use BezhanSalleh\PluginEssentials\Concerns\Plugin\BelongsToCluster;
 use BezhanSalleh\PluginEssentials\Concerns\Plugin\BelongsToParent;
 use BezhanSalleh\PluginEssentials\Concerns\Plugin\BelongsToTenant;
 use BezhanSalleh\PluginEssentials\Concerns\Plugin\HasGlobalSearch;
@@ -18,46 +17,13 @@ use Filament\Support\Concerns\EvaluatesClosures;
  */
 class FullFeaturesTestPlugin implements Plugin
 {
-    use BelongsToCluster;
-    use BelongsToParent;
+    // use BelongsToParent;
     use BelongsToTenant;
     use EvaluatesClosures;
-    use HasGlobalSearch;
-    use HasLabels;
-    use HasNavigation;
+    // use HasGlobalSearch;
+    // use HasLabels;
+    // use HasNavigation;
 
-    protected function getPluginDefaults(): array
-    {
-        return [
-            // HasLabels
-            'modelLabel' => 'Full Item',
-            'pluralModelLabel' => 'Full Items',
-            'recordTitleAttribute' => 'title',
-            'hasTitleCaseModelLabel' => false,
-
-            // HasNavigation
-            'navigationLabel' => 'Full Nav',
-            'navigationSort' => 10,
-            'shouldRegisterNavigation' => true,
-            'navigationGroup' => 'Full Group',
-
-            // HasGlobalSearch
-            'globalSearchResultsLimit' => 25,
-            'isGloballySearchable' => true,
-            'shouldSplitGlobalSearchTerms' => false,
-
-            // BelongsToCluster
-            'cluster' => 'FullCluster',
-
-            // BelongsToParent
-            'parentResource' => 'FullParentResource',
-
-            // BelongsToTenant
-            'isScopedToTenant' => true,
-            'tenantRelationshipName' => 'organization',
-            'tenantOwnershipRelationshipName' => 'owner',
-        ];
-    }
 
     public static function make(): static
     {

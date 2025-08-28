@@ -24,18 +24,21 @@ trait DelegatesToPlugin
             $plugin = static::getEssentialsPlugin();
 
             if (! is_object($plugin)) {
+
                 return self::$NO_PLUGIN_RESULT;
             }
 
             if (! static::pluginUsesTrait($plugin, $traitName)) {
+
                 return self::$NO_PLUGIN_RESULT;
             }
 
             if (! method_exists($plugin, $methodName)) {
+
                 return self::$NO_PLUGIN_RESULT;
             }
-
-            return $plugin->{$methodName}(static::class);
+            
+            return $plugin->{$methodName}(static::class) ?? $fallback;
 
         } catch (\Throwable) {
             return self::$NO_PLUGIN_RESULT;

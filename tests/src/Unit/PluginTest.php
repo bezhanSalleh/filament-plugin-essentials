@@ -172,30 +172,6 @@ describe('Plugin HasNavigation Trait', function () {
     });
 });
 
-describe('Plugin BelongsToCluster Trait', function () {
-    it('sets custom cluster', function () {
-        $this->panel
-            ->plugins([
-                EssentialPlugin::make()
-                    ->cluster('App\\Filament\\Clusters\\UserCluster'),
-            ]);
-
-        $plugin = Filament::getPlugin('bezhansalleh/essentials');
-
-        expect($plugin->getCluster())->toBe('App\\Filament\\Clusters\\UserCluster');
-        expect(UserResource::getCluster())->toBe('App\\Filament\\Clusters\\UserCluster');
-    });
-
-    it('uses default cluster', function () {
-        $this->panel
-            ->plugins([
-                EssentialPlugin::make(), // No cluster configuration
-            ]);
-
-        expect(UserResource::getCluster())->toBeNull();
-    });
-});
-
 describe('Plugin BelongsToParent Trait', function () {
     it('sets custom parent forResource', function () {
         $this->panel
@@ -373,21 +349,6 @@ describe('Multi-Resource Plugin Support', function () {
         expect(PostResource::getNavigationLabel())->toBe('Multi Items') // Falls back to plural model label
             ->and(PostResource::getNavigationGroup())->toBe('Publishing')
             ->and(PostResource::getNavigationSort())->toBe(20); // Plugin default
-    });
-
-    it('sets different cluster per forResource', function () {
-        $this->panel
-            ->plugins([
-                MultiResourceTestPlugin::make()
-                    ->forResource(AdminResource::class)
-                    ->cluster('App\\Filament\\Clusters\\AdminCluster')
-                    ->forResource(PostResource::class)
-                    ->cluster('App\\Filament\\Clusters\\ContentCluster'),
-            ]);
-
-        // Each forResource gets its specific cluster
-        expect(AdminResource::getCluster())->toBe('App\\Filament\\Clusters\\AdminCluster');
-        expect(PostResource::getCluster())->toBe('App\\Filament\\Clusters\\ContentCluster');
     });
 
     it('sets different tenant settings per forResource', function () {

@@ -33,7 +33,6 @@ src/
     │   ├── HasNavigation.php               # Navigation management (labels, icons, groups, sorting, badges)
     │   ├── HasLabels.php                   # Model labels, plural forms, title attributes, casing
     │   ├── HasGlobalSearch.php             # Global search controls (searchability, limits, case sensitivity)
-    │   ├── BelongsToCluster.php            # Cluster support for resource organization
     │   ├── BelongsToParent.php             # Parent-child resource relationships
     │   ├── BelongsToTenant.php             # Multi-tenancy support (scoping, relationships)
     │   ├── WithMultipleResourceSupport.php # Multi-resource configuration (forResource method)
@@ -42,7 +41,6 @@ src/
         ├── HasNavigation.php               # Delegates navigation calls to plugin
         ├── HasLabels.php                   # Delegates label calls to plugin
         ├── HasGlobalSearch.php             # Delegates global search calls to plugin
-        ├── BelongsToCluster.php            # Delegates cluster calls to plugin
         ├── BelongsToParent.php             # Delegates parent resource calls to plugin
         ├── BelongsToTenant.php             # Delegates tenant calls to plugin
         └── DelegatesToPlugin.php           # Core delegation mechanism
@@ -107,15 +105,8 @@ src/
 - `isGlobalSearchForcedCaseInsensitive()` - Check case sensitivity setting (delegates to plugin)
 - `shouldSplitGlobalSearchTerms()` - Check term splitting setting (delegates to plugin)
 
-### 4. BelongsToCluster (Plugin + Resource)
 
-**Plugin Trait Methods:**
-- `cluster(string|Closure|null)` - Set cluster class
-
-**Resource Trait Methods:**
-- `getCluster()` - Get cluster class (delegates to plugin)
-
-### 5. BelongsToParent (Plugin + Resource)
+### 4. BelongsToParent (Plugin + Resource)
 
 **Plugin Trait Methods:**
 - `parentResource(string|null)` - Set parent resource class
@@ -123,7 +114,7 @@ src/
 **Resource Trait Methods:**
 - `getParentResource()` - Get parent resource class (delegates to plugin)
 
-### 6. BelongsToTenant (Plugin + Resource)
+### 5. BelongsToTenant (Plugin + Resource)
 
 **Plugin Trait Methods:**
 - `scopeToTenant(bool|Closure)` - Control tenant scoping
@@ -135,7 +126,7 @@ src/
 - `getTenantRelationshipName()` - Get tenant relationship name (delegates to plugin)
 - `getTenantOwnershipRelationshipName()` - Get tenant ownership relationship name (delegates to plugin)
 
-### 7. WithMultipleResourceSupport (Plugin Only)
+### 6. WithMultipleResourceSupport (Plugin Only)
 
 **Special Trait Methods:**
 - `forResource(string $resourceClass)` - Set context for multi-resource configuration

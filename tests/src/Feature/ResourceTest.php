@@ -49,7 +49,7 @@ describe('Resource HasNavigation Trait', function () {
         expect(UserResource::shouldRegisterNavigation())->toBeBool();
         expect(UserResource::getSubNavigationPosition())->toBeInstanceOf(SubNavigationPosition::class);
 
-        expect(PostResource::getNavigationIcon())->not->toBeNull();
+        expect(PostResource::getNavigationIcon())->toBeNull();
         expect(PostResource::getNavigationLabel())->toBeString();
         expect(PostResource::getNavigationGroup())->toBeNull();
         expect(PostResource::getNavigationSort())->toBeNull();
@@ -97,27 +97,6 @@ describe('Resource HasLabels Trait', function () {
         expect(PostResource::getPluralModelLabel())->toBe('posts');  // Filament default (no plugin delegation)
         expect(PostResource::getRecordTitleAttribute())->toBeNull(); // Filament default (no plugin delegation)
         expect(PostResource::hasTitleCaseModelLabel())->toBeTrue(); // Filament default (no plugin delegation)
-    });
-});
-
-describe('Resource BelongsToCluster Trait', function () {
-    it('resources have cluster methods from traits', function () {
-        $userResourceMethods = get_class_methods(UserResource::class);
-        $postResourceMethods = get_class_methods(PostResource::class);
-
-        $expectedMethods = [
-            'getCluster',
-        ];
-
-        foreach ($expectedMethods as $method) {
-            expect(in_array($method, $userResourceMethods))->toBeTrue("UserResource should have {$method} method");
-            expect(in_array($method, $postResourceMethods))->toBeTrue("PostResource should have {$method} method");
-        }
-    });
-
-    it('can call cluster methods on resources', function () {
-        expect(UserResource::getCluster())->toBeNull();
-        expect(PostResource::getCluster())->toBeNull();
     });
 });
 

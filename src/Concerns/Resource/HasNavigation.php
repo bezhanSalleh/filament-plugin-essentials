@@ -20,11 +20,9 @@ trait HasNavigation
             null
         );
 
-        if (! static::isNoPluginResult($pluginResult) && filled($pluginResult)) {
-            return $pluginResult;
-        }
-
-        return static::getParentResult('getNavigationLabel') ?? '';
+        return (! static::isNoPluginResult($pluginResult) && filled($pluginResult))
+            ? $pluginResult
+            : parent::getNavigationLabel();
     }
 
     public static function getNavigationIcon(): string | BackedEnum | Htmlable | null
@@ -35,11 +33,9 @@ trait HasNavigation
             null
         );
 
-        if (! static::isNoPluginResult($pluginResult)) {
-            return $pluginResult;
-        }
-
-        return static::getParentResult('getNavigationIcon');
+        return static::isNoPluginResult($pluginResult)
+            ? parent::getNavigationIcon()
+            : $pluginResult;
     }
 
     public static function getActiveNavigationIcon(): BackedEnum | Htmlable | null | string
@@ -50,11 +46,9 @@ trait HasNavigation
             null
         );
 
-        if (! static::isNoPluginResult($pluginResult)) {
-            return $pluginResult;
-        }
-
-        return static::getParentResult('getActiveNavigationIcon');
+        return static::isNoPluginResult($pluginResult)
+            ? parent::getActiveNavigationIcon()
+            : $pluginResult;
     }
 
     public static function getNavigationGroup(): ?string
@@ -65,11 +59,9 @@ trait HasNavigation
             null
         );
 
-        if (! static::isNoPluginResult($pluginResult)) {
-            return $pluginResult;
-        }
-
-        return static::getParentResult('getNavigationGroup');
+        return static::isNoPluginResult($pluginResult)
+            ? parent::getNavigationGroup()
+            : $pluginResult;
     }
 
     public static function getNavigationSort(): ?int
@@ -80,11 +72,9 @@ trait HasNavigation
             null
         );
 
-        if (! static::isNoPluginResult($pluginResult)) {
-            return $pluginResult;
-        }
-
-        return static::getParentResult('getNavigationSort');
+        return static::isNoPluginResult($pluginResult)
+            ? parent::getNavigationSort()
+            : $pluginResult;
     }
 
     public static function getNavigationBadge(): ?string
@@ -95,11 +85,9 @@ trait HasNavigation
             null
         );
 
-        if (! static::isNoPluginResult($pluginResult)) {
-            return $pluginResult;
-        }
-
-        return static::getParentResult('getNavigationBadge');
+        return static::isNoPluginResult($pluginResult)
+            ? parent::getNavigationBadge()
+            : $pluginResult;
     }
 
     public static function getNavigationBadgeColor(): string | array | null
@@ -110,11 +98,9 @@ trait HasNavigation
             null
         );
 
-        if (! static::isNoPluginResult($pluginResult)) {
-            return $pluginResult;
-        }
-
-        return static::getParentResult('getNavigationBadgeColor');
+        return static::isNoPluginResult($pluginResult)
+            ? parent::getNavigationBadgeColor()
+            : $pluginResult;
     }
 
     public static function getNavigationBadgeTooltip(): ?string
@@ -125,11 +111,9 @@ trait HasNavigation
             null
         );
 
-        if (! static::isNoPluginResult($pluginResult)) {
-            return $pluginResult;
-        }
-
-        return static::getParentResult('getNavigationBadgeTooltip');
+        return static::isNoPluginResult($pluginResult)
+            ? parent::getNavigationBadgeTooltip()
+            : $pluginResult;
     }
 
     public static function shouldRegisterNavigation(): bool
@@ -140,11 +124,9 @@ trait HasNavigation
             null
         );
 
-        if (! static::isNoPluginResult($pluginResult)) {
-            return $pluginResult;
-        }
-
-        return static::getParentResult('shouldRegisterNavigation') ?? true;
+        return static::isNoPluginResult($pluginResult)
+            ? parent::shouldRegisterNavigation()
+            : $pluginResult;
     }
 
     public static function getNavigationParentItem(): ?string
@@ -155,11 +137,9 @@ trait HasNavigation
             null
         );
 
-        if (! static::isNoPluginResult($pluginResult)) {
-            return $pluginResult;
-        }
-
-        return static::getParentResult('getNavigationParentItem');
+        return static::isNoPluginResult($pluginResult)
+            ? parent::getNavigationParentItem()
+            : $pluginResult;
     }
 
     public static function getSubNavigationPosition(): SubNavigationPosition
@@ -170,10 +150,8 @@ trait HasNavigation
             null
         );
 
-        if (! static::isNoPluginResult($pluginResult)) {
-            return $pluginResult;
-        }
-
-        return static::getParentResult('getSubNavigationPosition') ?? SubNavigationPosition::Start;
+        return static::isNoPluginResult($pluginResult)
+            ? parent::getSubNavigationPosition()
+            : $pluginResult;
     }
 }

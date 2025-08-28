@@ -16,11 +16,9 @@ trait HasGlobalSearch
             null
         );
 
-        if (! static::isNoPluginResult($pluginResult)) {
-            return $pluginResult;
-        }
-
-        return static::getParentResult('canGloballySearch') ?? true;
+        return static::isNoPluginResult($pluginResult)
+            ? parent::canGloballySearch()
+            : $pluginResult;
     }
 
     public static function isGloballySearchable(): bool
@@ -31,11 +29,9 @@ trait HasGlobalSearch
             null
         );
 
-        if (! static::isNoPluginResult($pluginResult)) {
-            return $pluginResult;
-        }
-
-        return static::getParentResult('isGloballySearchable') ?? true;
+        return static::isNoPluginResult($pluginResult)
+            ? parent::isGloballySearchable()
+            : $pluginResult;
     }
 
     public static function getGlobalSearchResultsLimit(): int
@@ -46,11 +42,9 @@ trait HasGlobalSearch
             null
         );
 
-        if (! static::isNoPluginResult($pluginResult)) {
-            return (int) $pluginResult;
-        }
-
-        return static::getParentResult('getGlobalSearchResultsLimit') ?? 50;
+        return static::isNoPluginResult($pluginResult)
+            ? parent::getGlobalSearchResultsLimit()
+            : (int) $pluginResult;
     }
 
     public static function isGlobalSearchForcedCaseInsensitive(): ?bool
@@ -61,11 +55,9 @@ trait HasGlobalSearch
             null
         );
 
-        if (! static::isNoPluginResult($pluginResult)) {
-            return $pluginResult;
-        }
-
-        return static::getParentResult('isGlobalSearchForcedCaseInsensitive');
+        return static::isNoPluginResult($pluginResult)
+            ? parent::isGlobalSearchForcedCaseInsensitive()
+            : $pluginResult;
     }
 
     public static function shouldSplitGlobalSearchTerms(): bool
@@ -76,10 +68,8 @@ trait HasGlobalSearch
             null
         );
 
-        if (! static::isNoPluginResult($pluginResult)) {
-            return $pluginResult;
-        }
-
-        return static::getParentResult('shouldSplitGlobalSearchTerms') ?? false;
+        return static::isNoPluginResult($pluginResult)
+            ? parent::shouldSplitGlobalSearchTerms()
+            : $pluginResult;
     }
 }

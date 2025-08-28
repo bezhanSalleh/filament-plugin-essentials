@@ -2,7 +2,6 @@
 
 namespace BezhanSalleh\PluginEssentials\Tests\Fixtures;
 
-use BezhanSalleh\PluginEssentials\Concerns\Plugin\BelongsToCluster;
 use BezhanSalleh\PluginEssentials\Concerns\Plugin\BelongsToParent;
 use BezhanSalleh\PluginEssentials\Concerns\Plugin\BelongsToTenant;
 use BezhanSalleh\PluginEssentials\Concerns\Plugin\HasGlobalSearch;
@@ -14,7 +13,6 @@ use Filament\Panel;
 
 class EssentialPlugin implements Plugin
 {
-    use BelongsToCluster;
     use BelongsToParent;
     use BelongsToTenant;
     use HasGlobalSearch;
