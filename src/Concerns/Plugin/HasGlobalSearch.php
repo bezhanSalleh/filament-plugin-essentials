@@ -73,13 +73,6 @@ trait HasGlobalSearch
         return $result ?? true; // Default to true only if no value found
     }
 
-    public function isGloballySearchable(?string $resourceClass = null): bool
-    {
-        $result = $this->getPropertyWithDefaults('isGloballySearchable', $resourceClass);
-
-        return $result ?? true; // Default to true only if no value found
-    }
-
     public function getGlobalSearchResultsLimit(?string $resourceClass = null): int
     {
         $result = $this->getPropertyWithDefaults('globalSearchResultsLimit', $resourceClass);

@@ -38,7 +38,7 @@ trait DelegatesToPlugin
                 return self::$NO_PLUGIN_RESULT;
             }
 
-            return $plugin->{$methodName}(static::class) ?? $fallback;
+            return $plugin->{$methodName}(static::class);
 
         } catch (\Throwable) {
             return self::$NO_PLUGIN_RESULT;
