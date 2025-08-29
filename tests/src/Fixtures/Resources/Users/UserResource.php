@@ -4,24 +4,23 @@ declare(strict_types=1);
 
 namespace BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users;
 
-use Filament\Tables\Table;
-use Filament\Schemas\Schema;
-use Filament\Resources\Resource;
-use BezhanSalleh\PluginEssentials\Tests\Fixtures\Models\User;
-use BezhanSalleh\PluginEssentials\Concerns\Resource\HasLabels;
-use BezhanSalleh\PluginEssentials\Tests\Fixtures\EssentialPlugin;
-use BezhanSalleh\PluginEssentials\Concerns\Resource\HasNavigation;
 use BezhanSalleh\PluginEssentials\Concerns\Resource\BelongsToParent;
 use BezhanSalleh\PluginEssentials\Concerns\Resource\BelongsToTenant;
 use BezhanSalleh\PluginEssentials\Concerns\Resource\HasGlobalSearch;
+use BezhanSalleh\PluginEssentials\Concerns\Resource\HasLabels;
+use BezhanSalleh\PluginEssentials\Concerns\Resource\HasNavigation;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Models\User;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins\FullFeaturesTestPlugin;
-use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\Pages\EditUser;
-use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\Pages\ViewUser;
-use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\Pages\ListUsers;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\Pages\CreateUser;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\Pages\EditUser;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\Pages\ListUsers;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\Pages\ViewUser;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\Schemas\UserForm;
-use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\Tables\UsersTable;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\Schemas\UserInfolist;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\Tables\UsersTable;
+use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
+use Filament\Tables\Table;
 
 class UserResource extends Resource
 {

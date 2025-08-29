@@ -8,13 +8,13 @@ use Filament\Resources\Resource\Concerns\HasLabels as FilamentHasLabels;
 
 trait HasLabels
 {
+    use DelegatesToPlugin;
     use FilamentHasLabels {
         getModelLabel as filamentGetModelLabel;
         getPluralModelLabel as filamentGetPluralModelLabel;
         getRecordTitleAttribute as filamentGetRecordTitleAttribute;
         hasTitleCaseModelLabel as filamentHasTitleCaseModelLabel;
     }
-    use DelegatesToPlugin;
 
     public static function getModelLabel(): string
     {

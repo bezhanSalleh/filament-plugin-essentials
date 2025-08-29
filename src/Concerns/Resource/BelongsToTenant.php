@@ -8,12 +8,12 @@ use Filament\Resources\Resource\Concerns\BelongsToTenant as FilamentBelongsToTen
 
 trait BelongsToTenant
 {
+    use DelegatesToPlugin;
     use FilamentBelongsToTenant {
         isScopedToTenant as filamentIsScopedToTenant;
         getTenantRelationshipName as filamentGetTenantRelationshipName;
         getTenantOwnershipRelationshipName as filamentGetTenantOwnershipRelationshipName;
     }
-    use DelegatesToPlugin;
 
     public static function isScopedToTenant(): bool
     {

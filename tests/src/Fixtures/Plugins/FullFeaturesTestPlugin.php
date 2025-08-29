@@ -24,7 +24,6 @@ class FullFeaturesTestPlugin implements Plugin
     // use HasLabels;
     // use HasNavigation;
 
-
     public static function make(): static
     {
         return app(static::class);
