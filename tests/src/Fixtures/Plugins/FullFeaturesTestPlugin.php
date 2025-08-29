@@ -20,10 +20,10 @@ class FullFeaturesTestPlugin implements Plugin
     // use BelongsToParent;
     use BelongsToTenant;
     use EvaluatesClosures;
-    // use HasGlobalSearch;
-    // use HasLabels;
-    // use HasNavigation;
 
+    // use HasGlobalSearch;
+    use HasLabels;
+    // use HasNavigation;
 
     public static function make(): static
     {

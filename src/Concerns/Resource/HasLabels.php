@@ -4,16 +4,8 @@ declare(strict_types=1);
 
 namespace BezhanSalleh\PluginEssentials\Concerns\Resource;
 
-use Filament\Resources\Resource\Concerns\HasLabels as FilamentHasLabels;
-
 trait HasLabels
 {
-    use FilamentHasLabels {
-        getModelLabel as filamentGetModelLabel;
-        getPluralModelLabel as filamentGetPluralModelLabel;
-        getRecordTitleAttribute as filamentGetRecordTitleAttribute;
-        hasTitleCaseModelLabel as filamentHasTitleCaseModelLabel;
-    }
     use DelegatesToPlugin;
 
     public static function getModelLabel(): string
@@ -24,7 +16,7 @@ trait HasLabels
             return $pluginResult;
         }
 
-        return static::filamentGetModelLabel();
+        return static::getParentResult('getModelLabel');
     }
 
     public static function getPluralModelLabel(): string
@@ -35,7 +27,7 @@ trait HasLabels
             return $pluginResult;
         }
 
-        return static::filamentGetPluralModelLabel();
+        return static::getParentResult('getPluralModelLabel');
     }
 
     public static function getRecordTitleAttribute(): ?string
@@ -46,7 +38,7 @@ trait HasLabels
             return $pluginResult;
         }
 
-        return static::filamentGetRecordTitleAttribute();
+        return static::getParentResult('getRecordTitleAttribute');
     }
 
     public static function hasTitleCaseModelLabel(): bool
@@ -57,6 +49,6 @@ trait HasLabels
             return $pluginResult;
         }
 
-        return static::filamentHasTitleCaseModelLabel();
+        return static::getParentResult('hasTitleCaseModelLabel');
     }
 }

@@ -2,20 +2,42 @@
 
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins\FullFeaturesTestPlugin;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Plugins\NoDefaultsTestPlugin;
-use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\UserResource;
 use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Posts\PostResource;
+use BezhanSalleh\PluginEssentials\Tests\Fixtures\Resources\Users\UserResource;
 use Filament\Facades\Filament;
 
 beforeEach(function () {
     $this->panel = Filament::getCurrentOrDefaultPanel();
-    // $this->panel
-    //     ->plugins([
-    //         FullFeaturesTestPlugin::make()
-    //             ->tenantRelationshipName('organization')
-    //             ->tenantOwnershipRelationshipName('owner'),
-    //     ]);
 });
 describe('Trait Delegation with Real Plugin Registration', function () {
+
+    it('delegates HasLabels when used and fallbacks to defaults', function () {
+        $this->panel
+            ->plugins([
+                FullFeaturesTestPlugin::make(),
+            ]);
+        $resource = $this->panel->getResources()[0];
+
+        expect($resource::getModelLabel())->toBe('user');
+        expect($resource::getPluralModelLabel())->toBe('users');
+        expect($resource::getRecordTitleAttribute())->toBeNull();
+        expect($resource::hasTitleCaseModelLabel())->toBeTrue();
+
+        $this->panel
+            ->plugins([
+                FullFeaturesTestPlugin::make()
+                    ->modelLabel('Full Item')
+                    ->pluralModelLabel('Full Items')
+                    ->recordTitleAttribute('name')
+                // ->titleCaseModelLabel(false)
+                ,
+            ]);
+
+        expect($resource::getModelLabel())->toBe('Full Item');
+        expect($resource::getPluralModelLabel())->toBe('Full Items');
+        expect($resource::getRecordTitleAttribute())->toBe('name');
+        expect($resource::hasTitleCaseModelLabel())->toBeTrue();
+    });
 
     it('delegates to plugin when plugin has defaults', function () {
 
@@ -28,15 +50,15 @@ describe('Trait Delegation with Real Plugin Registration', function () {
         expect($userResource::getTenantRelationshipName())->toBe('users');
         expect($userResource::getTenantOwnershipRelationshipName())->toBeEmpty();
 
-        // $this->panel
-        //     ->plugins([
-        //         FullFeaturesTestPlugin::make()
-        //             ->tenantRelationshipName('organization')
-        //             ->tenantOwnershipRelationshipName('owner'),
-        //     ]);
+        $this->panel
+            ->plugins([
+                FullFeaturesTestPlugin::make()
+                    ->tenantRelationshipName('organization')
+                    ->tenantOwnershipRelationshipName('owner'),
+            ]);
 
-        // expect($userResource::getTenantRelationshipName())->toBe('organization');
-        // expect($userResource::getTenantOwnershipRelationshipName())->toBe('owner');
+        expect($userResource::getTenantRelationshipName())->toBe('organization');
+        expect($userResource::getTenantOwnershipRelationshipName())->toBe('owner');
     });
 
     // it('falls back to Filament core when plugin has no defaults (BelongsToTenant)', function () {
