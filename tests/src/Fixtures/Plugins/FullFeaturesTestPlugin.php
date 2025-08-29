@@ -20,7 +20,6 @@ class FullFeaturesTestPlugin implements Plugin
     use BelongsToParent;
     use BelongsToTenant;
     use EvaluatesClosures;
-
     use HasGlobalSearch;
     use HasLabels;
     use HasNavigation;
