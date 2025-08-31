@@ -22,7 +22,7 @@ trait HasNavigation
 
         return (! static::isNoPluginResult($pluginResult) && filled($pluginResult))
             ? $pluginResult
-            : parent::getNavigationLabel();
+            : static::getParentResult('getNavigationLabel');
     }
 
     public static function getNavigationIcon(): string | BackedEnum | Htmlable | null
@@ -34,7 +34,7 @@ trait HasNavigation
         );
 
         return static::isNoPluginResult($pluginResult)
-            ? parent::getNavigationIcon()
+            ? static::getParentResult('getNavigationIcon')
             : $pluginResult;
     }
 
@@ -47,7 +47,7 @@ trait HasNavigation
         );
 
         return static::isNoPluginResult($pluginResult)
-            ? parent::getActiveNavigationIcon()
+            ? static::getParentResult('getActiveNavigationIcon')
             : $pluginResult;
     }
 
@@ -60,7 +60,7 @@ trait HasNavigation
         );
 
         return static::isNoPluginResult($pluginResult)
-            ? parent::getNavigationGroup()
+            ? static::getParentResult('getNavigationGroup')
             : $pluginResult;
     }
 
@@ -73,7 +73,7 @@ trait HasNavigation
         );
 
         return static::isNoPluginResult($pluginResult)
-            ? parent::getNavigationSort()
+            ? static::getParentResult('getNavigationSort')
             : $pluginResult;
     }
 
@@ -86,7 +86,7 @@ trait HasNavigation
         );
 
         return static::isNoPluginResult($pluginResult)
-            ? parent::getNavigationBadge()
+            ? static::getParentResult('getNavigationBadge')
             : $pluginResult;
     }
 
@@ -99,7 +99,7 @@ trait HasNavigation
         );
 
         return static::isNoPluginResult($pluginResult)
-            ? parent::getNavigationBadgeColor()
+            ? static::getParentResult('getNavigationBadgeColor')
             : $pluginResult;
     }
 
@@ -112,7 +112,7 @@ trait HasNavigation
         );
 
         return static::isNoPluginResult($pluginResult)
-            ? parent::getNavigationBadgeTooltip()
+            ? static::getParentResult('getNavigationBadgeTooltip')
             : $pluginResult;
     }
 
@@ -125,7 +125,7 @@ trait HasNavigation
         );
 
         return static::isNoPluginResult($pluginResult)
-            ? parent::shouldRegisterNavigation()
+            ? static::getParentResult('shouldRegisterNavigation')
             : $pluginResult;
     }
 
@@ -138,7 +138,7 @@ trait HasNavigation
         );
 
         return static::isNoPluginResult($pluginResult)
-            ? parent::getNavigationParentItem()
+            ? static::getParentResult('getNavigationParentItem')
             : $pluginResult;
     }
 
@@ -151,7 +151,7 @@ trait HasNavigation
         );
 
         return static::isNoPluginResult($pluginResult)
-            ? parent::getSubNavigationPosition()
+            ? static::getParentResult('getSubNavigationPosition')
             : $pluginResult;
     }
 }

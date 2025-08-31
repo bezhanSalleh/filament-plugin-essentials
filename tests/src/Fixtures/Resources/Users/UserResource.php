@@ -26,8 +26,9 @@ class UserResource extends Resource
 {
     // use BelongsToParent;
     use BelongsToTenant;
+
     // use HasGlobalSearch;
-    // use HasLabels;
+    use HasLabels;
     // use HasNavigation;
 
     protected static ?string $model = User::class;
