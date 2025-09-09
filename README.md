@@ -1,5 +1,5 @@
 <a href="https://github.com/bezhansalleh/filament-plugin-essentials" class="filament-hidden">
-<img style="width: 100%; max-width: 100%;" alt="filament-plugin-essentials-art" src="https://github.com/bezhanSalleh/filament-plugin-essentials/blob/main/art/filament-plugin-essentials.png" >
+<img style="width: 100%; max-width: 100%;" alt="filament-plugin-essentials-art" src="https://repository-images.githubusercontent.com/1014100295/abe541e0-1f7e-4c9d-9120-ad49806f15b1" >
 </a>
 <p align="center" class="flex items-center justify-center">
     <a href="https://filamentphp.com/docs/4.x/introduction/installation">
