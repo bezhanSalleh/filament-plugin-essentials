@@ -7,6 +7,7 @@ namespace BezhanSalleh\PluginEssentials\Concerns\Resource;
 use BackedEnum;
 use Filament\Pages\Enums\SubNavigationPosition;
 use Illuminate\Contracts\Support\Htmlable;
+use UnitEnum;
 
 trait HasNavigation
 {
@@ -51,7 +52,7 @@ trait HasNavigation
             : $pluginResult;
     }
 
-    public static function getNavigationGroup(): ?string
+    public static function getNavigationGroup(): string | UnitEnum | null
     {
         $pluginResult = static::delegateToPlugin(
             'HasNavigation',
