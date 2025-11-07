@@ -12,12 +12,12 @@ trait HasCustomProperties
 
     protected array $customProperties = [];
 
-    public function customProperties(array | Closure | null $customProperties): static
+    public function customProperties(array $customProperties = []): static
     {
         // Get plugin default customProperties
         $defaultProperties = $this->getPluginDefault('customProperties', $this->activeResourceContext ?? null);
         // merge customProperties
-        $customProperties = array_merge($defaultProperties, $customProperties);
+        $customProperties = array_merge($defaultProperties ?? [], $customProperties);
 
         if (method_exists($this, 'setContextualProperty')) {
             return $this->setContextualProperty('customProperties', $customProperties);
