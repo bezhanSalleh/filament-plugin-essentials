@@ -3,7 +3,10 @@
 </a>
 <p align="center" class="flex items-center justify-center">
     <a href="https://filamentphp.com/docs/4.x/introduction/installation">
-        <img alt="FILAMENT 8.x" src="https://img.shields.io/badge/FILAMENT-4.x-EBB304?style=for-the-badge">
+        <img alt="FILAMENT 4.x" src="https://img.shields.io/badge/FILAMENT-4.x-EBB304?style=for-the-badge">
+    </a>
+    <a href="https://filamentphp.com/docs/5.x/introduction/installation">
+        <img alt="FILAMENT 5.x" src="https://img.shields.io/badge/FILAMENT-5.x-EBB304?style=for-the-badge">
     </a>
     <a href="https://packagist.org/packages/bezhansalleh/filament-plugin-essentials">
         <img alt="Packagist" src="https://img.shields.io/packagist/v/bezhansalleh/filament-plugin-essentials.svg?style=for-the-badge&logo=packagist">
@@ -28,6 +31,7 @@ A collection of essential traits that streamline Filament plugin development by 
 ## Table of Contents
 
 - [Filament Plugin Essentials](#filament-plugin-essentials)
+  - [Table of Contents](#table-of-contents)
   - [Features](#features)
   - [Requirements](#requirements)
   - [Installation](#installation)
@@ -38,7 +42,7 @@ A collection of essential traits that streamline Filament plugin development by 
   - [How Plugin Users Can Configure Your Plugin](#how-plugin-users-can-configure-your-plugin)
     - [Multi-forResource configuration](#multi-forresource-configuration)
     - [Dynamic values with closures](#dynamic-values-with-closures)
-  - [Plugin & Resource Trait Mapping](#plugin--resource-trait-mapping)
+  - [Plugin \& Resource Trait Mapping](#plugin--resource-trait-mapping)
   - [Configuration Options Provided by Each Trait](#configuration-options-provided-by-each-trait)
     - [`HasNavigation`](#hasnavigation)
     - [`HasLabels`](#haslabels)
@@ -68,7 +72,7 @@ A collection of essential traits that streamline Filament plugin development by 
 - **🛠️ Developer-Friendly** - Minimal boilerplate with maximum customization
 
 ## Requirements
-- [Filament 4.x](https://filamentphp.com/docs/4.x/introduction/installation)
+- Filament [4.x](https://filamentphp.com/docs/4.x/introduction/installation) & [5.x](https://filamentphp.com/docs/5.x/introduction/installation)
 - PHP 8.2+
   
 ## Installation
