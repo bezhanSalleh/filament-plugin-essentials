@@ -2,6 +2,15 @@
 
 All notable changes to `filament-plugin-essentials` will be documented in this file.
 
+## 1.1.0 - 2026-01-19
+
+### What's Changed
+
+* Add support for Filament 5.x by @bezhanSalleh
+* Bump dependabot/fetch-metadata from 2.4.0 to 2.5.0 by @dependabot[bot] in https://github.com/bezhanSalleh/filament-plugin-essentials/pull/11
+
+**Full Changelog**: https://github.com/bezhanSalleh/filament-plugin-essentials/compare/1.0.1...1.1.0
+
 ## 1.0.1 - 2025-11-30
 
 ### What's Changed
