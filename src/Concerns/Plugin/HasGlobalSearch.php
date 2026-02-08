@@ -80,6 +80,12 @@ trait HasGlobalSearch
         return $result ?? 50; // Default to 50 only if no value found
     }
 
+    public function isGloballySearchable(?string $resourceClass = null): bool
+    {
+        $result = $this->getPropertyWithDefaults('isGloballySearchable', $resourceClass);
+        return $result ?? true; // Default to true only if no value found
+    }
+
     public function isGlobalSearchForcedCaseInsensitive(?string $resourceClass = null): ?bool
     {
         return $this->getPropertyWithDefaults('isGlobalSearchForcedCaseInsensitive', $resourceClass);

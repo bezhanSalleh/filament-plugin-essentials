@@ -12,7 +12,7 @@ trait BelongsToTenant
     {
         $pluginResult = static::delegateToPlugin('BelongsToTenant', 'shouldScopeToTenant');
 
-        if (! static::isNoPluginResult($pluginResult)) {
+        if (! static::isNoPluginResult($pluginResult) && $pluginResult !== null) {
             return $pluginResult;
         }
 

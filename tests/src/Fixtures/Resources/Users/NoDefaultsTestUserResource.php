@@ -20,7 +20,9 @@ class NoDefaultsTestUserResource extends Resource
 
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string | null | \BackedEnum $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static ?string $recordTitleAttribute = 'name';
 
     public static function getEssentialsPlugin(): ?NoDefaultsTestPlugin
     {
