@@ -34,7 +34,7 @@ trait HasLabels
     {
         $pluginResult = static::delegateToPlugin('HasLabels', 'getRecordTitleAttribute');
 
-        if (! static::isNoPluginResult($pluginResult)) {
+        if (! static::isNoPluginResult($pluginResult) && $pluginResult !== null) {
             return $pluginResult;
         }
 
@@ -45,7 +45,7 @@ trait HasLabels
     {
         $pluginResult = static::delegateToPlugin('HasLabels', 'hasTitleCaseModelLabel');
 
-        if (! static::isNoPluginResult($pluginResult)) {
+        if (! static::isNoPluginResult($pluginResult) && $pluginResult !== null) {
             return $pluginResult;
         }
 
