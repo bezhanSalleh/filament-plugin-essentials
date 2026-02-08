@@ -34,6 +34,11 @@ trait HasGlobalSearch
             : (int) $pluginResult;
     }
 
+    public static function isGloballySearchable(): bool
+    {
+        return static::canGloballySearch() && static::getGlobalSearchResultsLimit() > 0;
+    }
+
     public static function isGlobalSearchForcedCaseInsensitive(): ?bool
     {
         $pluginResult = static::delegateToPlugin(

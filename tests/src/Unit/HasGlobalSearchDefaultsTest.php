@@ -51,13 +51,13 @@ describe('HasGlobalSearch Trait - 3-Tier Default System', function () {
         $plugin = Filament::getPlugin('full-features-test');
 
         // Test plugin defaults (no user overrides)
-        expect($plugin->getGlobalSearchResultsLimit())->toBe(25)
+        expect($plugin->getGlobalSearchResultsLimit())->toBe(50)
             ->and($plugin->isGloballySearchable())->toBeTrue()
             ->and($plugin->canGloballySearch())->toBeTrue()
             ->and($plugin->shouldSplitGlobalSearchTerms())->toBeFalse();
 
         // Test that resources receive plugin defaults
-        expect(FullFeaturesTestUserResource::getGlobalSearchResultsLimit())->toBe(25)
+        expect(FullFeaturesTestUserResource::getGlobalSearchResultsLimit())->toBe(50)
             ->and(FullFeaturesTestUserResource::isGloballySearchable())->toBeTrue()
             ->and(FullFeaturesTestUserResource::canGloballySearch())->toBeTrue()
             ->and(FullFeaturesTestUserResource::shouldSplitGlobalSearchTerms())->toBeFalse();

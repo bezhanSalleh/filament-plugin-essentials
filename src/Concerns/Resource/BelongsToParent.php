@@ -16,7 +16,7 @@ trait BelongsToParent
             null
         );
 
-        if (! static::isNoPluginResult($pluginResult)) {
+        if (! static::isNoPluginResult($pluginResult) && $pluginResult !== null) {
             return $pluginResult;
         }
 
