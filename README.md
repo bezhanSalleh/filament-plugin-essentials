@@ -14,7 +14,7 @@
     <a href="https://github.com/bezhansalleh/filament-plugin-essentials/actions?query=workflow%3Arun-tests+branch%3Amain" class="filament-hidden">
         <img alt="Tests Passing" src="https://img.shields.io/github/actions/workflow/status/bezhansalleh/filament-plugin-essentials/run-tests.yml?style=for-the-badge&logo=github&label=tests" class="filament-hidden">
     </a>
-    <a href="https://github.com/bezhansalleh/filament-plugin-essentials/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain class="filament-hidden">
+    <a href="https://github.com/bezhanSalleh/filament-plugin-essentials/actions/workflows/fix-php-code-style-issues.yml?query=branch%3Amain" class="filament-hidden">
         <img alt="Code Style Passing" src="https://img.shields.io/github/actions/workflow/status/bezhansalleh/filament-plugin-essentials/fix-php-code-style-issues.yml?style=for-the-badge&logo=github&label=code%20style">
     </a>
 
