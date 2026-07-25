@@ -2,6 +2,21 @@
 
 All notable changes to `filament-plugin-essentials` will be documented in this file.
 
+## 1.3.0 - 2026-07-25
+
+### What's Changed
+
+* Fix defaults resolution by @bezhanSalleh in https://github.com/bezhanSalleh/filament-plugin-essentials/pull/22
+* Fix broken readme file by @DanielFatkic in https://github.com/bezhanSalleh/filament-plugin-essentials/pull/18
+* Bump dependabot/fetch-metadata from 2.5.0 to 3.1.0 by @dependabot[bot] in https://github.com/bezhanSalleh/filament-plugin-essentials/pull/17
+* Bump actions/checkout from 6 to 7 by @dependabot[bot] in https://github.com/bezhanSalleh/filament-plugin-essentials/pull/19
+
+### New Contributors
+
+* @DanielFatkic made their first contribution in https://github.com/bezhanSalleh/filament-plugin-essentials/pull/18
+
+**Full Changelog**: https://github.com/bezhanSalleh/filament-plugin-essentials/compare/1.2.1...1.3.0
+
 ## 1.2.1 - 2026-03-22
 
 **Full Changelog**: https://github.com/bezhanSalleh/filament-plugin-essentials/compare/1.2.0...1.2.1
