@@ -18,52 +18,27 @@ trait BelongsToTenant
 
     public function scopeToTenant(bool | Closure $condition = true): static
     {
-        if (method_exists($this, 'setContextualProperty')) {
-            return $this->setContextualProperty('isScopedToTenant', $condition);
-        }
-
-        $this->isScopedToTenant = $condition;
-        $this->markPropertyAsUserSet('isScopedToTenant');
-
-        return $this;
+        return $this->fillEssentialsProperty('isScopedToTenant', $condition);
     }
 
     public function tenantOwnershipRelationshipName(string | Closure | null $ownershipRelationshipName): static
     {
-        if (method_exists($this, 'setContextualProperty')) {
-            return $this->setContextualProperty('tenantOwnershipRelationshipName', $ownershipRelationshipName);
-        }
-
-        $this->tenantOwnershipRelationshipName = $ownershipRelationshipName;
-        $this->markPropertyAsUserSet('tenantOwnershipRelationshipName');
-
-        return $this;
+        return $this->fillEssentialsProperty('tenantOwnershipRelationshipName', $ownershipRelationshipName);
     }
 
     public function tenantRelationshipName(string | Closure | null $relationshipName): static
     {
-        if (method_exists($this, 'setContextualProperty')) {
-            return $this->setContextualProperty('tenantRelationshipName', $relationshipName);
-        }
-
-        $this->tenantRelationshipName = $relationshipName;
-        $this->markPropertyAsUserSet('tenantRelationshipName');
-
-        return $this;
+        return $this->fillEssentialsProperty('tenantRelationshipName', $relationshipName);
     }
 
     public function isScopedToTenant(?string $resourceClass = null): bool
     {
-        $result = $this->getPropertyWithDefaults('isScopedToTenant', $resourceClass);
-
-        return $result ?? true; // Default to true only if no value found
+        return $this->getPropertyWithDefaults('isScopedToTenant', $resourceClass) ?? true;
     }
 
     public function shouldScopeToTenant(?string $resourceClass = null): bool
     {
-        $result = $this->getPropertyWithDefaults('isScopedToTenant', $resourceClass);
-
-        return $result ?? true; // Default to true only if no value found
+        return $this->getPropertyWithDefaults('isScopedToTenant', $resourceClass) ?? true;
     }
 
     public function getTenantRelationshipName(?string $resourceClass = null): ?string

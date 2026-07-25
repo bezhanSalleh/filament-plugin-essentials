@@ -20,50 +20,22 @@ trait HasLabels
 
     public function modelLabel(string | Closure | null $label): static
     {
-        if (method_exists($this, 'setContextualProperty')) {
-            return $this->setContextualProperty('modelLabel', $label);
-        }
-
-        $this->modelLabel = $label;
-        $this->markPropertyAsUserSet('modelLabel');
-
-        return $this;
+        return $this->fillEssentialsProperty('modelLabel', $label);
     }
 
     public function pluralModelLabel(string | Closure | null $label): static
     {
-        if (method_exists($this, 'setContextualProperty')) {
-            return $this->setContextualProperty('pluralModelLabel', $label);
-        }
-
-        $this->pluralModelLabel = $label;
-        $this->markPropertyAsUserSet('pluralModelLabel');
-
-        return $this;
+        return $this->fillEssentialsProperty('pluralModelLabel', $label);
     }
 
     public function titleCaseModelLabel(bool | Closure $condition = true): static
     {
-        if (method_exists($this, 'setContextualProperty')) {
-            return $this->setContextualProperty('hasTitleCaseModelLabel', $condition);
-        }
-
-        $this->hasTitleCaseModelLabel = $condition;
-        $this->markPropertyAsUserSet('hasTitleCaseModelLabel');
-
-        return $this;
+        return $this->fillEssentialsProperty('hasTitleCaseModelLabel', $condition);
     }
 
     public function recordTitleAttribute(string | Closure | null $attribute): static
     {
-        if (method_exists($this, 'setContextualProperty')) {
-            return $this->setContextualProperty('recordTitleAttribute', $attribute);
-        }
-
-        $this->recordTitleAttribute = $attribute;
-        $this->markPropertyAsUserSet('recordTitleAttribute');
-
-        return $this;
+        return $this->fillEssentialsProperty('recordTitleAttribute', $attribute);
     }
 
     public function getModelLabel(?string $resourceClass = null): ?string
@@ -78,9 +50,7 @@ trait HasLabels
 
     public function hasTitleCaseModelLabel(?string $resourceClass = null): bool
     {
-        $result = $this->getPropertyWithDefaults('hasTitleCaseModelLabel', $resourceClass);
-
-        return $result ?? true; // Default to true only if no value found
+        return $this->getPropertyWithDefaults('hasTitleCaseModelLabel', $resourceClass) ?? true;
     }
 
     public function getRecordTitleAttribute(?string $resourceClass = null): ?string

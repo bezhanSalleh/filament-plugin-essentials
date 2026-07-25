@@ -20,71 +20,37 @@ trait HasGlobalSearch
 
     public function globalSearchResultsLimit(int $limit): static
     {
-        if (method_exists($this, 'setContextualProperty')) {
-            return $this->setContextualProperty('globalSearchResultsLimit', $limit);
-        }
-
-        $this->globalSearchResultsLimit = $limit;
-        $this->markPropertyAsUserSet('globalSearchResultsLimit');
-
-        return $this;
+        return $this->fillEssentialsProperty('globalSearchResultsLimit', $limit);
     }
 
     public function globallySearchable(bool | Closure $condition = true): static
     {
-        if (method_exists($this, 'setContextualProperty')) {
-            return $this->setContextualProperty('isGloballySearchable', $condition);
-        }
-
-        $this->isGloballySearchable = $condition;
-        $this->markPropertyAsUserSet('isGloballySearchable');
-
-        return $this;
+        return $this->fillEssentialsProperty('isGloballySearchable', $condition);
     }
 
     public function forceGlobalSearchCaseInsensitive(bool | Closure | null $condition = true): static
     {
-        if (method_exists($this, 'setContextualProperty')) {
-            return $this->setContextualProperty('isGlobalSearchForcedCaseInsensitive', $condition);
-        }
-
-        $this->isGlobalSearchForcedCaseInsensitive = $condition;
-        $this->markPropertyAsUserSet('isGlobalSearchForcedCaseInsensitive');
-
-        return $this;
+        return $this->fillEssentialsProperty('isGlobalSearchForcedCaseInsensitive', $condition);
     }
 
     public function splitGlobalSearchTerms(bool | Closure $condition = true): static
     {
-        if (method_exists($this, 'setContextualProperty')) {
-            return $this->setContextualProperty('shouldSplitGlobalSearchTerms', $condition);
-        }
-
-        $this->shouldSplitGlobalSearchTerms = $condition;
-        $this->markPropertyAsUserSet('shouldSplitGlobalSearchTerms');
-
-        return $this;
+        return $this->fillEssentialsProperty('shouldSplitGlobalSearchTerms', $condition);
     }
 
     public function isGloballySearchable(?string $resourceClass = null): bool
     {
-        $result = $this->getPropertyWithDefaults('isGloballySearchable', $resourceClass);
-
-        return $result ?? true;
+        return $this->getPropertyWithDefaults('isGloballySearchable', $resourceClass) ?? true;
     }
 
     public function canGloballySearch(?string $resourceClass = null): bool
     {
-        $result = $this->getPropertyWithDefaults('isGloballySearchable', $resourceClass);
-
-        return $result ?? true; // Default to true only if no value found
+        return $this->getPropertyWithDefaults('isGloballySearchable', $resourceClass) ?? true;
     }
 
     public function getGlobalSearchResultsLimit(?string $resourceClass = null): int
     {
-        $result = $this->getPropertyWithDefaults('globalSearchResultsLimit', $resourceClass);
-
-        return $result ?? 50; // Default to 50 only if no value found
+        return $this->getPropertyWithDefaults('globalSearchResultsLimit', $resourceClass) ?? 50;
     }
 
     public function isGlobalSearchForcedCaseInsensitive(?string $resourceClass = null): ?bool
@@ -94,8 +60,6 @@ trait HasGlobalSearch
 
     public function shouldSplitGlobalSearchTerms(?string $resourceClass = null): bool
     {
-        $result = $this->getPropertyWithDefaults('shouldSplitGlobalSearchTerms', $resourceClass);
-
-        return $result ?? false; // Default to false only if no value found
+        return $this->getPropertyWithDefaults('shouldSplitGlobalSearchTerms', $resourceClass) ?? false;
     }
 }

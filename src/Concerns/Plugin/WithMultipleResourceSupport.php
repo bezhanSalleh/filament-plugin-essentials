@@ -37,6 +37,17 @@ trait WithMultipleResourceSupport
         return $this;
     }
 
+    protected function hasContextualProperty(string $property, ?string $resourceClass = null): bool
+    {
+        return $resourceClass !== null
+            && array_key_exists($property, $this->resourceContexts[$resourceClass] ?? []);
+    }
+
+    protected function getRawContextualProperty(string $property, ?string $resourceClass = null): mixed
+    {
+        return $this->resourceContexts[$resourceClass][$property] ?? null;
+    }
+
     protected function getContextualProperty(string $property, ?string $resourceClass = null): mixed
     {
         if ($resourceClass && isset($this->resourceContexts[$resourceClass][$property])) {

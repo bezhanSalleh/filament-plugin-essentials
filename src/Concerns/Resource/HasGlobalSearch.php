@@ -10,61 +10,38 @@ trait HasGlobalSearch
 
     public static function isGloballySearchable(): bool
     {
-        $pluginResult = static::delegateToPlugin(
-            'HasGlobalSearch',
-            'isGloballySearchable'
-        );
+        $value = static::resolvePluginProperty('HasGlobalSearch', 'isGloballySearchable');
 
-        return static::isNoPluginResult($pluginResult)
-            ? static::getParentResult('isGloballySearchable')
-            : (bool) $pluginResult;
+        return static::isNoPluginResult($value)
+            ? static::$isGloballySearchable
+            : (bool) $value;
     }
 
     public static function canGloballySearch(): bool
     {
-        $pluginResult = static::delegateToPlugin(
-            'HasGlobalSearch',
-            'canGloballySearch'
-        );
+        $value = static::resolvePluginProperty('HasGlobalSearch', 'isGloballySearchable');
 
-        return static::isNoPluginResult($pluginResult)
-            ? static::getParentResult('canGloballySearch')
-            : $pluginResult;
+        if (static::isNoPluginResult($value)) {
+            return static::getParentResult('canGloballySearch');
+        }
+
+        return (bool) $value
+            && count(static::getGloballySearchableAttributes()) > 0
+            && static::canAccess();
     }
 
     public static function getGlobalSearchResultsLimit(): int
     {
-        $pluginResult = static::delegateToPlugin(
-            'HasGlobalSearch',
-            'getGlobalSearchResultsLimit'
-        );
-
-        return static::isNoPluginResult($pluginResult)
-            ? static::getParentResult('getGlobalSearchResultsLimit')
-            : (int) $pluginResult;
+        return static::pluginOrParent('HasGlobalSearch', 'globalSearchResultsLimit', 'getGlobalSearchResultsLimit', nullFallsBack: true);
     }
 
     public static function isGlobalSearchForcedCaseInsensitive(): ?bool
     {
-        $pluginResult = static::delegateToPlugin(
-            'HasGlobalSearch',
-            'isGlobalSearchForcedCaseInsensitive'
-        );
-
-        return static::isNoPluginResult($pluginResult)
-            ? static::getParentResult('isGlobalSearchForcedCaseInsensitive')
-            : $pluginResult;
+        return static::pluginOrParent('HasGlobalSearch', 'isGlobalSearchForcedCaseInsensitive', 'isGlobalSearchForcedCaseInsensitive');
     }
 
     public static function shouldSplitGlobalSearchTerms(): bool
     {
-        $pluginResult = static::delegateToPlugin(
-            'HasGlobalSearch',
-            'shouldSplitGlobalSearchTerms'
-        );
-
-        return static::isNoPluginResult($pluginResult)
-            ? static::getParentResult('shouldSplitGlobalSearchTerms')
-            : $pluginResult;
+        return static::pluginOrParent('HasGlobalSearch', 'shouldSplitGlobalSearchTerms', 'shouldSplitGlobalSearchTerms', nullFallsBack: true);
     }
 }

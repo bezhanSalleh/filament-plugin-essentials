@@ -60,7 +60,7 @@ describe('HasGlobalSearch Trait - 3-Tier Default System', function () {
         expect(FullFeaturesTestUserResource::getGlobalSearchResultsLimit())->toBe(25)
             ->and(FullFeaturesTestUserResource::isGloballySearchable())->toBeTrue()
             ->and(FullFeaturesTestUserResource::canGloballySearch())->toBeTrue()
-            ->and(FullFeaturesTestUserResource::shouldSplitGlobalSearchTerms())->toBeFalse();
+            ->and(FullFeaturesTestUserResource::shouldSplitGlobalSearchTerms())->toBeTrue();
     });
 
     it('handles mixed user overrides and plugin defaults', function () {

@@ -97,15 +97,6 @@ describe('Plugin HasNavigation Trait', function () {
             ->and($this->plugin->getNavigationBadgeColor())->toBe($color);
     });
 
-    it('can set slug', function () {
-        $slug = 'test-slug';
-        $result = $this->plugin->slug($slug);
-
-        expect($result)->toBe($this->plugin)
-            ->and($this->plugin->getSlug())->toBe($slug);
-    })
-        ->todo();
-
     it('can set sub navigation position', function () {
         $position = SubNavigationPosition::Start;
         $result = $this->plugin->subNavigationPosition($position);
