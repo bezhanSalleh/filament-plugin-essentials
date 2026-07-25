@@ -1,26 +1,37 @@
 # Filament Plugin Essentials - Complete LLM Documentation
 
 **Package Name**: `bezhansalleh/filament-plugin-essentials`
-**Version**: 1.0.0-beta
+**Requires**: PHP 8.2+, Filament 4.x or 5.x
 **Purpose**: A collection of essential traits that streamline Filament plugin development by taking care of the boilerplate, so you can focus on shipping real features faster.
 
 ## Core Concept & Architecture
 
-This package implements a **3-tier default system** for Filament plugin configuration:
+The package provides **trait pairs**: Plugin traits that store fluent configuration on a Filament plugin class, and Resource traits that override the resource's static configuration methods and delegate them to the plugin.
 
-1. **User Overrides** (Highest Priority) - Configuration set by plugin users via fluent API
-2. **Plugin Developer Defaults** (Middle Priority) - Defaults set by plugin developers
-3. **Filament Core Defaults** (Lowest Priority) - Filament's built-in defaults
+For every configurable property, the value is resolved through this cascade — the first tier with an answer wins:
 
-The package provides **trait pairs**: Plugin traits that provide configuration methods, and Resource traits that delegate method calls to the plugin for consistent behavior.
+1. **Per-resource user override** — `->forResource(UserResource::class)->navigationIcon(...)`
+2. **Global user override** — `->navigationIcon(...)`
+3. **Plugin developer defaults** — a `getDefault{Property}()` method, then `getPluginDefaults()['resources'][ResourceClass][property]`, then legacy flat `getPluginDefaults()[ResourceClass][property]`, then global `getPluginDefaults()[property]`
+4. **Resource / Filament defaults** — the resource's own static configuration, then Filament's native behavior (including panel-level configuration such as `subNavigationPosition`)
 
-### Key Innovation: Delegation Pattern
+Two semantics agents must get right:
 
-Resources use traits that delegate method calls to their associated plugin, creating a seamless configuration flow:
+- **Explicit null is an answer, not a reset.** For nullable settings, `->navigationIcon(null)` clears the icon even when the plugin ships a default or the resource declares its own static icon. For settings whose resource method returns a non-nullable type (`getModelLabel(): string`, `getNavigationLabel(): string`, tenant relationship names), a resolved null falls through to tier 4 instead.
+- **Silence falls through.** If neither the user nor the plugin developer sets a value, the resource's own static configuration and Filament's defaults apply exactly as if the traits were not there.
+
+### Delegation flow
 
 ```
-Resource Method Call → Plugin Trait → User Override OR Plugin Default OR Filament Default
+Resource static call
+  → resource trait → DelegatesToPlugin::pluginOrParent()
+    → static::getEssentialsPlugin()          (convention method the resource must define)
+    → plugin->hasResolvedEssentialsProperty() (tiers 1-3 have an answer?)
+       yes → plugin->resolveEssentialsProperty() (Closures evaluated here)
+       no  → parent Filament implementation      (tier 4)
 ```
+
+Delegation degrades gracefully: a missing `getEssentialsPlugin()`, an unregistered plugin, a plugin without the matching trait, or an exception during lookup all silently fall through to Filament's behavior. Trait detection is recursive — plugins may inherit the traits from an abstract base class or compose them through an aggregate trait.
 
 ## Package Structure
 
@@ -30,163 +41,151 @@ src/
 ├── PluginEssentialsServiceProvider.php     # Laravel service provider
 └── Concerns/
     ├── Plugin/                              # Traits for Plugin classes
-    │   ├── HasNavigation.php               # Navigation management (labels, icons, groups, sorting, badges)
-    │   ├── HasLabels.php                   # Model labels, plural forms, title attributes, casing
-    │   ├── HasGlobalSearch.php             # Global search controls (searchability, limits, case sensitivity)
+    │   ├── HasNavigation.php               # Navigation (label, icons, group, sort, badges, sub-nav position, registration)
+    │   ├── HasLabels.php                   # Model labels, plural forms, title attribute, casing
+    │   ├── HasGlobalSearch.php             # Global search (searchability, limit, case sensitivity, term splitting)
     │   ├── BelongsToParent.php             # Parent-child resource relationships
-    │   ├── BelongsToTenant.php             # Multi-tenancy support (scoping, relationships)
-    │   ├── WithMultipleResourceSupport.php # Multi-resource configuration (forResource method)
-    │   └── HasPluginDefaults.php           # Core defaults system implementation
+    │   ├── BelongsToTenant.php             # Multi-tenancy (scoping, relationship names)
+    │   ├── WithMultipleResourceSupport.php # Per-resource configuration (forResource method)
+    │   └── HasPluginDefaults.php           # Resolution engine (user values + developer defaults)
     └── Resource/                            # Traits for Resource classes
-        ├── HasNavigation.php               # Delegates navigation calls to plugin
-        ├── HasLabels.php                   # Delegates label calls to plugin
-        ├── HasGlobalSearch.php             # Delegates global search calls to plugin
-        ├── BelongsToParent.php             # Delegates parent resource calls to plugin
-        ├── BelongsToTenant.php             # Delegates tenant calls to plugin
-        └── DelegatesToPlugin.php           # Core delegation mechanism
+        ├── HasNavigation.php               # Overrides the 11 navigation statics, delegates to plugin
+        ├── HasLabels.php                   # Overrides the 4 label statics
+        ├── HasGlobalSearch.php             # Overrides the 5 global search statics
+        ├── BelongsToParent.php             # Overrides getParentResource()
+        ├── BelongsToTenant.php             # Overrides the 3 tenancy statics
+        └── DelegatesToPlugin.php           # Delegation core (pluginOrParent, resolvePluginProperty)
 ```
 
 ## Trait Mapping & Functionality
 
+Property names in parentheses are the keys the defaults system uses — `getPluginDefaults()` arrays MUST use these, not the setter names.
+
 ### 1. HasNavigation (Plugin + Resource)
 
-**Plugin Trait Methods:**
-- `navigationLabel(string|Closure|null)` - Set navigation label
-- `navigationIcon(string|Closure|null)` - Set navigation icon
-- `activeNavigationIcon(string|Closure|null)` - Set active navigation icon
-- `navigationGroup(string|Closure|null)` - Set navigation group
-- `navigationSort(int|Closure|null)` - Set navigation sort order
-- `navigationBadge(string|Closure|null)` - Set navigation badge text
-- `navigationBadgeColor(string|array|Closure|null)` - Set badge color
-- `navigationBadgeTooltip(string|Closure|null)` - Set badge tooltip
-- `navigationParentItem(string|Closure|null)` - Set parent navigation item
-- `subNavigationPosition(Closure|SubNavigationPosition)` - Set sub-navigation position
-- `registerNavigation(bool|Closure)` - Control navigation registration
+**Plugin setters (fluent, chainable):**
+- `navigationLabel(string|Closure|null)` (property: `navigationLabel`)
+- `navigationIcon(string|BackedEnum|Closure|null)` (`navigationIcon`)
+- `activeNavigationIcon(string|BackedEnum|Closure|null)` (`activeNavigationIcon`)
+- `navigationGroup(string|UnitEnum|Closure|null)` (`navigationGroup`)
+- `navigationSort(int|Closure|null)` (`navigationSort`)
+- `navigationBadge(string|Closure|null)` (`navigationBadge`)
+- `navigationBadgeColor(string|array|Closure)` (`navigationBadgeColor`)
+- `navigationBadgeTooltip(string|Closure|null)` (`navigationBadgeTooltip`)
+- `navigationParentItem(string|Closure|null)` (`navigationParentItem`)
+- `subNavigationPosition(SubNavigationPosition|Closure)` (`subNavigationPosition`)
+- `registerNavigation(bool|Closure)` (`shouldRegisterNavigation`)
 
-**Resource Trait Methods:**
-- `getNavigationLabel()` - Get navigation label (delegates to plugin)
-- `getNavigationIcon()` - Get navigation icon (delegates to plugin)
-- `getActiveNavigationIcon()` - Get active navigation icon (delegates to plugin)
-- `getNavigationGroup()` - Get navigation group (delegates to plugin)
-- `getNavigationSort()` - Get navigation sort order (delegates to plugin)
-- `getNavigationBadge()` - Get navigation badge (delegates to plugin)
-- `getNavigationBadgeColor()` - Get badge color (delegates to plugin)
-- `getNavigationBadgeTooltip()` - Get badge tooltip (delegates to plugin)
-- `getNavigationParentItem()` - Get parent navigation item (delegates to plugin)
-- `getSubNavigationPosition()` - Get sub-navigation position (delegates to plugin)
-- `shouldRegisterNavigation()` - Check if navigation should be registered (delegates to plugin)
+**Resource overrides (all delegate, then fall back to Filament):**
+`getNavigationLabel()`, `getNavigationIcon()`, `getActiveNavigationIcon()`, `getNavigationGroup()`, `getNavigationSort()`, `getNavigationBadge()`, `getNavigationBadgeColor()`, `getNavigationBadgeTooltip()`, `getNavigationParentItem()`, `getSubNavigationPosition()`, `shouldRegisterNavigation()`
+
+Note: when nothing sets `activeNavigationIcon`, Filament's own fallback applies (active icon = navigation icon). When nothing sets `subNavigationPosition`, cluster- and panel-level configuration applies.
 
 ### 2. HasLabels (Plugin + Resource)
 
-**Plugin Trait Methods:**
-- `modelLabel(string|Closure|null)` - Set model label
-- `pluralModelLabel(string|Closure|null)` - Set plural model label
-- `recordTitleAttribute(string|Closure|null)` - Set record title attribute
-- `titleCaseModelLabel(bool|Closure)` - Control title case formatting
+**Plugin setters:**
+- `modelLabel(string|Closure|null)` (`modelLabel`)
+- `pluralModelLabel(string|Closure|null)` (`pluralModelLabel`)
+- `recordTitleAttribute(string|Closure|null)` (`recordTitleAttribute`)
+- `titleCaseModelLabel(bool|Closure)` (`hasTitleCaseModelLabel`)
 
-**Resource Trait Methods:**
-- `getModelLabel()` - Get model label (delegates to plugin)
-- `getPluralModelLabel()` - Get plural model label (delegates to plugin)
-- `getRecordTitleAttribute()` - Get record title attribute (delegates to plugin)
-- `hasTitleCaseModelLabel()` - Check title case setting (delegates to plugin)
+**Resource overrides:** `getModelLabel()`, `getPluralModelLabel()`, `getRecordTitleAttribute()`, `hasTitleCaseModelLabel()`
 
 ### 3. HasGlobalSearch (Plugin + Resource)
 
-**Plugin Trait Methods:**
-- `globallySearchable(bool|Closure)` - Control global searchability
-- `globalSearchResultsLimit(int)` - Set search results limit
-- `forceGlobalSearchCaseInsensitive(bool|Closure|null)` - Force case insensitive search
-- `splitGlobalSearchTerms(bool|Closure)` - Control term splitting
+**Plugin setters:**
+- `globallySearchable(bool|Closure)` (`isGloballySearchable`)
+- `globalSearchResultsLimit(int)` (`globalSearchResultsLimit`)
+- `forceGlobalSearchCaseInsensitive(bool|Closure|null)` (`isGlobalSearchForcedCaseInsensitive`)
+- `splitGlobalSearchTerms(bool|Closure)` (`shouldSplitGlobalSearchTerms`)
 
-**Resource Trait Methods:**
-- `canGloballySearch()` - Check if globally searchable (delegates to plugin)
-- `isGloballySearchable()` - Check if globally searchable (delegates to plugin)
-- `getGlobalSearchResultsLimit()` - Get search results limit (delegates to plugin)
-- `isGlobalSearchForcedCaseInsensitive()` - Check case sensitivity setting (delegates to plugin)
-- `shouldSplitGlobalSearchTerms()` - Check term splitting setting (delegates to plugin)
+**Resource overrides:** `canGloballySearch()`, `isGloballySearchable()`, `getGlobalSearchResultsLimit()`, `isGlobalSearchForcedCaseInsensitive()`, `shouldSplitGlobalSearchTerms()`
 
+Security-relevant semantics of `canGloballySearch()`:
+- Plugin resolves **false** → resource is not searchable.
+- Plugin resolves **true** → still gated by Filament's rules: the resource must have searchable attributes (a record title attribute) AND pass `canAccess()`. The plugin flag only replaces the `$isGloballySearchable` component, which lets plugins opt resources in even on panels using Filament's opt-in global search mode.
+- Plugin silent → Filament's full native behavior.
+
+`isGloballySearchable()` has no parent method in Filament; when the plugin is silent it returns the resource's inherited static `$isGloballySearchable` property.
 
 ### 4. BelongsToParent (Plugin + Resource)
 
-**Plugin Trait Methods:**
-- `parentResource(string|null)` - Set parent resource class
-
-**Resource Trait Methods:**
-- `getParentResource()` - Get parent resource class (delegates to plugin)
+**Plugin setter:** `parentResource(?string)` (`parentResource`)
+**Resource override:** `getParentResource()`
 
 ### 5. BelongsToTenant (Plugin + Resource)
 
-**Plugin Trait Methods:**
-- `scopeToTenant(bool|Closure)` - Control tenant scoping
-- `tenantRelationshipName(string|Closure|null)` - Set tenant relationship name
-- `tenantOwnershipRelationshipName(string|Closure|null)` - Set tenant ownership relationship name
+**Plugin setters:**
+- `scopeToTenant(bool|Closure)` (`isScopedToTenant`)
+- `tenantRelationshipName(string|Closure|null)` (`tenantRelationshipName`)
+- `tenantOwnershipRelationshipName(string|Closure|null)` (`tenantOwnershipRelationshipName`)
 
-**Resource Trait Methods:**
-- `isScopedToTenant()` - Check if scoped to tenant (delegates to plugin)
-- `getTenantRelationshipName()` - Get tenant relationship name (delegates to plugin)
-- `getTenantOwnershipRelationshipName()` - Get tenant ownership relationship name (delegates to plugin)
+**Resource overrides:** `isScopedToTenant()`, `getTenantRelationshipName()`, `getTenantOwnershipRelationshipName()`
 
-### 6. WithMultipleResourceSupport (Plugin Only)
+### 6. WithMultipleResourceSupport (Plugin only)
 
-**Special Trait Methods:**
-- `forResource(string $resourceClass)` - Set context for multi-resource configuration
+- `forResource(string $resourceClass)` — scopes every subsequent fluent setter to that resource.
 
-This trait enables per-resource configuration by maintaining contextual property storage.
+Ordering matters: `forResource()` is sticky. Set global values BEFORE the first `forResource()` call; there is no method to switch back to global scope on the same chain.
+
+```php
+YourPlugin::make()
+    ->navigationGroup('Global Group')          // global: before any forResource
+    ->forResource(UserResource::class)
+        ->navigationLabel('Users')
+    ->forResource(PostResource::class)
+        ->navigationLabel('Posts');
+```
 
 ## Core Implementation Details
 
-### HasPluginDefaults Trait
+### HasPluginDefaults (resolution engine)
 
-The foundation of the 3-tier system. Key methods:
+- `hasResolvedEssentialsProperty(string $property, ?string $resourceClass = null): bool` — true when tiers 1-3 have an answer (explicit nulls count; tracked via `$userSetProperties` and `array_key_exists` on per-resource contexts).
+- `resolveEssentialsProperty(string $property, ?string $resourceClass = null): mixed` — the evaluated value from the cascade; Closures are evaluated via Filament's `EvaluatesClosures`.
+- `getPropertyWithDefaults()` — legacy wrapper over the pair (kept for backward compatibility).
+- `fillEssentialsProperty(string $property, mixed $value): static` — shared setter body (routes through the per-resource context when `WithMultipleResourceSupport` is present, otherwise marks the property user-set).
+- `getPluginDefault(string $property, ?string $resourceClass = null)` — developer defaults: `getDefault{Property}()` method first, then nested/legacy/global arrays.
 
-- `getPropertyWithDefaults(string $property, ?string $resourceClass = null)` - Implements the 3-tier lookup
-- `markPropertyAsUserSet(string $property)` - Tracks user-set properties
-- `getPluginDefault(string $property, ?string $resourceClass = null)` - Gets plugin developer defaults
+### DelegatesToPlugin (delegation core)
 
-### DelegatesToPlugin Trait
-
-Handles delegation from Resource traits to Plugin traits:
-
-- `delegateToPlugin(string $traitName, string $methodName, mixed $fallback = null)` - Core delegation method
-- `pluginUsesTrait(object $plugin, string $traitName)` - Checks if plugin uses required trait
-- `getParentResult(string $methodName)` - Falls back to parent Resource implementation
-
-### Multi-Resource Configuration
-
-When a plugin uses `WithMultipleResourceSupport`, it can configure different resources separately:
-
-```php
-$plugin
-    ->forResource(UserResource::class)
-        ->navigationLabel('Users')
-        ->modelLabel('User')
-    ->forResource(PostResource::class)
-        ->navigationLabel('Posts')
-        ->modelLabel('Article');
-```
+- `pluginOrParent(string $traitName, string $property, string $parentMethod, bool $nullFallsBack = false)` — the whole policy in one place; every resource override is a one-line call to it.
+- `resolvePluginProperty(string $traitName, string $property)` — plugin lookup + guards; returns a sentinel when no plugin answer exists.
+- `pluginUsesTrait(object $plugin, string $traitName)` — recursive trait detection (`class_uses_recursive`).
+- `delegateToPlugin()`, `isNoPluginResult()`, `getParentResult()` — legacy API, kept working for backward compatibility.
 
 ## Usage Patterns
 
 ### For Plugin Developers
 
-**1. Basic Plugin Setup:**
+**1. Plugin class:**
 ```php
 <?php
 
 namespace YourVendor\YourPlugin;
 
-use BezhanSalleh\PluginEssentials\Concerns\Plugin;
+use BezhanSalleh\PluginEssentials\Concerns\Plugin\HasGlobalSearch;
+use BezhanSalleh\PluginEssentials\Concerns\Plugin\HasLabels;
+use BezhanSalleh\PluginEssentials\Concerns\Plugin\HasNavigation;
+use BezhanSalleh\PluginEssentials\Concerns\Plugin\WithMultipleResourceSupport;
 use Filament\Contracts\Plugin;
+use Filament\Facades\Filament;
 
 class YourPlugin implements Plugin
 {
-    use Plugin\HasNavigation;
-    use Plugin\HasLabels;
-    use Plugin\HasGlobalSearch;
+    use HasGlobalSearch;
+    use HasLabels;
+    use HasNavigation;
+    use WithMultipleResourceSupport;
 
     public static function make(): static
     {
         return app(static::class);
+    }
+
+    public static function get(): ?static
+    {
+        return Filament::getPlugin('your-plugin');
     }
 
     public function getId(): string
@@ -194,7 +193,6 @@ class YourPlugin implements Plugin
         return 'your-plugin';
     }
 
-    // Optional: Set plugin developer defaults
     protected function getPluginDefaults(): array
     {
         return [
@@ -203,58 +201,11 @@ class YourPlugin implements Plugin
             'modelLabel' => 'Item',
             'pluralModelLabel' => 'Items',
             'globalSearchResultsLimit' => 25,
-        ];
-    }
-}
-```
 
-**2. Resource Setup:**
-```php
-<?php
-
-namespace YourVendor\YourPlugin\Resources;
-
-use BezhanSalleh\PluginEssentials\Concerns\Resource;
-use Filament\Resources\Resource;
-
-class UserResource extends Resource
-{
-    use Resource\HasNavigation;
-    use Resource\HasLabels;
-    use Resource\HasGlobalSearch;
-
-    protected static ?string $model = User::class;
-
-    // Required: Link resource to plugin
-    public static function getEssentialsPlugin(): ?YourPlugin
-    {
-        return YourPlugin::get();
-    }
-}
-```
-
-**3. Multi-Resource Plugin:**
-```php
-class YourPlugin implements Plugin
-{
-    use HasNavigation, HasLabels, WithMultipleResourceSupport;
-
-    protected function getPluginDefaults(): array
-    {
-        return [
-            // Global defaults
-            'navigationGroup' => 'Your Plugin',
-            'modelLabel' => 'Item',
-
-            // Resource-specific defaults
             'resources' => [
                 UserResource::class => [
                     'modelLabel' => 'User',
                     'navigationIcon' => 'heroicon-o-users',
-                ],
-                PostResource::class => [
-                    'modelLabel' => 'Post',
-                    'navigationIcon' => 'heroicon-o-document-text',
                 ],
             ],
         ];
@@ -262,9 +213,47 @@ class YourPlugin implements Plugin
 }
 ```
 
+Do NOT import the `Concerns\Plugin` namespace next to Filament's `Plugin` contract — the bare aliases collide and PHP fatals. Import the traits individually as above.
+
+**2. Method-based defaults (alternative to the array; takes precedence over it):**
+```php
+protected function getDefaultModelLabel(?string $resourceClass = null): string
+{
+    return $resourceClass === UserResource::class ? 'User' : 'Item';
+}
+```
+
+**3. Resource class:**
+```php
+<?php
+
+namespace YourVendor\YourPlugin\Resources;
+
+use BezhanSalleh\PluginEssentials\Concerns\Resource\HasGlobalSearch;
+use BezhanSalleh\PluginEssentials\Concerns\Resource\HasLabels;
+use BezhanSalleh\PluginEssentials\Concerns\Resource\HasNavigation;
+use Filament\Resources\Resource;
+use YourVendor\YourPlugin\YourPlugin;
+
+class UserResource extends Resource
+{
+    use HasGlobalSearch;
+    use HasLabels;
+    use HasNavigation;
+
+    protected static ?string $model = User::class;
+
+    public static function getEssentialsPlugin(): ?YourPlugin
+    {
+        return YourPlugin::get();
+    }
+}
+```
+
+`getEssentialsPlugin()` is the required link — a static method by that exact name returning the plugin instance (or null). Without it, delegation is silently disabled and the resource behaves as plain Filament.
+
 ### For Plugin Users
 
-**1. Basic Configuration:**
 ```php
 public function panel(Panel $panel): Panel
 {
@@ -279,93 +268,49 @@ public function panel(Panel $panel): Panel
 }
 ```
 
-**2. Multi-Resource Configuration:**
+Clearing a plugin default:
 ```php
 YourPlugin::make()
-    ->forResource(UserResource::class)
-        ->navigationLabel('Users')
-        ->modelLabel('User')
-        ->globalSearchResultsLimit(25)
-
-    ->forResource(PostResource::class)
-        ->navigationLabel('Posts')
-        ->modelLabel('Article')
-        ->globalSearchResultsLimit(10)
+    ->navigationIcon(null)        // removes the icon entirely
+    ->activeNavigationIcon(null);
 ```
 
-**3. Dynamic Configuration with Closures:**
+Dynamic values:
 ```php
 YourPlugin::make()
-    ->navigationLabel(fn() => 'Users (' . User::count() . ')')
-    ->navigationBadge(fn() => User::whereNull('email_verified_at')->count())
-    ->modelLabel(fn() => auth()->user()->isAdmin() ? 'Admin User' : 'User')
+    ->navigationLabel(fn () => 'Users (' . User::count() . ')')
+    ->navigationBadge(fn () => User::whereNull('email_verified_at')->count());
 ```
 
 ## Default Resolution Examples
 
-### Example 1: Navigation Label Resolution
-
 ```php
-// User sets custom label
-$plugin->navigationLabel('My Custom Label');
-// Result: 'My Custom Label' (User Override - Priority 1)
+// Tier 1: user override always wins
+$plugin->navigationLabel('My Custom Label');           // → 'My Custom Label'
 
-// Plugin developer sets default in getPluginDefaults()
-'navigationLabel' => 'Plugin Default Label'
-// Result: 'Plugin Default Label' (Plugin Default - Priority 2)
+// Tier 2: forResource beats global user values for that resource
+$plugin->forResource(UserResource::class)->navigationSort(5);
 
-// No user override or plugin default
-// Result: '' (Filament Default - Priority 3)
+// Tier 3: developer defaults (property-name keys!)
+'shouldRegisterNavigation' => false,                    // correct key
+'registerNavigation' => false,                          // WRONG — setter name, never read
+
+// Tier 4: nothing set anywhere → the resource's own statics win
+protected static ?int $navigationSort = 7;              // applies when plugin is silent
+
+// Explicit null clears (nullable settings only)
+$plugin->navigationIcon(null);                          // → no icon, statics do NOT resurface
 ```
 
-### Example 2: Multi-Resource Defaults
+## Limitations
 
-```php
-protected function getPluginDefaults(): array
-{
-    return [
-        // Global default
-        'modelLabel' => 'Global Item',
+Route-phase configuration cannot be plugin-delegated. Filament resolves resource slugs, clusters, and route prefixes while registering routes at application boot — before any panel boots and before `filament()->getPlugin()` can target the correct panel. That is why these traits cover navigation, labels, global search, tenancy, and parent resources, but not `slug()` or cluster assignment. Set those statically on the resource class.
 
-        // Resource-specific defaults
-        'resources' => [
-            UserResource::class => [
-                'modelLabel' => 'User Override',
-            ],
-        ],
-    ];
-}
+## Key Guarantees
 
-// For UserResource: 'User Override' (Resource-specific default)
-// For PostResource: 'Global Item' (Global default)
-```
-
-## Key Features
-
-1. **Minimal Boilerplate**: Plugin developers just add traits and optionally set defaults
-2. **Consistent API**: All plugins using these traits have the same configuration interface
-3. **Flexible Defaults**: Support for both global and resource-specific defaults
-4. **Closure Support**: Dynamic values and conditional logic
-5. **Multi-Resource Support**: Single plugin can configure multiple resources differently
-6. **Backward Compatibility**: Works with existing Filament patterns
-7. **Type Safety**: Full type hints and documentation
-8. **Testable**: Comprehensive test suite ensuring reliability
-
-## Testing Strategy
-
-The package includes extensive tests covering:
-
-- **Unit Tests**: Individual trait functionality
-- **Feature Tests**: Integration between plugin and resource traits
-- **Multi-Resource Tests**: Contextual configuration scenarios
-- **Default Resolution Tests**: 3-tier system behavior
-- **Edge Cases**: Missing plugins, trait detection, error handling
-
-## Performance Considerations
-
-- **Lazy Evaluation**: Values are only computed when needed
-- **Trait Detection**: Efficient reflection-based trait checking
-- **Caching**: Plugin instances are cached by Filament
-- **Minimal Overhead**: Delegation adds negligible performance cost
-
-This package essentially provides a standardized way to handle plugin configuration in Filament, reducing boilerplate code while maintaining flexibility and consistency across the ecosystem.
+1. **Zero boilerplate contract**: traits + `getEssentialsPlugin()` is the entire integration surface.
+2. **Non-invasive**: attaching the traits without configuring anything changes nothing — resource statics and Filament defaults keep working.
+3. **Graceful degradation**: missing/unregistered/throwing plugins never crash a panel; behavior falls back to Filament.
+4. **Closure support everywhere**: user values and array defaults are evaluated through Filament's `EvaluatesClosures`.
+5. **Backward compatible**: the legacy delegation API (`delegateToPlugin`, `getParentResult`, `getPropertyWithDefaults`) keeps its exact signatures and behavior.
+6. **Tested**: the resolution tiers, explicit-null semantics, search gating, and every delegation guard path are covered by the Pest suite (red-first regression tests).

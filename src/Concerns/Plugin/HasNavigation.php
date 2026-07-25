@@ -38,148 +38,67 @@ trait HasNavigation
 
     public function subNavigationPosition(Closure | SubNavigationPosition $subNavigationPosition): static
     {
-        if (method_exists($this, 'setContextualProperty')) {
-            return $this->setContextualProperty('subNavigationPosition', $subNavigationPosition);
-        }
-
-        $this->subNavigationPosition = $subNavigationPosition;
-        $this->markPropertyAsUserSet('subNavigationPosition');
-
-        return $this;
+        return $this->fillEssentialsProperty('subNavigationPosition', $subNavigationPosition);
     }
 
     public function registerNavigation(bool | Closure $shouldRegisterNavigation): static
     {
-        if (method_exists($this, 'setContextualProperty')) {
-            return $this->setContextualProperty('shouldRegisterNavigation', $shouldRegisterNavigation);
-        }
-
-        $this->shouldRegisterNavigation = $shouldRegisterNavigation;
-        $this->markPropertyAsUserSet('shouldRegisterNavigation');
-
-        return $this;
+        return $this->fillEssentialsProperty('shouldRegisterNavigation', $shouldRegisterNavigation);
     }
 
     public function navigationBadgeTooltip(string | Closure | null $tooltip): static
     {
-        if (method_exists($this, 'setContextualProperty')) {
-            return $this->setContextualProperty('navigationBadgeTooltip', $tooltip);
-        }
-
-        $this->navigationBadgeTooltip = $tooltip;
-        $this->markPropertyAsUserSet('navigationBadgeTooltip');
-
-        return $this;
+        return $this->fillEssentialsProperty('navigationBadgeTooltip', $tooltip);
     }
 
     public function navigationBadge(Closure | null | string $value = null): static
     {
-        if (method_exists($this, 'setContextualProperty')) {
-            return $this->setContextualProperty('navigationBadge', $value);
-        }
-
-        $this->navigationBadge = $value;
-        $this->markPropertyAsUserSet('navigationBadge');
-
-        return $this;
+        return $this->fillEssentialsProperty('navigationBadge', $value);
     }
 
     public function navigationBadgeColor(array | Closure | string $color): static
     {
-        if (method_exists($this, 'setContextualProperty')) {
-            return $this->setContextualProperty('navigationBadgeColor', $color);
-        }
-
-        $this->navigationBadgeColor = $color;
-        $this->markPropertyAsUserSet('navigationBadgeColor');
-
-        return $this;
+        return $this->fillEssentialsProperty('navigationBadgeColor', $color);
     }
 
     public function navigationGroup(Closure | null | string | UnitEnum $group): static
     {
-        if (method_exists($this, 'setContextualProperty')) {
-            return $this->setContextualProperty('navigationGroup', $group);
-        }
-
-        $this->navigationGroup = $group;
-        $this->markPropertyAsUserSet('navigationGroup');
-
-        return $this;
+        return $this->fillEssentialsProperty('navigationGroup', $group);
     }
 
     public function navigationParentItem(string | Closure | null $item): static
     {
-        if (method_exists($this, 'setContextualProperty')) {
-            return $this->setContextualProperty('navigationParentItem', $item);
-        }
-
-        $this->navigationParentItem = $item;
-        $this->markPropertyAsUserSet('navigationParentItem');
-
-        return $this;
+        return $this->fillEssentialsProperty('navigationParentItem', $item);
     }
 
     public function navigationIcon(BackedEnum | Closure | null | string $icon): static
     {
-        if (method_exists($this, 'setContextualProperty')) {
-            return $this->setContextualProperty('navigationIcon', $icon);
-        }
-
-        $this->navigationIcon = $icon;
-        $this->markPropertyAsUserSet('navigationIcon');
-
-        return $this;
+        return $this->fillEssentialsProperty('navigationIcon', $icon);
     }
 
     public function activeNavigationIcon(BackedEnum | Closure | null | string $icon): static
     {
-        if (method_exists($this, 'setContextualProperty')) {
-            return $this->setContextualProperty('activeNavigationIcon', $icon);
-        }
-
-        $this->activeNavigationIcon = $icon;
-        $this->markPropertyAsUserSet('activeNavigationIcon');
-
-        return $this;
+        return $this->fillEssentialsProperty('activeNavigationIcon', $icon);
     }
 
     public function navigationLabel(Closure | null | string $label): static
     {
-        if (method_exists($this, 'setContextualProperty')) {
-            return $this->setContextualProperty('navigationLabel', $label);
-        }
-
-        $this->navigationLabel = $label;
-        $this->markPropertyAsUserSet('navigationLabel');
-
-        return $this;
+        return $this->fillEssentialsProperty('navigationLabel', $label);
     }
 
     public function navigationSort(int | Closure | null $sort): static
     {
-        if (method_exists($this, 'setContextualProperty')) {
-            return $this->setContextualProperty('navigationSort', $sort);
-        }
-
-        $this->navigationSort = $sort;
-        $this->markPropertyAsUserSet('navigationSort');
-
-        return $this;
+        return $this->fillEssentialsProperty('navigationSort', $sort);
     }
 
     public function getSubNavigationPosition(?string $resourceClass = null): SubNavigationPosition
     {
-        $result = $this->getPropertyWithDefaults('subNavigationPosition', $resourceClass);
-
-        return $result ?? SubNavigationPosition::Start;
+        return $this->getPropertyWithDefaults('subNavigationPosition', $resourceClass) ?? SubNavigationPosition::Start;
     }
 
     public function shouldRegisterNavigation(?string $resourceClass = null): bool
     {
-        $result = $this->getPropertyWithDefaults('shouldRegisterNavigation', $resourceClass);
-
-        return $result ?? true; // Default to true only if no value found
+        return $this->getPropertyWithDefaults('shouldRegisterNavigation', $resourceClass) ?? true;
     }
 
     public function getNavigationBadgeTooltip(?string $resourceClass = null): ?string

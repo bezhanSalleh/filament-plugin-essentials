@@ -12,38 +12,54 @@ trait HasPluginDefaults
 
     protected array $userSetProperties = [];
 
-    /**
-     * Get a property value with plugin defaults fallback:
-     * 1. User-set values (tracked via fluent API)
-     * 2. Plugin developer defaults
-     * 3. Return null (let Resource handle its defaults)
-     */
+    public function hasResolvedEssentialsProperty(string $property, ?string $resourceClass = null): bool
+    {
+        if ($this->hasEssentialsUserValue($property, $resourceClass)) {
+            return true;
+        }
+
+        return $this->getPluginDefault($property, $resourceClass) !== null;
+    }
+
+    public function resolveEssentialsProperty(string $property, ?string $resourceClass = null): mixed
+    {
+        if ($this->hasEssentialsUserValue($property, $resourceClass)) {
+            return $this->evaluate($this->getEssentialsUserValue($property, $resourceClass));
+        }
+
+        return $this->evaluate($this->getPluginDefault($property, $resourceClass));
+    }
+
+    protected function hasEssentialsUserValue(string $property, ?string $resourceClass = null): bool
+    {
+        if (method_exists($this, 'hasContextualProperty') && $this->hasContextualProperty($property, $resourceClass)) {
+            return true;
+        }
+
+        return $this->isPropertyUserSet($property);
+    }
+
+    protected function getEssentialsUserValue(string $property, ?string $resourceClass = null): mixed
+    {
+        if (method_exists($this, 'hasContextualProperty') && $this->hasContextualProperty($property, $resourceClass)) {
+            return $this->getRawContextualProperty($property, $resourceClass);
+        }
+
+        return $this->{$property} ?? null;
+    }
+
     protected function getPropertyWithDefaults(string $property, ?string $resourceClass = null): mixed
     {
-        // 1. Check user-set values (highest priority)
-        $userValue = null;
+        return $this->resolveEssentialsProperty($property, $resourceClass);
+    }
 
-        if (method_exists($this, 'getContextualProperty')) {
-            $userValue = $this->getContextualProperty($property, $resourceClass);
+    protected function fillEssentialsProperty(string $property, mixed $value): static
+    {
+        if (method_exists($this, 'setContextualProperty')) {
+            return $this->setContextualProperty($property, $value);
         }
 
-        // If no contextual value, check if user explicitly set this property
-        if ($userValue === null && $this->isPropertyUserSet($property)) {
-            $userValue = $this->$property ?? null;
-        }
-
-        if ($userValue !== null) {
-            return $this->evaluate($userValue);
-        }
-
-        // 2. Check plugin developer defaults (middle priority)
-        $pluginDefault = $this->getPluginDefault($property, $resourceClass);
-        if ($pluginDefault !== null) {
-            return $this->evaluate($pluginDefault);
-        }
-
-        // 3. Return null - let Resource handle its own defaults
-        return null;
+        return $this->setUserProperty($property, $value);
     }
 
     protected function markPropertyAsUserSet(string $property): void

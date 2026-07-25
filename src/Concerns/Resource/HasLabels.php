@@ -10,45 +10,21 @@ trait HasLabels
 
     public static function getModelLabel(): string
     {
-        $pluginResult = static::delegateToPlugin('HasLabels', 'getModelLabel');
-
-        if (! static::isNoPluginResult($pluginResult) && $pluginResult !== null) {
-            return $pluginResult;
-        }
-
-        return static::getParentResult('getModelLabel');
+        return static::pluginOrParent('HasLabels', 'modelLabel', 'getModelLabel', nullFallsBack: true);
     }
 
     public static function getPluralModelLabel(): string
     {
-        $pluginResult = static::delegateToPlugin('HasLabels', 'getPluralModelLabel');
-
-        if (! static::isNoPluginResult($pluginResult) && $pluginResult !== null) {
-            return $pluginResult;
-        }
-
-        return static::getParentResult('getPluralModelLabel');
+        return static::pluginOrParent('HasLabels', 'pluralModelLabel', 'getPluralModelLabel', nullFallsBack: true);
     }
 
     public static function getRecordTitleAttribute(): ?string
     {
-        $pluginResult = static::delegateToPlugin('HasLabels', 'getRecordTitleAttribute');
-
-        if (! static::isNoPluginResult($pluginResult) && $pluginResult !== null) {
-            return $pluginResult;
-        }
-
-        return static::getParentResult('getRecordTitleAttribute');
+        return static::pluginOrParent('HasLabels', 'recordTitleAttribute', 'getRecordTitleAttribute');
     }
 
     public static function hasTitleCaseModelLabel(): bool
     {
-        $pluginResult = static::delegateToPlugin('HasLabels', 'hasTitleCaseModelLabel');
-
-        if (! static::isNoPluginResult($pluginResult) && $pluginResult !== null) {
-            return $pluginResult;
-        }
-
-        return static::getParentResult('hasTitleCaseModelLabel');
+        return static::pluginOrParent('HasLabels', 'hasTitleCaseModelLabel', 'hasTitleCaseModelLabel', nullFallsBack: true);
     }
 }

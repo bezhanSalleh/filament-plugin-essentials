@@ -39,6 +39,7 @@ A collection of essential traits that streamline Filament plugin development by 
     - [1. Add traits to your plugin class](#1-add-traits-to-your-plugin-class)
     - [2. Add matching traits to your forResource classes](#2-add-matching-traits-to-your-forresource-classes)
     - [3. Set defaults for your plugin (optional)](#3-set-defaults-for-your-plugin-optional)
+    - [How values are resolved](#how-values-are-resolved)
   - [How Plugin Users Can Configure Your Plugin](#how-plugin-users-can-configure-your-plugin)
     - [Multi-forResource configuration](#multi-forresource-configuration)
     - [Dynamic values with closures](#dynamic-values-with-closures)
@@ -50,6 +51,7 @@ A collection of essential traits that streamline Filament plugin development by 
     - [`BelongsToParent`](#belongstoparent)
     - [`BelongsToTenant`](#belongstotenant)
     - [`WithMultipleResourceSupport`](#withmultipleresourcesupport)
+  - [Limitations](#limitations)
   - [Todo](#todo)
   - [Testing](#testing)
   - [Changelog](#changelog)
@@ -90,19 +92,28 @@ composer require bezhansalleh/filament-plugin-essentials
 
 namespace YourVendor\YourPlugin;
 
-use BezhanSalleh\PluginEssentials\Concerns\Plugin;
+use BezhanSalleh\PluginEssentials\Concerns\Plugin\HasGlobalSearch;
+use BezhanSalleh\PluginEssentials\Concerns\Plugin\HasLabels;
+use BezhanSalleh\PluginEssentials\Concerns\Plugin\HasNavigation;
+use BezhanSalleh\PluginEssentials\Concerns\Plugin\WithMultipleResourceSupport;
 use Filament\Contracts\Plugin;
+use Filament\Facades\Filament;
 
 class YourPlugin implements Plugin
 {
-    use Plugin\HasNavigation;
-    use Plugin\HasLabels;
-    use Plugin\HasGlobalSearch;
-    use Plugin\WithMultipleResourceSupport; // For multi-forResource plugins
+    use HasGlobalSearch;
+    use HasLabels;
+    use HasNavigation;
+    use WithMultipleResourceSupport; // For multi-forResource plugins
     
     public static function make(): static
     {
         return app(static::class);
+    }
+    
+    public static function get(): ?static
+    {
+        return Filament::getPlugin('your-plugin');
     }
     
     public function getId(): string
@@ -178,6 +189,31 @@ class YourPlugin implements Plugin
     }
 }
 ```
+
+> [!NOTE]
+> Defaults arrays are keyed by **property name** (`shouldRegisterNavigation`, `isGloballySearchable`, `hasTitleCaseModelLabel`, …), not by setter name. The copy-paste blocks under each trait below list the correct keys.
+
+Alternatively, define a `getDefault{Property}()` method for any property — it takes precedence over the `getPluginDefaults()` array and receives the resource class being resolved:
+
+```php
+protected function getDefaultModelLabel(?string $resourceClass = null): string
+{
+    return $resourceClass === UserResource::class ? 'User' : 'Item';
+}
+```
+
+The legacy flat structure (`UserResource::class => [...]` at the top level of the defaults array) keeps working alongside the nested `'resources'` key.
+
+### How values are resolved
+
+For every configurable property, the first tier with an answer wins:
+
+1. **Per-resource user override** — `->forResource(UserResource::class)->navigationIcon(...)`
+2. **Global user override** — `->navigationIcon(...)`
+3. **Plugin developer defaults** — `getDefault{Property}()` method, then `getPluginDefaults()['resources'][ResourceClass][property]`, then legacy `getPluginDefaults()[ResourceClass][property]`, then `getPluginDefaults()[property]`
+4. **Resource / Filament defaults** — the resource's own static configuration, then Filament's native behavior (including panel-level configuration such as `subNavigationPosition`)
+
+Passing `null` explicitly to a nullable setting is an answer, not a reset — `->navigationIcon(null)` removes the icon even when the plugin ships a default or the resource declares its own static icon.
 
 ## How Plugin Users Can Configure Your Plugin
 
@@ -257,7 +293,8 @@ $plugin
     ->navigationBadge('5')                      // string|Closure|null
     ->navigationBadgeColor('success')           // string|array|Closure|null
     ->navigationParentItem('parent.item')       // string|Closure|null
-    ->slug('custom-slug')                       // string|Closure|null
+    ->navigationBadgeTooltip('New users')       // string|Closure|null
+    ->subNavigationPosition(SubNavigationPosition::End) // SubNavigationPosition|Closure
     ->registerNavigation(false);                // bool|Closure
 ```
 
@@ -273,9 +310,9 @@ protected function getPluginDefaults(): array
         'navigationSort' => 10,
         'navigationBadge' => null,
         'navigationBadgeColor' => null,
+        'navigationBadgeTooltip' => null,
         'navigationParentItem' => null,
-        'slug' => null,
-        'registerNavigation' => true,
+        'shouldRegisterNavigation' => true,
     ];
 }
 ```
@@ -298,7 +335,7 @@ protected function getPluginDefaults(): array
         'modelLabel' => 'Item',
         'pluralModelLabel' => 'Items',
         'recordTitleAttribute' => 'name',
-        'titleCaseModelLabel' => true,
+        'hasTitleCaseModelLabel' => true,
     ];
 }
 ```
@@ -318,10 +355,10 @@ $plugin
 protected function getPluginDefaults(): array
 {
     return [
-        'globallySearchable' => true,
+        'isGloballySearchable' => true,
         'globalSearchResultsLimit' => 50,
-        'forceGlobalSearchCaseInsensitive' => null,
-        'splitGlobalSearchTerms' => false,
+        'isGlobalSearchForcedCaseInsensitive' => null,
+        'shouldSplitGlobalSearchTerms' => true,
     ];
 }
 ```
@@ -357,7 +394,7 @@ $plugin
 protected function getPluginDefaults(): array
 {
     return [
-        'scopeToTenant' => true,
+        'isScopedToTenant' => true,
         'tenantRelationshipName' => null,
         'tenantOwnershipRelationshipName' => null,
     ];
@@ -382,6 +419,10 @@ $plugin
     ->forResource(PostResource::class)
         ->navigationLabel('Posts');
 ```
+
+## Limitations
+
+Route-phase configuration cannot be plugin-delegated. Filament resolves resource **slugs**, **clusters**, and route prefixes while registering routes at application boot — before any panel boots and before `filament()->getPlugin()` can target the correct panel. Plugin configuration only becomes reliable per-request, after the panel boots. That is why these traits cover navigation, labels, global search, tenancy, and parent resources, but not `slug()` or cluster assignment.
 
 ## Todo
 - [ ] Add support for pages

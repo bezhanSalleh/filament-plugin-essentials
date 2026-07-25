@@ -10,15 +10,6 @@ trait BelongsToParent
 
     public static function getParentResource(): ?string
     {
-        $pluginResult = static::delegateToPlugin(
-            'BelongsToParent',
-            'getParentResource'
-        );
-
-        if (! static::isNoPluginResult($pluginResult) && $pluginResult !== null) {
-            return $pluginResult;
-        }
-
-        return static::getParentResult('getParentResource');
+        return static::pluginOrParent('BelongsToParent', 'parentResource', 'getParentResource');
     }
 }

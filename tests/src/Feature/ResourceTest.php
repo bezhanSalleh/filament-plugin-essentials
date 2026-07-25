@@ -31,7 +31,6 @@ describe('Resource HasNavigation Trait', function () {
             'getActiveNavigationIcon',
             'shouldRegisterNavigation',
             'getSubNavigationPosition',
-            'getSlug',
         ];
 
         foreach ($expectedMethods as $method) {

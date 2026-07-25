@@ -15,14 +15,7 @@ trait BelongsToParent
 
     public function parentResource(?string $resource): static
     {
-        if (method_exists($this, 'setContextualProperty')) {
-            return $this->setContextualProperty('parentResource', $resource);
-        }
-
-        $this->parentResource = $resource;
-        $this->markPropertyAsUserSet('parentResource');
-
-        return $this;
+        return $this->fillEssentialsProperty('parentResource', $resource);
     }
 
     /**

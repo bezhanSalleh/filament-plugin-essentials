@@ -160,7 +160,7 @@ describe('Plugin HasNavigation Trait', function () {
         // Test that resources delegate to plugin and receive values
         expect(UserResource::getNavigationLabel())->toBe('People')
             ->and(UserResource::getNavigationIcon())->toBe('heroicon-o-user-group')
-            ->and(UserResource::getActiveNavigationIcon())->toBeNull() // Default null
+            ->and(UserResource::getActiveNavigationIcon())->toBe('heroicon-o-user-group') // Filament falls back to the navigation icon
             ->and(UserResource::getNavigationGroup())->toBeNull() // Default null
             ->and(UserResource::getNavigationSort())->toBe(5)
             ->and(UserResource::getNavigationBadge())->toBeNull() // Default null
@@ -244,11 +244,11 @@ describe('Plugin HasGlobalSearch Trait', function () {
                 EssentialPlugin::make(), // No global search configuration
             ]);
 
-        // Default values: searchable=true, limit=50, others=false/null
+        // Filament defaults: searchable=true, limit=50, split terms=true
         expect(UserResource::canGloballySearch())->toBeTrue()
             ->and(UserResource::getGlobalSearchResultsLimit())->toBe(50)
             ->and(UserResource::isGlobalSearchForcedCaseInsensitive())->toBeNull()
-            ->and(UserResource::shouldSplitGlobalSearchTerms())->toBeFalse();
+            ->and(UserResource::shouldSplitGlobalSearchTerms())->toBeTrue();
     });
 });
 
@@ -294,7 +294,7 @@ describe('Multi-Resource Plugin Support', function () {
         // AdminResource gets partial config, others default
         expect(AdminResource::getModelLabel())->toBe('Administrator')
             ->and(AdminResource::getPluralModelLabel())->toBe('Multi Items') // Plugin default
-            ->and(AdminResource::getRecordTitleAttribute())->toBeNull(); // Resource default
+            ->and(AdminResource::getRecordTitleAttribute())->toBe('email'); // Resource static
 
         // PostResource gets different partial config
         expect(PostResource::getModelLabel())->toBe('Multi Item') // Plugin default
